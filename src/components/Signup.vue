@@ -1,10 +1,10 @@
 <template>
   <div class="sign-up">
-    <p>Let's create a new account !</p>
+    <p>Create your Account</p>
     <input type="text" v-model="email" placeholder="Email"><br>
     <input type="password" v-model="password" placeholder="Password"><br>
     <button @click="signUp">Sign Up</button>
-    <span>or go back to <router-link to="/login">login</router-link>.</span>
+    <span>go back to <router-link to="/login">login</router-link>.</span>
   </div>
 </template>
 
@@ -22,7 +22,7 @@
       signUp: function() {
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
           (user) => {
-            this.$router.replace('home')
+            this.$router.replace('login')
           },
           (err) => {
             alert('Oops. ' + err.message)
