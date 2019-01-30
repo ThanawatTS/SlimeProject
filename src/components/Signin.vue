@@ -1,15 +1,15 @@
 <template>
 
-    <div id="signup">
-        <h1>Sign Up</h1>
+    <div id="signin">
+        <h1>Sign In</h1>
         <form>
-        <div class = "sign-up">
+        <div class = "sign-in">
             <input type="text" id="userNameInput" v-model="username">
         </div>
-        <div class = "sign-up">
+        <div class = "sign-in">
             <input type="password" id="passwordInput"  v-model="password">
         </div>
-        <button v-on:click="signUpaccount">Sign Up </button>
+        <button v-on:click="signInAccount"> Sign In </button>
         </form>
     </div>
 </template>
@@ -19,7 +19,7 @@
 import firebase from './firebaseInit';
 
 export default {
-    name: 'signup',
+    name: 'signin',
     data () {
         return {
            
@@ -29,20 +29,19 @@ export default {
         }
     },
     methods: {
-        signUpaccount: function() {
-            firebase.auth().createUserWithEmailAndPassword(this.username, this.password)
+        signInAccount: function() {
+            firebase.auth().signInWithEmailAndPassword(this.username, this.password)
             .then( user => {
-                alert('Account created successful!');
-                console.log('register');
+                alert('Login successful!');
+                console.log('Login Successful');
                 this.$router.push('/');
             },
             err => {
                 alert(err.message);
-                console.log('Already exist');
+                console.log('Login Fail');
             });
             
-           
-                
+            
         }
     }
    
