@@ -16,7 +16,7 @@
 
 <script>
 
-import firebase from './firebaseInit';
+import firebase from 'firebase';
 
 export default {
     name: 'signin',
