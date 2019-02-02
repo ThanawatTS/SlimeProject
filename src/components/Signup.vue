@@ -1,5 +1,4 @@
 <template>
-
     <div id="signup">
         <h1>Sign Up</h1>
         <form>
@@ -20,7 +19,7 @@ import firebase from 'firebase';
 
 export default {
     name: 'signup',
-    data () {
+    data() {
         return {
            
             username: '',
