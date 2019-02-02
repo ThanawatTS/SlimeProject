@@ -20,7 +20,7 @@ import firebase from 'firebase';
 
 export default {
     name: 'signin',
-    data () {
+    data() {
         return {
            
             username: '',
@@ -34,13 +34,12 @@ export default {
             .then( user => {
                 alert('Login successful!');
                 console.log('Login Successful');
-                this.$router.push('/');
+                this.$router.push('/maps');
             },
             err => {
                 alert(err.message);
                 console.log('Login Fail');
             });
-            
             
         }
     }
