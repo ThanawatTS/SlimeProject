@@ -20,6 +20,8 @@
       <li v-for="Restname in RestuarantLocation" >
         {{ Restname.Name }} 
         {{ Restname.location.latitude}}
+        {{ Restname.location.longitude}}
+
         <button @click="deleteRest(Restname)">
           Remove
         </button>
@@ -39,6 +41,7 @@
         Name: '',
         latt : 0 ,
         lon : 0,
+        Markerss : [],
       }
     },
     firestore() {
