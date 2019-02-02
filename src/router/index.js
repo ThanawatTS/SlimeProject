@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import Signup from '@/components/Signup'
 import Signin from '@/components/Signin'
-
+import fire from '@/components/fire'
+import Addrestloca from '@/components/Addrestloca'
 Vue.use(Router)
 
 const router = new Router({
@@ -22,6 +23,16 @@ const router = new Router({
       path: '/signin',
       name: 'signin',
       component: Signin
+    },
+    {
+      path: '/fire',
+      name: 'fire',
+      component: fire
+    },
+    {
+      path: '/addrest',
+      name: 'Addrestloca',
+      component: Addrestloca
     }
   ]
 })
