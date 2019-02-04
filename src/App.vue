@@ -1,8 +1,9 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
+  <v-app dark id="app">
+    <v-toolbar></v-toolbar>
+    <!-- <img src="./assets/logo.png"> -->
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <script>

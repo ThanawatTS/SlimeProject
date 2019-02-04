@@ -3,28 +3,29 @@
         <h1>Sign Up</h1>
         <form>
         <div class = "sign-up">
-            <input type="text" id="userNameInput" v-model="username">
+            <v-flex xs12 sm6 md3>
+            <v-text-field label="Email" type="text" id="userNameInput" v-model="username"></v-text-field>
+            </v-flex>
         </div>
         <div class = "sign-up">
-            <input type="password" id="passwordInput"  v-model="password">
+            <v-flex xs12 sm6 md3>
+            <v-text-field label="Password" type="password" id="passwordInput"  v-model="password"></v-text-field>
+            </v-flex>
         </div>
-        <button v-on:click="signUpaccount">Sign Up </button>
+        <v-btn color="info" v-on:click="signUpaccount">Sign Up </v-btn>
         </form>
     </div>
 </template>
 
 <script>
-
 import firebase from 'firebase';
 
 export default {
     name: 'signup',
     data() {
         return {
-           
             username: '',
             password: ''
-            
         }
     },
     methods: {
@@ -39,12 +40,7 @@ export default {
                 alert(err.message);
                 console.log('Already exist');
             });
-            
-           
-                
         }
     }
-   
 }
-
 </script>

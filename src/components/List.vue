@@ -4,14 +4,12 @@
        <button @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
           Find Location
        </button>
-
-
      </li>
-   
   </ul>
 </template>
 
 <script>
+
   import firebaseApp from './firebaseInit';
   import firebase from 'firebase/app'
   export default {
@@ -27,19 +25,15 @@
       }
     },
     method: {
-
        FindLocation : function (Latitude,Longtitude) {
-            const marker = {
+          const marker = {
           lat: Latitude,
           lng: Longtitude
         };
         this.markers.push({ position: marker });
-        // console.log(markers)
         this.center = marker;
-
        }
     }
   }
-
 
 </script>
