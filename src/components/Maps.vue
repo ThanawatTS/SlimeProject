@@ -6,37 +6,32 @@
        <button @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
           Find Location
        </button>
-
-
      </li>
-   
-  </ul>
+    </ul>
   </div>
    <div id = "Maps" class="grid__media"> 
     <br>
+
     <gmap-map
       :center="mapCenter"
       :zoom="12"
       style="width:100%;  height: 400px;"
     >
-      <gmap-marker
-        :key="index"
-        v-for="(m, index) in markers"
-        :position="m.position"
-      ></gmap-marker>
+    <gmap-marker
+      :key="index"
+      v-for="(m, index) in markers"
+      :position="m.position"
+    ></gmap-marker>
 
-
-      <gmap-marker
-        :key="index"
-        v-for="(x, index) in Currentlocation"
-        :position="x.position"
-        @click="center=m.position"
-        ></gmap-marker>
-
-
-
+    <gmap-marker
+      :key="index"
+      v-for="(x, index) in Currentlocation"
+      :position="x.position"
+      @click="center=m.position"
+    ></gmap-marker>
     </gmap-map>
-     </div>
+
+    </div>
   </div>
 </template>
 
@@ -58,14 +53,10 @@ export default {
         RestuarantLocation: firebaseApp.collection('RestuarantLocation'),
       }
     },
-
   mounted() {
     this.geolocate();
   },
-  
   methods: {
-   
-  
     //Find current location
     geolocate: function() {
       navigator.geolocation.getCurrentPosition(position => {
@@ -76,7 +67,6 @@ export default {
         console.log(position.coords.latitude)
         this.Currentlocation.push({position : this.mapCenter})
       });
-      
     },
     FindLocation : function (Latitude,Longtitude) {
         this.markers.pop();
@@ -85,9 +75,7 @@ export default {
           lng: Longtitude
         };
         this.markers.push({ position: marker });
-        // console.log(markers)
         this.center = marker;
-
        }
   }
 };
@@ -96,12 +84,9 @@ export default {
 #List{
   display: block;
   background: greenyellow;
-
 }
 #Maps{
-  
 }
-
 .app{
   display: grid;
   grid-template-columns: 
@@ -111,11 +96,9 @@ export default {
 .grid__media {
   grid-column: 2 / 10; /* Start on Column 2 and end at the start of Column 9 */
 }
-
 .grid__text {
   grid-column: 10 / 14; /* Start on Column 10 and end at the start of Column 14 */
 }
-
 .grid__media,
 .grid__text {
   grid-row: 1; /* We want to keep our items on the same row */
