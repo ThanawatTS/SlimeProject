@@ -1,9 +1,9 @@
 <template>
   <ul>
      <li v-for="Restname in RestuarantLocation">{{ Restname.Name }}
-       <button @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
+       <v-btn color="info" @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
           Find Location
-       </button>
+       </v-btn>
      </li>
   </ul>
 </template>
