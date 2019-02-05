@@ -3,9 +3,9 @@
     <div id= "List"  class="grid__text">
     <ul>
      <li v-for="Restname in RestuarantLocation">{{ Restname.Name }}
-       <button @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
+       <v-btn color="info" @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
           Find Location
-       </button>
+       </v-btn>
      </li>
     </ul>
   </div>
@@ -14,7 +14,7 @@
 
     <gmap-map
       :center="mapCenter"
-      :zoom="12"
+      :zoom="15"
       style="width:100%;  height: 400px;"
     >
     <gmap-marker
