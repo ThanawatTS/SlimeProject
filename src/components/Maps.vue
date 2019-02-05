@@ -3,7 +3,8 @@
     <div id= "List"  class="grid__text">
     <ul>
      <li v-for="Restname in RestuarantLocation">{{ Restname.Name }}
-       <v-btn color="info" @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
+       <br>
+       <v-btn small color="yellow lighten-2" @click="FindLocation(Restname.location.latitude,Restname.location.longitude)">
           Find Location
        </v-btn>
      </li>
@@ -83,6 +84,7 @@ export default {
 <style>
 #List{
   display: block;
+  font-size: 20px;
   background: greenyellow;
 }
 #Maps{
