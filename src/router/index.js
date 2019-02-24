@@ -6,6 +6,7 @@ import Signin from '@/components/Signin'
 import fire from '@/components/fire'
 import Addrestloca from '@/components/Addrestloca'
 import Maps from '@/components/Maps'
+
 Vue.use(Router)
 
 const router = new Router({
