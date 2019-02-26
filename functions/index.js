@@ -8,15 +8,10 @@ const LINE_HEADER = {
 };
 
 
-let stickerpack = "3";
-//let data = JSON.parse(reply_profile());
-console.log("test");
-
 exports.LineBot = functions.https.onRequest((req, res) => {
   
-  //var data = JSON.parse(reply_profile())
-  var data = JSON.stringify(reply_profile())
-  //var data = "1";
+  var data = JSON.stringify(reply_profile()) 
+  let stickerpack = "3";
 
   if (req.body.events[0].message.type !== 'text') {
     return;
@@ -74,8 +69,6 @@ const reply = (bodyResponse, sticker, dataReply) => {
         {
           type: `text`,
           //text: bodyResponse.events[0].message.text
-          //text: "line://app/1648357069-N4goRqx1"
-          //message: reply_profile()
           text: bodyResponse.events[0].source.userId,
           
           quickReply: {
@@ -84,14 +77,13 @@ const reply = (bodyResponse, sticker, dataReply) => {
                 type: "action",
                 action: {
                   type: "location",
-                  label: "Message",
+                  label: "Location",
                   
                 }
               }
             ]
           }
         }
-        
 	  ]
     })
   });
@@ -100,9 +92,8 @@ const reply = (bodyResponse, sticker, dataReply) => {
 const reply_profile = () => {
   return request({
     method: `Get`,
-    uri: `https://api.line.me/v2/bot/profile/Uc7d94e2bf96f8cb56389107f8fbff8d1`,
+    uri: `https://api.line.me/v2/bot/profile/{userId}`,
     headers: LINE_HEADER
-    //json: true
   })
 }
 
