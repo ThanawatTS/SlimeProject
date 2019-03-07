@@ -6,6 +6,7 @@ import Signin from '@/components/Signin'
 import fire from '@/components/fire'
 import Addrestloca from '@/components/Addrestloca'
 import Maps from '@/components/Maps'
+import Suggestion from '@/components/Suggestion'
 Vue.use(Router)
 
 const router = new Router({
@@ -39,6 +40,11 @@ const router = new Router({
       path: '/maps',
       name: 'Maps',
       component: Maps
+    },
+    {
+      path: '/suggestion',
+      name: 'Suggestion',
+      component: Suggestion
     }
   ]
 })
