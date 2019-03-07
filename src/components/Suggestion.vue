@@ -9,15 +9,17 @@
                         <form>
                             <label> Add Restaurant List </label><br/>
                             <input v-model="restaurant_Name" id="restaurantName" placeholder="Restaurant Name"><br/>
-                            <v-btn small color="primary" v-on:click="addedRestaurantList">Restaurant Name</v-btn>
+                            <v-btn small color="primary" v-on:click.prevent="addedRestaurantList" :disabled="restaurant_Name == emptyName">Restaurant Name</v-btn>
                         </form>
                         
                         <ul>
+
                             <li
                                 v-for="listName in restaurant_List"
                                 v-bind:key="listName.id"
                                 v-bind:title="listName.Name"
                             >{{ listName.Name }} {{ listName.id}}</li>
+
                         </ul>
                         
                     </v-layout>
@@ -38,7 +40,8 @@ export default {
         return {
             restaurant_Name: '',
             restaurant_List: [],
-            restaurant_ID: 1
+            restaurant_ID: 1,
+            emptyName: ''
         }
     },
     methods: {
