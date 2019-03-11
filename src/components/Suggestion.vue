@@ -18,13 +18,29 @@
                                 v-for="listName in restaurant_List"
                                 v-bind:key="listName.id"
                                 v-bind:title="listName.Name"
-                            >{{ listName.Name }} {{ listName.id}}</li>
+                            >
+                            {{ listName.Name }} {{ listName.id}}
+                            <v-btn small color="red" v-on:click.prevent="removeRestaurantName(listName)">Remove</v-btn>
+                            </li>
 
                         </ul>
                         
                     </v-layout>
                 </div>
             
+            </v-flex>
+            <br/>
+
+            <v-flex xs12>
+
+                <v-layout align-center justify-center column fill-height>
+                <h1> Random Restaurant</h1>
+
+                <v-btn small color="orange" v-on:click="randomRestaurant(restaurant_List.length)">Random</v-btn>
+                <span> Random : {{ suggestion_restaurant }}</span>
+                </v-layout>
+
+                
             </v-flex>
 
         </v-container>
@@ -41,7 +57,8 @@ export default {
             restaurant_Name: '',
             restaurant_List: [],
             restaurant_ID: 1,
-            emptyName: ''
+            emptyName: '',
+            suggestion_restaurant: ''
         }
     },
     methods: {
@@ -51,6 +68,13 @@ export default {
                 Name: this.restaurant_Name
             })
             this.restaurant_Name = ''
+        },
+        removeRestaurantName(index){
+            this.restaurant_List.splice(index,1)
+        },
+        randomRestaurant(num){
+            this.$data.suggestion_restaurant = this.$data.restaurant_List[Math.floor(Math.random()*num)].Name
+            console.log(Math.floor(Math.random()*num))
         }
     }
 }
