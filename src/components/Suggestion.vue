@@ -36,7 +36,7 @@
                 <v-layout align-center justify-center column fill-height>
                 <h1> Random Restaurant</h1>
 
-                <v-btn small color="orange" v-on:click="randomRestaurant(restaurant_List.length)">Random</v-btn>
+                <v-btn small color="orange" v-on:click="randomRestaurant(restaurant_List.length)" :disabled="suggestion_restaurant != emptyName">Random</v-btn>
                 <span> Random : {{ suggestion_restaurant }}</span>
                 </v-layout>
 
@@ -75,6 +75,9 @@ export default {
         randomRestaurant(num){
             this.$data.suggestion_restaurant = this.$data.restaurant_List[Math.floor(Math.random()*num)].Name
             console.log(Math.floor(Math.random()*num))
+            setTimeout(() => {
+                this.$data.suggestion_restaurant = ''
+            }, 2000);
         }
     }
 }
