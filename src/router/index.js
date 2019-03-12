@@ -7,6 +7,7 @@ import fire from '@/components/fire'
 import Addrestloca from '@/components/Addrestloca'
 import Maps from '@/components/Maps'
 import Suggestion from '@/components/Suggestion'
+
 Vue.use(Router)
 
 const router = new Router({

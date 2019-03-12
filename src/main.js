@@ -8,6 +8,7 @@ import router from './router'
 import VueFirestore from 'vue-firestore'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vuex from 'vuex'
+import LineBot from '@/components/LineBot'
 
 Vue.config.productionTip = false
 Vue.use(VueFirestore);
@@ -20,6 +21,9 @@ Vue.use(VueGoogleMaps, {
         libraries: 'places', 
       },
 });
+
+
+
 /* eslint-disable no-new */
 new Vue({
       el: '#app',
@@ -27,3 +31,4 @@ new Vue({
       components: { App },
       template: '<App/>'
 })
+
