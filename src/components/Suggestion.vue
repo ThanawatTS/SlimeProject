@@ -38,6 +38,8 @@
                 <span> Random : {{ suggestion_restaurant }}</span>
                 </v-layout>
 
+                <v-btn v-on:click="checkdata">checked</v-btn>
+
             </v-flex>
 
         </v-container>
@@ -57,7 +59,6 @@ export default {
         return {
             restaurant_Name: '',
             restaurant_List: [],
-            restaurant_ID: 1,
             dataRestaurant_List: [],
             emptyName: '',
             suggestion_restaurant: '',
@@ -76,12 +77,6 @@ export default {
                 if (doc.exists){
                     for (var restaurantList in doc.data().menu){
                         test = doc.data().menu;
-                        //console.log(this.$data.dataRestaurant_List)
-                        // this.$data.dataRestaurant_List.push({
-                        //     Id: doc.data().menu[restaurantList].Id++,
-                        //     Name: doc.data().menu[restaurantList].Name
-                        // })
-                        
                     }
 
                 } else {
@@ -94,29 +89,27 @@ export default {
                 if(test == null){
                     setTimeout(() => {
                         this.$data.dataRestaurant_List.push({
-                        Id: this.restaurant_ID,
                         Name: this.restaurant_Name
                         })
                         this.restaurant_Name = ''   
                     }, 500);
-                    
                 } else {
                     setTimeout(() => {
                         this.$data.dataRestaurant_List = test
+                        this.$data.dataRestaurant_List.push({
+                        Name: this.restaurant_Name
+                        })
                         this.restaurant_Name = ''   
                     }, 500);
                 }
-
                 this.restaurant_List.push({
                     Id: this.restaurant_ID,
                     Name: this.restaurant_Name
                 })
 
-            
             } else {
                 for(var x in this.restaurant_List){
                     if(name == this.$data.restaurant_List[x].Name){
-                        
                         checkduplicateName = true;
                         this.$data.seen = true;
                         setTimeout(() => {
@@ -125,35 +118,26 @@ export default {
                             }, 2000);
                     }
                 }
-
-                
                 setTimeout(() => {
                     this.$data.dataRestaurant_List.push({
-                    Id: this.$data.restaurant_ID,
                     Name: this.restaurant_Name
                     })
                     this.restaurant_Name = ''   
                 }, 500);
                     
-
                 if(checkduplicateName == false){
-                this.restaurant_List.push({
+                    this.restaurant_List.push({
                     Id: this.restaurant_ID++,
                     Name: this.restaurant_Name
-                    })
-                         
-                }
-                
+                    })       
+                }  
             }
-
-
             setTimeout(() => {
                     UserTest.set({
                     menu: this.$data.dataRestaurant_List
                     })
             }, 1000);
             
-
         },
         removeRestaurantName(index){
             this.restaurant_List.splice(index,1)
@@ -166,8 +150,27 @@ export default {
             setTimeout(() => {
                 this.$data.suggestion_restaurant = ''
             }, 2000);
+        },
+        checkdata(){
+            UserTest.get().then(function(doc) {
+                if (doc.exists){
+                    for (var restaurantList in doc.data().menu){
+                        test = doc.data().menu;              
+                    }
+
+                } else {
+                    console.log("No such document!");
+                }
+                }).catch(function(error){
+                console.log("Error getting document: ", error)
+                });
+
+                console.log(test)
         }
         
+    },
+    beforeMount(){
+        this.checkdata()
     }
 }
 </script>
