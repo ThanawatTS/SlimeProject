@@ -167,10 +167,9 @@ export default {
 
                 console.log(test)
         }
-        
     },
     beforeMount(){
-        this.checkdata()
+        this.checkdata();
     }
 }
 </script>
