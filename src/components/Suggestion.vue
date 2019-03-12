@@ -14,7 +14,6 @@
                         </form>
                         
                         <ul>
-
                             <li
                                 v-for="listName in restaurant_List"
                                 v-bind:key="listName.id"
@@ -23,7 +22,6 @@
                             {{ listName.Name }} {{ listName.id}}
                             <v-btn small color="red" v-on:click.prevent="removeRestaurantName(listName)">Remove</v-btn>
                             </li>
-
                         </ul>
                         
                     </v-layout>
@@ -31,7 +29,6 @@
             
             </v-flex>
             <br/>
-
             <v-flex xs12>
 
                 <v-layout align-center justify-center column fill-height>
@@ -41,7 +38,6 @@
                 <span> Random : {{ suggestion_restaurant }}</span>
                 </v-layout>
 
-                
             </v-flex>
 
         </v-container>
@@ -52,7 +48,9 @@
 
 <script>
 import firebaseApp from './firebaseInit';
-var UserTest = firebaseApp.collection("users").doc("2");
+import { error } from 'util';
+const UserTest = firebaseApp.collection("users").doc("1")
+var test
 export default {
     name: 'suggestion',
     data () {
@@ -60,6 +58,7 @@ export default {
             restaurant_Name: '',
             restaurant_List: [],
             restaurant_ID: 1,
+            dataRestaurant_List: [],
             emptyName: '',
             suggestion_restaurant: '',
             message_duplicatename: 'Already have one',
@@ -70,46 +69,97 @@ export default {
     methods: {
         addedRestaurantList(name){
             var checkduplicateName = false;
+
             if(this.restaurant_List.length == 0){
+
+                UserTest.get().then(function(doc) {
+                if (doc.exists){
+                    for (var restaurantList in doc.data().menu){
+                        test = doc.data().menu;
+                        //console.log(this.$data.dataRestaurant_List)
+                        // this.$data.dataRestaurant_List.push({
+                        //     Id: doc.data().menu[restaurantList].Id++,
+                        //     Name: doc.data().menu[restaurantList].Name
+                        // })
+                        
+                    }
+
+                } else {
+                    console.log("No such document!");
+                }
+                }).catch(function(error){
+                console.log("Error getting document: ", error)
+                });
+                
+                if(test == null){
+                    setTimeout(() => {
+                        this.$data.dataRestaurant_List.push({
+                        Id: this.restaurant_ID,
+                        Name: this.restaurant_Name
+                        })
+                        this.restaurant_Name = ''   
+                    }, 500);
+                    
+                } else {
+                    setTimeout(() => {
+                        this.$data.dataRestaurant_List = test
+                        this.restaurant_Name = ''   
+                    }, 500);
+                }
+
                 this.restaurant_List.push({
-                id: this.restaurant_ID++,
-                Name: this.restaurant_Name
+                    Id: this.restaurant_ID,
+                    Name: this.restaurant_Name
                 })
-                this.restaurant_Name = ''
+
+            
             } else {
                 for(var x in this.restaurant_List){
                     if(name == this.$data.restaurant_List[x].Name){
-                        this.restaurant_Name = ''
+                        
                         checkduplicateName = true;
                         this.$data.seen = true;
                         setTimeout(() => {
                             this.$data.seen = false;
+                            this.restaurant_Name = ''
                             }, 2000);
                     }
                 }
 
-                if(checkduplicateName == false){
-                this.restaurant_List.push({
-                    id: this.restaurant_ID++,
+                
+                setTimeout(() => {
+                    this.$data.dataRestaurant_List.push({
+                    Id: this.$data.restaurant_ID,
                     Name: this.restaurant_Name
                     })
-                this.restaurant_Name = ''
-                
+                    this.restaurant_Name = ''   
+                }, 500);
+                    
+
+                if(checkduplicateName == false){
+                this.restaurant_List.push({
+                    Id: this.restaurant_ID++,
+                    Name: this.restaurant_Name
+                    })
+                         
                 }
+                
             }
 
+
+            setTimeout(() => {
+                    UserTest.set({
+                    menu: this.$data.dataRestaurant_List
+                    })
+            }, 1000);
             
 
-            UserTest.set({
-                name: "One",
-                menu: this.$data.restaurant_List
-            })
         },
         removeRestaurantName(index){
             this.restaurant_List.splice(index,1)
-            UserTest.update({
-                menu: this.$data.restaurant_List
-            })
+            // UserTest.update({
+            //     menu: this.$data.restaurant_List
+            // })
         },
         randomRestaurant(num){
             this.$data.suggestion_restaurant = this.$data.restaurant_List[Math.floor(Math.random()*num)].Name
