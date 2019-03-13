@@ -7,6 +7,8 @@
 
 <script>
 const axios = require('axios');
+var jwt = require('jsonwebtoken');
+
 export default {
     name: 'dashboard',
     data () {
@@ -59,9 +61,22 @@ export default {
             request(options, function (error, response, body) {
             if (error) throw new Error(error);
             console.log(body);
+            console.log("BR")
+            var seperateBody = body.slice(body.search("id_token")+11,body.search("}")-1)
+            // var decoded_id_token = jwt.decode(body,
+            //                   "88f24f0c0dfa5258983d13850529bcf9",
+            //                   "1554433367",
+            //                   'https://access.line.me',
+            //                   'HS256')
+
+            // console.log("HAHA"+decoded_id_token)
+            console.log(seperateBody)
+            var decoded = jwt.decode(seperateBody, {complete: true});
+            console.log(decoded.payload)
             });
 
             
+
         }
     },
     beforeMount(){
