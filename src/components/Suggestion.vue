@@ -1,6 +1,5 @@
 <template>
     <div>
-        
         <v-container fluid>
             <v-flex xs12>
                 <div>
@@ -38,7 +37,7 @@
                 <span> Random : {{ suggestion_restaurant }}</span>
                 </v-layout>
 
-                <v-btn v-on:click="checkdata">checked</v-btn>
+                <v-btn v-on:click="loadData">loadedData</v-btn>
 
             </v-flex>
 
@@ -51,8 +50,8 @@
 <script>
 import firebaseApp from './firebaseInit';
 import { error } from 'util';
-const UserTest = firebaseApp.collection("users").doc("1")
-var test
+const userData = firebaseApp.collection("users").doc("1")
+var menuInFB
 export default {
     name: 'suggestion',
     data () {
@@ -70,15 +69,14 @@ export default {
     methods: {
         addedRestaurantList(name){
             var checkduplicateName = false;
-
+            //First time when web is reder it will check in firebase cloud isn't it have a data yet
+            //If it already have it will copy it in "menuInFB"
             if(this.restaurant_List.length == 0){
-
-                UserTest.get().then(function(doc) {
+                userData.get().then(function(doc) {
                 if (doc.exists){
                     for (var restaurantList in doc.data().menu){
-                        test = doc.data().menu;
+                        menuInFB = doc.data().menu;
                     }
-
                 } else {
                     console.log("No such document!");
                 }
@@ -86,7 +84,7 @@ export default {
                 console.log("Error getting document: ", error)
                 });
                 
-                if(test == null){
+                if(menuInFB == null){
                     setTimeout(() => {
                         this.$data.dataRestaurant_List.push({
                         Name: this.restaurant_Name
@@ -95,7 +93,7 @@ export default {
                     }, 500);
                 } else {
                     setTimeout(() => {
-                        this.$data.dataRestaurant_List = test
+                        this.$data.dataRestaurant_List = menuInFB
                         this.$data.dataRestaurant_List.push({
                         Name: this.restaurant_Name
                         })
@@ -108,6 +106,7 @@ export default {
                 })
 
             } else {
+                //check isn't user input a same name in a random list
                 for(var x in this.restaurant_List){
                     if(name == this.$data.restaurant_List[x].Name){
                         checkduplicateName = true;
@@ -124,7 +123,6 @@ export default {
                     })
                     this.restaurant_Name = ''   
                 }, 500);
-                    
                 if(checkduplicateName == false){
                     this.restaurant_List.push({
                     Id: this.restaurant_ID++,
@@ -133,15 +131,14 @@ export default {
                 }  
             }
             setTimeout(() => {
-                    UserTest.set({
+                    userData.set({
                     menu: this.$data.dataRestaurant_List
                     })
             }, 1000);
-            
         },
         removeRestaurantName(index){
             this.restaurant_List.splice(index,1)
-            // UserTest.update({
+            // userData.update({
             //     menu: this.$data.restaurant_List
             // })
         },
@@ -151,25 +148,24 @@ export default {
                 this.$data.suggestion_restaurant = ''
             }, 2000);
         },
-        checkdata(){
-            UserTest.get().then(function(doc) {
+        //After website has render. First time that get data from firebase will be undefied
+        //So this method was created to be prepared for use in future step.
+        loadData(){
+            userData.get().then(function(doc) {
                 if (doc.exists){
                     for (var restaurantList in doc.data().menu){
-                        test = doc.data().menu;              
+                        menuInFB = doc.data().menu;              
                     }
-
                 } else {
                     console.log("No such document!");
                 }
                 }).catch(function(error){
                 console.log("Error getting document: ", error)
                 });
-
-                console.log(test)
         }
     },
     beforeMount(){
-        this.checkdata();
+        this.loadData();
     }
 }
 </script>
