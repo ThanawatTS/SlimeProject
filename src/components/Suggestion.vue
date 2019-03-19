@@ -38,6 +38,8 @@
                 </v-layout>
 
                 <v-btn v-on:click="loadData">loadedData</v-btn>
+                <v-btn v-on:click="userStatus">userStatus</v-btn>
+                <v-btn v-on:click="setUpUser">SetUP</v-btn>
 
             </v-flex>
 
@@ -48,10 +50,13 @@
 
 
 <script>
+import firebase from 'firebase';
 import firebaseApp from './firebaseInit';
 import { error } from 'util';
+import { EventBus } from '../main.js';
 const userData = firebaseApp.collection("users").doc("1")
 var menuInFB
+var dataCollection
 export default {
     name: 'suggestion',
     data () {
@@ -62,7 +67,11 @@ export default {
             emptyName: '',
             suggestion_restaurant: '',
             message_duplicatename: 'Already have one',
-            seen: false
+            seen: false,
+            userEmail: ''
+                
+
+            
             
         }
     },
@@ -71,6 +80,8 @@ export default {
             var checkduplicateName = false;
             //First time when web is reder it will check in firebase cloud isn't it have a data yet
             //If it already have it will copy it in "menuInFB"
+            
+
             if(this.restaurant_List.length == 0){
                 userData.get().then(function(doc) {
                 if (doc.exists){
@@ -79,6 +90,7 @@ export default {
                     }
                 } else {
                     console.log("No such document!");
+                    //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
                 }
                 }).catch(function(error){
                 console.log("Error getting document: ", error)
@@ -151,6 +163,8 @@ export default {
         //After website has render. First time that get data from firebase will be undefied
         //So this method was created to be prepared for use in future step.
         loadData(){
+            
+
             userData.get().then(function(doc) {
                 if (doc.exists){
                     for (var restaurantList in doc.data().menu){
@@ -158,14 +172,49 @@ export default {
                     }
                 } else {
                     console.log("No such document!");
+                    //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
                 }
                 }).catch(function(error){
                 console.log("Error getting document: ", error)
                 });
+                
+        },
+        userStatus(){
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                     // User is signed in.
+                     console.log(user)
+                     console.log("user login")
+                     console.log(user.displayName + "  " + user.email)
+                } else {
+                    console.log(user)
+                    // No user is signed in.
+                    console.log("user not login")
+                }
+                });
+                console.log("BR")
+                var user = firebase.auth().currentUser;
+                if (user){
+                    console.log(user.email)
+                } else {
+
+                }
+                console.log("HAHAA" + user.email)
+                
+        },
+        setUpUser(){
+            var user = firebase.auth().currentUser;
+            
+            this.$data.userEmail = user.email
+            console.log(this.$data.userEmail)
         }
     },
     beforeMount(){
-        this.loadData();
+        setTimeout(() => {
+            this.loadData();
+        }, 1000);
+        
+        //this.setUpUser();
     }
 }
 </script>

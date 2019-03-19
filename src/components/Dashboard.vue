@@ -8,6 +8,7 @@
 
 <script>
 import firebase from 'firebase';
+import { EventBus } from '../main.js';
 var jwt = require('jsonwebtoken');
 var dataCollectDecode
 
@@ -15,6 +16,7 @@ export default {
     name: 'dashboard',
     data () {
         return {
+          dataUser: []
         }
     },
     methods: {
@@ -25,6 +27,7 @@ export default {
             .then( user => {
                 alert('Login successful!');
                 console.log('Login Successful');
+                this.updateUserProfile()
                 this.$router.push('/suggestion');
             },
             err => {
@@ -35,13 +38,26 @@ export default {
                 .then( user => {
                     alert('Account created successful!');
                     console.log('register');
-                    this.$router.push('/suggestion');
+                    
                     },
                     err => {
                         alert(err.message);
                         console.log("Can't created account");
                     });
             });
+        },
+        updateUserProfile(){
+            var user = firebase.auth().currentUser;
+
+            user.updateProfile({
+            displayName: dataCollectDecode.name_U,
+            photoURL: dataCollectDecode.pic_U
+            }).then(function() {
+                console.log("Update successful")
+            }).catch(function(error) {
+                console.log("error, Couldn't update")
+            });
+
         },
         getdata(){
             // userCode will get code from currentUrl to specific identity of user by line
