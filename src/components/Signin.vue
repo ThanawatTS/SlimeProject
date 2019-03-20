@@ -38,7 +38,7 @@ export default {
             .then( user => {
                 alert('Login successful!');
                 console.log('Login Successful');
-                this.$router.push('/maps');
+                this.$router.push('/usermanager');
             },
             err => {
                 alert(err.message);
