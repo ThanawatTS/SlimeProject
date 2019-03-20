@@ -7,9 +7,6 @@
 </template>
  
 <script>
-import firebase from 'firebase';
-
-
 export default {
     name: 'usermanager',
     data () {
@@ -18,14 +15,11 @@ export default {
     },
     methods: {
         claimTobeOwner(){
-
+            this.$router.push('/restaurantManagement')
         },
         claimTobeCustomer(){
-
+            this.$router.push('/customerManagement')
         }
-    },
-    beforeMount() {
-        this.checkUserrole()
     }
 }
 </script>

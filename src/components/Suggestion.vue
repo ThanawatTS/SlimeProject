@@ -50,10 +50,8 @@
 
 
 <script>
-import firebase from 'firebase';
-import firebaseApp from './firebaseInit';
-import { error } from 'util';
-import { EventBus } from '../main.js';
+import firebase from 'firebase'
+import firebaseApp from './firebaseInit'
 const userData = firebaseApp.collection("users").doc("1")
 var menuInFB
 var dataCollection

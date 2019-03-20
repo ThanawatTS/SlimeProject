@@ -8,7 +8,6 @@
 
 <script>
 import firebase from 'firebase';
-import { EventBus } from '../main.js';
 var jwt = require('jsonwebtoken');
 var dataCollectDecode
 
@@ -28,7 +27,7 @@ export default {
                 alert('Login successful!');
                 console.log('Login Successful');
                 this.updateUserProfile()
-                this.$router.push('/suggestion');
+                this.$router.push('/usermanager');
             },
             err => {
                 alert(err.message);
@@ -77,7 +76,7 @@ export default {
             { 
             grant_type: 'authorization_code',
             code: userUrlCode,
-            redirect_uri: 'https://6fb1c1c8.ngrok.io',
+            redirect_uri: 'https://ce6a1b99.ngrok.io',
             client_id: '1554433367',
             client_secret: '88f24f0c0dfa5258983d13850529bcf9',
             }};

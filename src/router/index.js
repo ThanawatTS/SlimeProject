@@ -8,6 +8,9 @@ import Addrestloca from '@/components/Addrestloca'
 import Maps from '@/components/Maps'
 import Suggestion from '@/components/Suggestion'
 import Usermanager from '@/components/Usermanager'
+import CustomerManagement from '@/components/CustomerManagement'
+import RestaurantManagement from '@/components/RestaurantManagement'
+
 
 Vue.use(Router)
 
@@ -52,6 +55,16 @@ const router = new Router({
       path: '/usermanager',
       name: 'Usermanager',
       component: Usermanager
+    },
+    {
+      path: '/customerManagement',
+      name: 'CustomerManagement',
+      component: CustomerManagement
+    },
+    {
+      path: '/restaurantManagement',
+      name: 'RestaurantManagement',
+      component: RestaurantManagement
     }
   ]
 })
