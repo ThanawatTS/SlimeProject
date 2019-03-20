@@ -46,7 +46,7 @@ const router = new Router({
     {
       path: '/suggestion',
       name: 'Suggestion',
-      component: Suggestion
+      component: Suggestion,
     },
     {
       path: '/usermanager',
