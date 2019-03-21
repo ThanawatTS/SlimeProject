@@ -56,10 +56,10 @@ export default {
             restaurantExist.get().then(function(doc) {
                 if (doc.exists){
                     for(var checkExistName in doc.data().Restaurant.RestaurantName){
-                        console.log("=========")
+                        console.log("=========start")
                         console.log("Count" + checkExistName)
                         console.log("NAME: " + doc.data().Restaurant.RestaurantName[checkExistName].name)
-                        console.log("=========")
+                        console.log("=========end")
                         if(checkName == doc.data().Restaurant.RestaurantName[checkExistName].name){
                             console.log("This Name is already have!")
                             existName = true;
@@ -76,20 +76,59 @@ export default {
                 if(existName){
                     console.log("Not add in database")
                 } else {
-                    this.$data.restaurantEach.name = this.$data.restuarantName
-                    this.$data.restuarantInfo.push(this.$data.restaurantEach)
-                }
 
-                var restaurantData = {
-                    Restaurant: {
-                        RestaurantName: this.$data.restuarantInfo,
-                    }
-                }
-                restaurantCreate.set(restaurantData).then( function() {
-                    console.log("DOC Created!")
-                })
+                    this.$data.restaurantEach.name = this.$data.restuarantName
+                    var tar = this.iterationCopy(this.$data.restaurantEach)
+                    
+
+                    
+                        this.$data.restuarantInfo.push(tar)
+                        console.log(Object.values(tar))
+                        //console.log(object.values(this.$data.restuarantInfo))
+                        var restaurantData = {
+                            Restaurant: {
+                                RestaurantName: this.$data.restuarantInfo,
+                            }
+                        }
+                        restaurantCreate.set(restaurantData).then( function() {
+                            console.log("DOC Created!")
+                            this.$data.restaurantEach.name = ""
+                        })
+                    
+                    
+                    
+                    
+
+                    // for (var x in this.$data.restaurantEach){
+                    //     console.log("===Each")
+                    //     console.log(this.$data.restaurantEach.name)
+                    //     console.log("===")
+                    //     console.log("==========Each2")
+                    //     console.log(Object.values(this.$data.restaurantEach))
+                    // }
+                    // for (var x in this.$data.restuarantInfo){
+                    //     console.log("===Info")
+                    //     console.log(this.$data.restuarantInfo[x].name)
+                    //     console.log("===")
+                    // }
+
+
+                    
+
+                    
+                } 
+                
             }, 1500);    
         },
+        iterationCopy(src){
+            var target = {}
+            for(var prop in src){
+                if (src.hasOwnProperty(prop)) {
+                    target[prop] = src[prop];
+                }
+            }
+            return target;
+        }
     },
     beforeMount(){
         this.checkStatus()
