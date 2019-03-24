@@ -79,7 +79,8 @@ export default {
 
                     this.$data.restaurantEach.name = this.$data.restuarantName
                     var tar = this.iterationCopy(this.$data.restaurantEach)
-
+                    console.log("CheckedrestaurantInfo")
+                    console.log(tar)
                     this.$data.restuarantInfo.push(tar)
                     console.log(Object.values(tar))
                     //console.log(object.values(this.$data.restuarantInfo))
@@ -92,9 +93,6 @@ export default {
                         console.log("DOC Created!")
                         this.$data.restaurantEach.name = ""
                     })
-                    
-                    
-                    
                     
 
                     // for (var x in this.$data.restaurantEach){
