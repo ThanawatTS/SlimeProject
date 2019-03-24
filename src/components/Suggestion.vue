@@ -1,6 +1,5 @@
 <template>
     <div>
-        
         <v-container fluid>
             <v-flex xs12>
                 <div>
@@ -38,7 +37,9 @@
                 <span> Random : {{ suggestion_restaurant }}</span>
                 </v-layout>
 
-                <v-btn v-on:click="checkdata">checked</v-btn>
+                <v-btn v-on:click="loadData">loadedData</v-btn>
+                <v-btn v-on:click="userStatus">userStatus</v-btn>
+                <v-btn v-on:click="setUpUser">SetUP</v-btn>
 
             </v-flex>
 
@@ -49,10 +50,11 @@
 
 
 <script>
-import firebaseApp from './firebaseInit';
-import { error } from 'util';
-const UserTest = firebaseApp.collection("users").doc("1")
-var test
+import firebase from 'firebase'
+import firebaseApp from './firebaseInit'
+const userData = firebaseApp.collection("users").doc("1")
+var menuInFB
+var dataCollection
 export default {
     name: 'suggestion',
     data () {
@@ -63,30 +65,36 @@ export default {
             emptyName: '',
             suggestion_restaurant: '',
             message_duplicatename: 'Already have one',
-            seen: false
+            seen: false,
+            userEmail: ''
+                
+
+            
             
         }
     },
     methods: {
         addedRestaurantList(name){
             var checkduplicateName = false;
+            //First time when web is reder it will check in firebase cloud isn't it have a data yet
+            //If it already have it will copy it in "menuInFB"
+            
 
             if(this.restaurant_List.length == 0){
-
-                UserTest.get().then(function(doc) {
+                userData.get().then(function(doc) {
                 if (doc.exists){
                     for (var restaurantList in doc.data().menu){
-                        test = doc.data().menu;
+                        menuInFB = doc.data().menu;
                     }
-
                 } else {
                     console.log("No such document!");
+                    //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
                 }
                 }).catch(function(error){
                 console.log("Error getting document: ", error)
                 });
                 
-                if(test == null){
+                if(menuInFB == null){
                     setTimeout(() => {
                         this.$data.dataRestaurant_List.push({
                         Name: this.restaurant_Name
@@ -95,7 +103,7 @@ export default {
                     }, 500);
                 } else {
                     setTimeout(() => {
-                        this.$data.dataRestaurant_List = test
+                        this.$data.dataRestaurant_List = menuInFB
                         this.$data.dataRestaurant_List.push({
                         Name: this.restaurant_Name
                         })
@@ -108,6 +116,7 @@ export default {
                 })
 
             } else {
+                //check isn't user input a same name in a random list
                 for(var x in this.restaurant_List){
                     if(name == this.$data.restaurant_List[x].Name){
                         checkduplicateName = true;
@@ -124,7 +133,6 @@ export default {
                     })
                     this.restaurant_Name = ''   
                 }, 500);
-                    
                 if(checkduplicateName == false){
                     this.restaurant_List.push({
                     Id: this.restaurant_ID++,
@@ -133,15 +141,14 @@ export default {
                 }  
             }
             setTimeout(() => {
-                    UserTest.set({
+                    userData.set({
                     menu: this.$data.dataRestaurant_List
                     })
             }, 1000);
-            
         },
         removeRestaurantName(index){
             this.restaurant_List.splice(index,1)
-            // UserTest.update({
+            // userData.update({
             //     menu: this.$data.restaurant_List
             // })
         },
@@ -151,25 +158,61 @@ export default {
                 this.$data.suggestion_restaurant = ''
             }, 2000);
         },
-        checkdata(){
-            UserTest.get().then(function(doc) {
+        //After website has render. First time that get data from firebase will be undefied
+        //So this method was created to be prepared for use in future step.
+        loadData(){
+            
+
+            userData.get().then(function(doc) {
                 if (doc.exists){
                     for (var restaurantList in doc.data().menu){
-                        test = doc.data().menu;              
+                        menuInFB = doc.data().menu;              
                     }
-
                 } else {
                     console.log("No such document!");
+                    //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
                 }
                 }).catch(function(error){
                 console.log("Error getting document: ", error)
                 });
+                
+        },
+        userStatus(){
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                     // User is signed in.
+                     console.log(user)
+                     console.log("user login")
+                     console.log(user.displayName + "  " + user.email)
+                } else {
+                    console.log(user)
+                    // No user is signed in.
+                    console.log("user not login")
+                }
+                });
+                console.log("BR")
+                var user = firebase.auth().currentUser;
+                if (user){
+                    console.log(user.email)
+                } else {
 
-                console.log(test)
+                }
+                console.log("HAHAA" + user.email)
+                
+        },
+        setUpUser(){
+            var user = firebase.auth().currentUser;
+            
+            this.$data.userEmail = user.email
+            console.log(this.$data.userEmail)
         }
     },
     beforeMount(){
-        this.checkdata();
+        setTimeout(() => {
+            this.loadData();
+        }, 1000);
+        
+        //this.setUpUser();
     }
 }
 </script>
