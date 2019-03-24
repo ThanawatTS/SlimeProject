@@ -1,4 +1,5 @@
 <template>
+
   <div class = "app"> 
     <div id= "List"  class="grid__text">
     <ul>
@@ -10,7 +11,7 @@
      </li>
     </ul>
   </div>
-   <div id = "Maps" class="grid__media"> 
+  <div id = "Maps" class="grid__media"> 
     <br>
 
     <gmap-map
@@ -77,10 +78,12 @@ export default {
         };
         this.markers.push({ position: marker });
         this.center = marker;
-       }
+    }
   }
 };
 </script>
+
+
 <style>
 #List{
   display: block;

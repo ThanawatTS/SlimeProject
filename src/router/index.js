@@ -7,7 +7,7 @@ import fire from '@/components/fire'
 import Addrestloca from '@/components/Addrestloca'
 import Maps from '@/components/Maps'
 import Suggestion from '@/components/Suggestion'
-import Usermanager from '@/components/Usermanager'
+import UserManager from '@/components/UserManager'
 import CustomerManagement from '@/components/CustomerManagement'
 import RestaurantManagement from '@/components/RestaurantManagement'
 
@@ -53,8 +53,8 @@ const router = new Router({
     },
     {
       path: '/usermanager',
-      name: 'Usermanager',
-      component: Usermanager
+      name: 'UserManager',
+      component: UserManager
     },
     {
       path: '/customerManagement',

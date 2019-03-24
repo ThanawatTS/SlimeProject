@@ -21,9 +21,8 @@ export default {
         return {
             userCur: "",
             restuarantName: "",
-            restaurantEach: { name : "", Location: "15.02", queue: {} },
+            restaurantEach: { name : "", location: "15.02", queue: {} ,status: false},
             restuarantInfo: []
-            
         }
     },
     methods: {
@@ -68,7 +67,7 @@ export default {
                         }
                     }
                 }else{
-                    console.log("else output")
+                    console.log("doc doesn't exist yet")
                 }
             })
             setTimeout(() => {
@@ -81,7 +80,10 @@ export default {
                     var tar = this.iterationCopy(this.$data.restaurantEach)
                     console.log("CheckedrestaurantInfo")
                     console.log(tar)
+                    console.log(Object.values(tar))
+                    console.log(this.$data.restuarantInfo)
                     this.$data.restuarantInfo.push(tar)
+                    //this.$data.restuarantInfo.push(this.$data.restaurantEach)
                     console.log(Object.values(tar))
                     //console.log(object.values(this.$data.restuarantInfo))
                     var restaurantData = {
@@ -148,12 +150,15 @@ export default {
                     temparr = doc.data().Restaurant.RestaurantName
                     console.log("loadData" + temparr)
                 } else {
-                    console.log("NO Doc")
+                    console.log("N Doc")
                 }
             })
             setTimeout(() => {
                 console.log("DATA" + temparr)  
                 this.$data.restuarantInfo = temparr
+                if(temparr == null){
+                    this.$data.restuarantInfo = []
+                }
                 console.log(this.$data.restuarantInfo)
             }, 1500);
             

@@ -52,9 +52,7 @@
 <script>
 import firebase from 'firebase'
 import firebaseApp from './firebaseInit'
-const userData = firebaseApp.collection("users").doc("1")
-var menuInFB
-var dataCollection
+
 export default {
     name: 'suggestion',
     data () {
@@ -62,15 +60,12 @@ export default {
             restaurant_Name: '',
             restaurant_List: [],
             dataRestaurant_List: [],
+            menuInFB: [],
             emptyName: '',
             suggestion_restaurant: '',
             message_duplicatename: 'Already have one',
             seen: false,
             userEmail: ''
-                
-
-            
-            
         }
     },
     methods: {
@@ -78,38 +73,53 @@ export default {
             var checkduplicateName = false;
             //First time when web is reder it will check in firebase cloud isn't it have a data yet
             //If it already have it will copy it in "menuInFB"
-            
+            var user = firebase.auth().currentUser;
+            if(user){
+                this.$data.userEmail = user.email;
+                console.log("Login by email: ",this.$data.userEmail)
+            } else {
+                console.log("Didn't login")
+            }
 
+            var userMenuAdded = firebaseApp.collection("usersChoosingMenu").doc(this.$data.userEmail)
+            
             if(this.restaurant_List.length == 0){
-                userData.get().then(function(doc) {
-                if (doc.exists){
-                    for (var restaurantList in doc.data().menu){
-                        menuInFB = doc.data().menu;
-                    }
-                } else {
-                    console.log("No such document!");
-                    //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
-                }
-                }).catch(function(error){
-                console.log("Error getting document: ", error)
-                });
+                // userMenuAdded.get().then(function(doc) {
+                // if (doc.exists){
+                //     for (var restaurantList in doc.data().menu){
+                //         this.$data.menuInFB = doc.data().menu;
+                //     }
+                // } else {
+                //     console.log("No such document!");
+                // }
+                // }).catch(function(error){
+                // console.log("Error getting document: ", error)
+                // });
                 
-                if(menuInFB == null){
-                    setTimeout(() => {
+
+                // if(this.$data.dataRestaurant_List.length == 0){
+                //     setTimeout(() => {
+                //         this.$data.dataRestaurant_List.push({
+                //         Name: this.restaurant_Name
+                //         })
+                //         this.restaurant_Name = ''   
+                //     }, 500);
+                // } else {
+                //     setTimeout(() => {
+                //         this.$data.dataRestaurant_List = this.$data.menuInFB
+                //         this.$data.dataRestaurant_List.push({
+                //         Name: this.restaurant_Name
+                //         })
+                //         this.restaurant_Name = ''   
+                //     }, 500);
+                // }
+                setTimeout(() => {
                         this.$data.dataRestaurant_List.push({
                         Name: this.restaurant_Name
                         })
-                        this.restaurant_Name = ''   
-                    }, 500);
-                } else {
-                    setTimeout(() => {
-                        this.$data.dataRestaurant_List = menuInFB
-                        this.$data.dataRestaurant_List.push({
-                        Name: this.restaurant_Name
-                        })
-                        this.restaurant_Name = ''   
-                    }, 500);
-                }
+                        this.restaurant_Name = ''
+                    }, 1000);
+
                 this.restaurant_List.push({
                     Id: this.restaurant_ID,
                     Name: this.restaurant_Name
@@ -118,7 +128,7 @@ export default {
             } else {
                 //check isn't user input a same name in a random list
                 for(var x in this.restaurant_List){
-                    if(name == this.$data.restaurant_List[x].Name){
+                    if(this.$data.restaurant_Name == this.$data.restaurant_List[x].Name){
                         checkduplicateName = true;
                         this.$data.seen = true;
                         setTimeout(() => {
@@ -141,7 +151,7 @@ export default {
                 }  
             }
             setTimeout(() => {
-                    userData.set({
+                    userMenuAdded.set({
                     menu: this.$data.dataRestaurant_List
                     })
             }, 1000);
@@ -161,20 +171,51 @@ export default {
         //After website has render. First time that get data from firebase will be undefied
         //So this method was created to be prepared for use in future step.
         loadData(){
-            
+            var user = firebase.auth().currentUser;
+            if(user){
+                this.$data.userEmail = user.email;
+                console.log("User login by email: " + this.$data.userEmail)
+            } else {
+                console.log("Didn't login yet")
+            }
 
-            userData.get().then(function(doc) {
-                if (doc.exists){
-                    for (var restaurantList in doc.data().menu){
-                        menuInFB = doc.data().menu;              
-                    }
+            var userInputData = firebaseApp.collection("usersChoosingMenu").doc(this.$data.userEmail)
+            var userDataFB
+
+            userInputData.get().then(function(doc) {
+                if(doc.exists){
+                    userDataFB = doc.data().menu
+                    console.log("Doc data: ", userDataFB)
                 } else {
-                    console.log("No such document!");
-                    //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
+                    console.log("No Doc")
                 }
-                }).catch(function(error){
-                console.log("Error getting document: ", error)
-                });
+            })
+
+            setTimeout(() => {
+                console.log("Menu in Database: ",userDataFB)
+                if(userDataFB != null){
+                    //this.$data.restaurant_List = userDataFB
+                    this.$data.dataRestaurant_List = userDataFB
+                } else {
+                    this.$data.restaurant_List = []
+                    this.$data.dataRestaurant_List = []
+                }
+            }, 1500);
+
+
+
+            // userData.get().then(function(doc) {
+            //     if (doc.exists){
+            //         for (var restaurantList in doc.data().menu){
+            //             menuInFB = doc.data().menu;              
+            //         }
+            //     } else {
+            //         console.log("No such document!");
+            //         //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
+            //     }
+            //     }).catch(function(error){
+            //     console.log("Error getting document: ", error)
+            //     });
                 
         },
         userStatus(){
@@ -197,7 +238,7 @@ export default {
                 } else {
 
                 }
-                console.log("HAHAA" + user.email)
+                
                 
         },
         setUpUser(){
