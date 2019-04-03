@@ -5,6 +5,8 @@
             <label> Create Restaurant Name </label><br/>
             <input v-model="restuarantName" placeholder="Input restaurant name">
             <v-btn @click.prevent="createRestaurant(restuarantName)">Create</v-btn>
+            <v-btn @click.prevent="pushQueue">Queue</v-btn>
+            
         </form>
 
         
@@ -14,6 +16,7 @@
 <script>
 import firebase from 'firebase'
 import firebaseApp from './firebaseInit'
+import { exists } from 'fs';
 
 export default {
     name: 'restaurantManagement',
@@ -21,7 +24,7 @@ export default {
         return {
             userCur: "",
             restuarantName: "",
-            restaurantEach: { name : "", location: "15.02", queue: {} ,status: false},
+            restaurantEach: { location: "15.02", queue: {name: "", queue: "0"}, status: false},
             restuarantInfo: []
         }
     },
@@ -34,8 +37,6 @@ export default {
                     console.log("Didn't login")
                 }
             })
-
-            
         },
         createRestaurant(rest_name){
             var user = firebase.auth().currentUser;
@@ -46,77 +47,93 @@ export default {
                     console.log("Didn't login yet")
                 }
 
-            
-            var restaurantCreate = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur)
-            var restaurantExist = restaurantCreate;
-            var checkName = this.$data.restuarantName
-            var existName = false;
-            
-            restaurantExist.get().then(function(doc) {
-                if (doc.exists){
-                    for(var checkExistName in doc.data().Restaurant.RestaurantName){
-                        console.log("=========start")
-                        console.log("Count" + checkExistName)
-                        console.log("NAME: " + doc.data().Restaurant.RestaurantName[checkExistName].name)
-                        console.log("=========end")
-                        if(checkName == doc.data().Restaurant.RestaurantName[checkExistName].name){
-                            console.log("This Name is already have!")
-                            existName = true;
-                        } else {
-                            console.log("Not have Yet!")
-                        }
+            var restaurantCreate = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
+            var restaurantExist = restaurantCreate
+            var checkRestaurantName = rest_name
+            var existName = false
+        
+            restaurantExist.get().then(function(querySnapshot){
+                querySnapshot.forEach(function(doc){
+                    console.log(doc.id, " => ", doc.data())
+                    if(checkRestaurantName == doc.id){
+                        console.log("This Name is already have!")
+                        existName = true;
+                    } else if (!existName) {
+                        console.log("This Name not have Yet!")
                     }
-                }else{
-                    console.log("doc doesn't exist yet")
-                }
+                });
+
             })
+            
             setTimeout(() => {
-                console.log(existName)
                 if(existName){
                     console.log("Not add in database")
                 } else {
+                    restaurantCreate.doc(rest_name).set(this.$data.restaurantEach)
+                }
+            }, 2000);
+            // restaurantExist.get().then(function(doc) {
+            //     console.log(doc.data())
+            //     if (doc.exists){
+            //         for(var checkExistName in doc.data().Restaurant.RestaurantName){
+            //             console.log("=========start")
+            //             console.log("Count" + checkExistName)
+            //             console.log("NAME: " + doc.data().Restaurant.RestaurantName[checkExistName].name)
+            //             console.log("=========end")
+            //             if(checkName == doc.data().Restaurant.RestaurantName[checkExistName].name){
+            //                 console.log("This Name is already have!")
+            //                 existName = true;
+            //             } else {
+            //                 console.log("Not have Yet!")
+            //             }
+            //         }
+            //     }else{
+            //         console.log("doc doesn't exist yet")
+            //     }
+            // })
+            // setTimeout(() => {
+            //     console.log(existName)
+            //     if(existName){
+            //         console.log("Not add in database")
+            //     } else {
 
-                    this.$data.restaurantEach.name = this.$data.restuarantName
-                    var tar = this.iterationCopy(this.$data.restaurantEach)
-                    console.log("CheckedrestaurantInfo")
-                    console.log(tar)
-                    console.log(Object.values(tar))
-                    console.log(this.$data.restuarantInfo)
-                    this.$data.restuarantInfo.push(tar)
-                    //this.$data.restuarantInfo.push(this.$data.restaurantEach)
-                    console.log(Object.values(tar))
-                    //console.log(object.values(this.$data.restuarantInfo))
-                    var restaurantData = {
-                        Restaurant: {
-                            RestaurantName: this.$data.restuarantInfo,
-                        }
-                    }
-                    restaurantCreate.set(restaurantData).then( function() {
-                        console.log("DOC Created!")
-                        this.$data.restaurantEach.name = ""
-                    })
+            //         this.$data.restaurantEach.name = this.$data.restuarantName
+            //         var tar = this.iterationCopy(this.$data.restaurantEach)
+            //         console.log("CheckedrestaurantInfo")
+            //         console.log(tar)
+            //         console.log(Object.values(tar))
+            //         console.log(this.$data.restuarantInfo)
+            //         this.$data.restuarantInfo.push(tar)
+            //         //this.$data.restuarantInfo.push(this.$data.restaurantEach)
+            //         console.log(Object.values(tar))
+            //         //console.log(object.values(this.$data.restuarantInfo))
+            //         var restaurantData = {
+            //             Restaurant: {
+            //                 RestaurantName: this.$data.restuarantInfo,
+            //             }
+            //         }
+            //         restaurantCreate.set(restaurantData).then( function() {
+            //             console.log("DOC Created!")
+            //             this.$data.restaurantEach.name = ""
+            //         })
                     
 
-                    // for (var x in this.$data.restaurantEach){
-                    //     console.log("===Each")
-                    //     console.log(this.$data.restaurantEach.name)
-                    //     console.log("===")
-                    //     console.log("==========Each2")
-                    //     console.log(Object.values(this.$data.restaurantEach))
-                    // }
-                    // for (var x in this.$data.restuarantInfo){
-                    //     console.log("===Info")
-                    //     console.log(this.$data.restuarantInfo[x].name)
-                    //     console.log("===")
-                    // }
-
-
+            //         // for (var x in this.$data.restaurantEach){
+            //         //     console.log("===Each")
+            //         //     console.log(this.$data.restaurantEach.name)
+            //         //     console.log("===")
+            //         //     console.log("==========Each2")
+            //         //     console.log(Object.values(this.$data.restaurantEach))
+            //         // }
+            //         // for (var x in this.$data.restuarantInfo){
+            //         //     console.log("===Info")
+            //         //     console.log(this.$data.restuarantInfo[x].name)
+            //         //     console.log("===")
+            //         // }
                     
-
-                    
-                } 
+            //     } 
                 
-            }, 1500);    
+            // }, 1500);    
         },
         iterationCopy(src){
             var target = {}
