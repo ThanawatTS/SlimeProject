@@ -154,7 +154,7 @@ export default {
                 }
 
             
-            var restaurantData = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur)
+            var restaurantData = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
             var temparr
             restaurantData.get().then(function(doc) {
                 console.log("1")
