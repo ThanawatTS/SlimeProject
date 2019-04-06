@@ -24,6 +24,7 @@
 <script>
 import firebase from 'firebase';
 
+
 export default {
     name: 'signup',
     data() {
@@ -38,7 +39,7 @@ export default {
             .then( user => {
                 alert('Account created successful!');
                 console.log('register');
-                this.$router.push('/');
+                this.$router.push('/signin');
             },
             err => {
                 alert(err.message);
