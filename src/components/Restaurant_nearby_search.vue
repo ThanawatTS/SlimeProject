@@ -1,5 +1,4 @@
 <template>
-
   <div class = "app"> 
         <div id = "List" class="grid__text">
         <v-btn small color="yellow lighten-2" @click="addgeofire()">
@@ -8,18 +7,19 @@
         <v-btn small color="yellow lighten-2" @click="findnearby()">
         Test Find nearby
         </v-btn>
-        
-     <v-layout>
+    
+    <div v-for="Restname in RestaurantName">
+    <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
         <v-card-title primary-title>
           <div>
-            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-            <div> hello </div>
+            <h3 class="headline mb-0">{{Restname}}</h3>
+            <div> asdlksadlkasldklk </div>
           </div>
           <v-card-actions>
-          <v-btn flat color="orange">Share</v-btn>
-          <v-btn flat color="orange">Explore</v-btn>
+          <v-btn flat color="orange" @click="MakeQue(Restname)" >Que</v-btn>
+
         </v-card-actions>
         </v-card-title>
 
@@ -27,6 +27,7 @@
       </v-card>
     </v-flex>
   </v-layout>
+</div>
 </div>
   <div id = "Maps" class="grid__media"> 
     <br>
@@ -64,22 +65,25 @@ export default {
     return {
       mapCenter: { lat: 0, lng: 0 },
       markers: [],
-      test : [],
+      RestaurantName : [],
       RestuarantLocation: [],
       Currentlocation: [],
       latitude : 0,
       longitude : 0,
-      firebaseRef : firebaseApp.collection("Geofire").doc("Location")
+      firebaseRef : firebase.database().ref("location")
     };
   },
     
-    mounted(){
+    created(){
       this.geolocate();
-  },
-
+    },
+    // watch(){
+      
+    // },
   methods: {
         //Find current location
         geolocate: function() {
+          this.Currentlocation = [];
           navigator.geolocation.getCurrentPosition(position => {
             this.latitude = position.coords.latitude;
             this.longitude = position.coords.longitude;
@@ -88,12 +92,12 @@ export default {
               lng: position.coords.longitude
             };
             this.Currentlocation.push({position : this.mapCenter})
+            console.log(this.Currentlocation)
           });
         },
 
         addgeofire () {
-          var firebaseRef = firebase.database().ref("location");
-          var geoFire = new GeoFire(firebaseRef);
+          var geoFire = new GeoFire(this.firebaseRef);
           // Create a new GeoFire instance at the random Firebase location
           firebaseApp.collection("RestaurantData").get().then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
@@ -110,21 +114,19 @@ export default {
           });
       },//end addgeofire
      
-     findnearby () {
-          var firebaseRef = firebase.database().ref("location");
+     findnearby: function() {
+          var firebaseRef = firebase.database().ref("location")
           var radius = parseFloat(1000);
           var operation;
           var geoFire = new GeoFire(firebaseRef);
           var geoQuery;        
-          var self =this;
+          this.Restaurant = []
 
-        //   var getNearbyRestaurants = function() {
-        // // Cancel the previous GeoQuery, if it exists, and clear the log
-        //   if (geoQuery) {
-        //   geoQuery.cancel();
-        //   clearLog();
-        //   }
-        // }
+          if (geoQuery) {
+          geoQuery.cancel();
+          clearLog();
+          }
+        
           if (typeof geoQuery !== "undefined") {
           operation = "Updating";
 
@@ -134,7 +136,6 @@ export default {
           });
             } else {
           operation = "Creating";
-
           geoQuery = geoFire.query({
             center: [this.latitude, this.longitude],
             radius: radius
@@ -148,15 +149,51 @@ export default {
                 lng: location[1]
               };
               this.markers.push({ position: marker });
-  
+              this.RestaurantName.push(key);
+
                   
             });
-            console.log(firebaseRef)
+            console.log(this.firebaseRef)
 
             geoQuery.on("key_exited", function(key, location, distance) {
               console.log(key + " is located at [" + location + "] which is no longer within the query (" + distance.toFixed(2) + " km from center)");
             });
       },
+      MakeQue : function (restname) {
+      console.log(restname.RestaurantMail)
+      console.log(restname.Name)
+      var Get_Que_Value = firebaseApp.collection("RestaurantData").doc(restname)
+      
+      Get_Que_Value.get().then(function(doc) {
+          if (doc.exists) {
+              var que = doc.data().Queue
+              console.log("Document data:", doc.data().Queue);
+              console.log(que[que.length-1])
+              console.log(que[que.length-1]+1)
+              que.push(que[que.length-1]+1)
+              console.log(que)
+          
+          Get_Que_Value.update({
+              Queue: que
+          })
+          .then(function() {
+              console.log("Document successfully updated!");
+          })
+          .catch(function(error) {
+              // The document probably doesn't exist.
+              console.error("Error updating document: ", error);
+          });     
+
+              
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+      }).catch(function(error) {
+          console.log("Error getting document:", error);
+      });
+
+    },
 
 
 
