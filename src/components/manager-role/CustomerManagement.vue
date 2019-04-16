@@ -35,7 +35,8 @@ export default {
                     console.log("INCONDITION")
                     console.log(doc.data())
                     dbSetRole.update({
-                        "role": "customer"
+                        role: "customer",
+                        newUser: false
                     }).then(() => {
                         console.log("Update! role become: customer")
                     })

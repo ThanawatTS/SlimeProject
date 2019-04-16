@@ -47,9 +47,10 @@ export default {
                 alert(err.message);
                 console.log("Can't created account");
             });
-
-            emailDB.doc(this.username).set({
-                role: "newUser"
+            var setEmailToLWC = this.username.toLowerCase();
+            emailDB.doc(setEmailToLWC).set({
+                role: "newUser",
+                newUser: true
             })
 
         }

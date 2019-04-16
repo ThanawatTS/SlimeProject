@@ -11,7 +11,7 @@
 import firebase from 'firebase';
 
 export default {
-    name: 'usermanager',
+    name: 'userManager',
     data () {
         return {
         }
