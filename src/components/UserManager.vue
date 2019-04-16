@@ -8,6 +8,8 @@
 </template>
  
 <script>
+import firebase from 'firebase';
+
 export default {
     name: 'usermanager',
     data () {
@@ -23,7 +25,23 @@ export default {
         },
         suggestionMenu(){
             this.$router.push('/suggestion')
+        },
+        userCurrent(){
+            var user = firebase.auth().currentUser;
+            if(user){
+                console.log(user.displayName)
+                console.log(user.email)
+                console.log(user.photoURL)
+            } else {
+                console.log("NO LONGER USER")
+            }
         }
+        
+    },
+    beforeMount(){
+        setTimeout(() => {
+           this.userCurrent()
+        }, 1000);
         
     }
 }
