@@ -7,7 +7,7 @@
 
 <script>
 import firebase from 'firebase'
-import firebaseApp from './firebaseInit'
+import firebaseApp from '../firebase/firebaseInit'
 
 export default {
     name: 'customerManagement',

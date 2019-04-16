@@ -10,7 +10,7 @@
 
 <script>
 
-  import firebaseApp from './firebaseInit';
+  import firebaseApp from './firebase/firebaseInit';
   import firebase from 'firebase/app'
   export default {
     name: "List",
