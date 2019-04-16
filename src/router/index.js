@@ -53,7 +53,8 @@ const router = new Router({
       name: 'Maps',
       component: Maps,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        role: "customer"
       }
     },
     {
@@ -90,7 +91,6 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         role: "restaurantOwner",
-
       }
     },
     {
@@ -101,7 +101,11 @@ const router = new Router({
     {
       path: '/Restaurant_que',
       name: 'Restaurant_Que',
-      component: Restaurant_Que
+      component: Restaurant_Que,
+      meta: {
+        requiresAuth: true,
+        role: "restaurantOwner",
+      }
     }
   ]
 })
