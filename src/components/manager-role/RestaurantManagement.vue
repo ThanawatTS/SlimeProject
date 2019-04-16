@@ -15,7 +15,7 @@
 
 <script>
 import firebase from 'firebase'
-import firebaseApp from './firebaseInit'
+import firebaseApp from '../firebase/firebaseInit'
 import { exists } from 'fs';
 
 export default {
