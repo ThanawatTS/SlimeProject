@@ -40,7 +40,7 @@ export default {
     },
     beforeMount(){
         setTimeout(() => {
-           this.userCurrent()
+           //this.userCurrent()
         }, 1000);
         
     }

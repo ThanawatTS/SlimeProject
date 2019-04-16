@@ -23,7 +23,9 @@
 
 <script>
 import firebase from 'firebase';
+import firebaseApp from '../firebase/firebaseInit'
 
+var emailDB = firebaseApp.collection("emailSignupFromWebsite")
 export default {
     name: 'signin',
     data() {
@@ -38,7 +40,26 @@ export default {
             .then( user => {
                 alert('Login successful!');
                 console.log('Login Successful');
-                this.$router.push('/usermanager');
+                emailDB.get().then((querySnapshot) =>{
+                    querySnapshot.forEach((doc) =>{
+                        if(doc.id == this.username) {
+                            switch(doc.data().role) {
+
+                                case "newUser":
+                                    this.$router.push('/usermanager')
+                                    break;
+                                case "restaurantOwner":
+                                    this.$router.push('/restaurantManagement')
+                                    break;
+                                case "customer":
+                                    this.$router.push('/customerManagement')
+                                    break;
+                            
+                            }
+                            
+                        }
+                    })
+                })
             },
             err => {
                 alert(err.message);
