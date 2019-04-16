@@ -1,0 +1,70 @@
+curl -H "Content-Type: application/json; charset=utf-8" 
+-H "Authorization: Bearer ya29.c.ElrkBvradG4BfJlkYZtQ7irFnLU6lYyDY_LgjzhiB1uwueFzznkYa5zITClB5WLI-A8ILMHHywXH_UJucMt0KbNoQaIjpBAbRQBSy6uSOnrtNkoq1Za44Bk8I2w"  
+-d "{\"queryInput\":{\"text\":{\"text\":\"สวัสดี\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}"
+"https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+
+curl -H "Content-Type: application/json; charset=utf-8"  
+-H "Authorization: Bearer ya29.c.ElrkBmCj--X89SZCcuYkNePeC0hB4QhZo_D5pSO2EoVEF-jRxx_orsXBaOfVLsJrHdgoyTXT0QWLAuleezohlfcCAgWwoSHPPTqDOrl_250kTePCJoI09RZ_CM8"  
+-d "{\"queryInput\":{\"text\":{\"text\":\"ขอทักทาย\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}"
+ "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+
+ curl -H "Content-Type: application/json; charset=utf-8" 
+-H "Authorization: Bearer ya29.c.ElrkBhyhNuR0S6Iztq0iBiJ7Jph_qubUgsIShnN2eQkCE5lm1pZYq49_itBDmemVWJ4HBevRScyDFjPbdsmntvuKZnEJRAts_LHBUZy1nd3vcwjAykI_y96u_L8"  
+-d "{\"queryInput\":{\"text\":{\"text\":\"ขอคิว\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}" 
+    "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+
+
+    curl -H "Content-Type: application/json; charset=utf-8"  
+    -H "Authorization: Bearer ya29.c.ElrkBlhkVh4t1GOI3KNBfqfAbmqwyLpxKfK5gJOjyjKlGCynAfFFB4tDMKZnHu6Dx0u1Hr-vnDtv2g0v-qwlGzu3qrOOp5cVxqmOxvGOzYTjkJ-pQv4jwqLhMIA"  
+    -d "{\"queryInput\":{\"text\":{\"text\":\"คิว\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}"
+     "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+     curl -H "Content-Type: application/json; charset=utf-8"  
+     -H "Authorization: Bearer ya29.c.ElrkBlhkVh4t1GOI3KNBfqfAbmqwyLpxKfK5gJOjyjKlGCynAfFFB4tDMKZnHu6Dx0u1Hr-vnDtv2g0v-qwlGzu3qrOOp5cVxqmOxvGOzYTjkJ-pQv4jwqLhMIA" 
+      -d "{\"queryInput\":{\"text\":{\"text\":\"คิว\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}" 
+        "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+        curl -H "Content-Type: application/json; charset=utf-8"  
+        -H "Authorization: Bearer ya29.c.ElrkBlhkVh4t1GOI3KNBfqfAbmqwyLpxKfK5gJOjyjKlGCynAfFFB4tDMKZnHu6Dx0u1Hr-vnDtv2g0v-qwlGzu3qrOOp5cVxqmOxvGOzYTjkJ-pQv4jwqLhMIA"
+          -d "{\"queryInput\":{\"text\":{\"text\":\"สวัสดี\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}" 
+          "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+          งงง
+
+
+
+          curl -H "Content-Type: application/json; charset=utf-8"
+            -H "Authorization: Bearer ya29.c.ElrkBlVG2xDrlmq_wODnTKGdcd35BFXT-jd_PW-CC3YOLAolFFXOx_E13vQ5Iu0AE0_S-rzzxWz0nYpvBzNCWavt_BNxv1drWWfxWx1AfpYgaJjrn1PavhT-3GA"  
+            -d "{\"queryInput\":{\"text\":{\"text\":\"ขอคิว\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}"
+             "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+
+             curl -H "Content-Type: application/json; charset=utf-8"
+               -H "Authorization: Bearer ya29.c.ElrkBlVG2xDrlmq_wODnTKGdcd35BFXT-jd_PW-CC3YOLAolFFXOx_E13vQ5Iu0AE0_S-rzzxWz0nYpvBzNCWavt_BNxv1drWWfxWx1AfpYgaJjrn1PavhT-3GA"  
+               -d "{\"queryInput\":{\"text\":{\"text\":\"สวัสดี\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}"
+                "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+                curl -H "Content-Type: application/json; "  
+                -H "Authorization: 
+                "  -d ""
+                 "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+
+                 curl -H "Content-Type: application/json; charset=utf-8"  
+                 -H "Authorization: Bearer ya29.c.ElrkBmtjqDrldRdDtuObHonsSyvznY7fG1On4Uis9C4aFD_qY6vwlpttMbwmlcIpHkQPmYvDeQFFS8MVkP6KD8xSCmlYvhkwhj_TiWFlXks3PVBnV-uktm7krww"  -d "{\"queryInput\":{\"text\":{\"text\":\"สวัสดี\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}" 
+                 "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+
+
+                   curl -H "Content-Type: application/json; charset=utf-8" 
+                    -H "Authorization: Bearer ya29.c.ElroBvhLFfihcAOXMIvnsomSfqdNLISV-ZV4azy44GqhWhA-GPG4sKQzfliD92Nl062BJBT3ZxWiKg6q1WgSqRimcbH6VSwDtGFOnSWrY6ooyu9mj_mxDdmak_8" 
+                     -d "{\"queryInput\":{\"text\":{\"text\":\"แสดงคิว\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}"
+                      "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"
+
+
+                      curl -H "Content-Type: application/json; charset=utf-8" 
+                       -H "Authorization: Bearer ya29.c.ElroBvhLFfihcAOXMIvnsomSfqdNLISV-ZV4azy44GqhWhA-GPG4sKQzfliD92Nl062BJBT3ZxWiKg6q1WgSqRimcbH6VSwDtGFOnSWrY6ooyu9mj_mxDdmak_8"  
+                       -d "{\"queryInput\":{\"text\":{\"text\":\"ขอคิว\",\"languageCode\":\"th\"}},\"queryParams\":{\"timeZone\":\"Asia/Bangkok\"}}" 
+                       "https://dialogflow.googleapis.com/v2/projects/slimeslam-24d26/agent/sessions/f5c83a8d-3613-e88d-fca2-48e60446ed62:detectIntent"

@@ -76,7 +76,7 @@ export default {
             { 
             grant_type: 'authorization_code',
             code: userUrlCode,
-            redirect_uri: 'https://1de991f6.ngrok.io',
+            redirect_uri: 'https://b5b9cb36.ngrok.io',
             client_id: '1554433367',
             client_secret: '88f24f0c0dfa5258983d13850529bcf9',
             }};
