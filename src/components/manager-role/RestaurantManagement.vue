@@ -3,8 +3,8 @@
         <h1>Restaurant</h1>
         <form>
             <label> Create Restaurant Name </label><br/>
-            <input v-model="restuarantName" placeholder="Input restaurant name">
-            <v-btn @click.prevent="createRestaurant(restuarantName)">Create</v-btn>
+            <input v-model="restName" placeholder="Input restaurant name">
+            <v-btn @click.prevent="createRestaurant(restName)">Create</v-btn>
             <v-btn @click.prevent="pushQueue">Queue</v-btn>
             
         </form>
@@ -17,15 +17,16 @@
 import firebase from 'firebase'
 import firebaseApp from '../firebase/firebaseInit'
 import { exists } from 'fs';
+var emailDB = firebaseApp.collection("emailSignupFromWebsite")
 
 export default {
     name: 'restaurantManagement',
     data () {
         return {
             userCur: "",
-            restuarantName: "",
-            restaurantEach: { location: "15.02", queue: {name: "", queue: "0"}, status: false},
-            restuarantInfo: []
+            restName: "",
+            restaurantEach: { restaurantName: "", emailOwner: "", emailEmployee: "", restaurantArrange: ""},
+            restuarantInfo: [],
         }
     },
     methods: {
@@ -37,6 +38,10 @@ export default {
                     console.log("Didn't login")
                 }
             })
+        },
+        genPassword(){
+            var emp_password = Math.random().toString(36).slice(-6)
+            return emp_password
         },
         createRestaurant(rest_name){
             var user = firebase.auth().currentUser;
@@ -50,16 +55,20 @@ export default {
             var restaurantCreate = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
             var restaurantExist = restaurantCreate
             var checkRestaurantName = rest_name
+            var emp_restaurant
+            var restaurantArrangeNum = 1
             var existName = false
         
-            restaurantExist.get().then(function(querySnapshot){
-                querySnapshot.forEach(function(doc){
+            restaurantExist.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.id, " => ", doc.data())
+                    restaurantArrangeNum++
                     if(checkRestaurantName == doc.id){
                         console.log("This Name is already have!")
                         existName = true;
                     } else if (!existName) {
                         console.log("This Name not have Yet!")
+                        console.log("NUM", restaurantArrangeNum)
                     }
                 });
 
@@ -69,9 +78,49 @@ export default {
                 if(existName){
                     console.log("Not add in database")
                 } else {
-                    restaurantCreate.doc(rest_name).set(this.$data.restaurantEach)
-                }
-            }, 2000);
+                    restaurantExist.doc(rest_name).set({
+                        restaurantName: rest_name, 
+                        emailOwner: this.$data.userCur,
+                        emailEmployee: "EMP"+restaurantArrangeNum+"_"+this.$data.userCur,
+                        restaurantArrange: restaurantArrangeNum
+                    })
+                    emp_restaurant = "EMP"+restaurantArrangeNum+"_"+this.$data.userCur
+                    var emp_password = this.genPassword()
+
+                    setTimeout(() => {
+                    firebase.auth().createUserWithEmailAndPassword(emp_restaurant, emp_password).then( () => {
+                        var setEmailToLWC = emp_restaurant.toLowerCase();
+                        var employeeEmailDB = firebaseApp.collection("EmployeeEmail")
+
+                        employeeEmailDB.doc(setEmailToLWC).set({
+                            owner: this.$data.userCur,
+                            role: "employee",
+                        })
+                        emailDB.doc(this.$data.userCur).collection("EmployeeEmail").doc(setEmailToLWC).set({
+                            role: "employee",
+                            newUser: false,
+                            owner: this.$data.userCur,
+                            password: emp_password,
+                            restaurantArrange: restaurantArrangeNum
+                        })
+                        setTimeout(() => {
+                            firebase.auth().signOut().then(() =>{
+                                console.log("sign out!")
+                                this.$router.push('/signin');
+                                alert(" Employee\'s password: " + emp_password + " \n Please noted the password you will be force to sign in again");
+                                setTimeout(() => {
+                                    alert('Please sign in again to vertify Owner account');
+                                }, 50);
+                            })
+                        }, 1200);
+
+                    },  err => {
+                            alert(err.message);
+                            console.log("Can't created account");
+                        });
+                    }, 200);
+                } 
+            }, 1100);
             // restaurantExist.get().then(function(doc) {
             //     console.log(doc.data())
             //     if (doc.exists){
@@ -156,22 +205,25 @@ export default {
             
             var restaurantData = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
             var temparr
-            restaurantData.get().then(function(doc) {
-                console.log("1")
-                if(doc.exists){
-                    console.log("2")
-                    // for(var x in doc.data().Restaurant.RestaurantName){
-                    //     restuarantInfo = doc.data().Restaurant.RestaurantName
-                    // }
-                    console.log("2"+ doc.data().Restaurant.RestaurantName)
-                    temparr = doc.data().Restaurant.RestaurantName
-                    console.log("loadData" + temparr)
-                } else {
-                    console.log("N Doc")
-                }
+            restaurantData.get().then((doc) => {
+
             })
+            // restaurantData.get().then(function(doc) {
+            //     console.log("1")
+            //     if(doc.exists){
+            //         console.log("2")
+            //         // for(var x in doc.data().Restaurant.RestaurantName){
+            //         //     restuarantInfo = doc.data().Restaurant.RestaurantName
+            //         // }
+            //         console.log("2"+ doc.data().Restaurant.RestaurantName)
+            //         temparr = doc.data().Restaurant.RestaurantName
+            //         console.log("loadData" + temparr)
+            //     } else {
+            //         console.log("N Doc")
+            //     }
+            // })
             setTimeout(() => {
-                console.log("DATA" + temparr)  
+                console.log("DATA", temparr)  
                 this.$data.restuarantInfo = temparr
                 if(temparr == null){
                     this.$data.restuarantInfo = []
@@ -180,14 +232,31 @@ export default {
             }, 1500);
             
         
+        },
+        setRestaurantRole(){
+
+            var dbSetRole = emailDB.doc(this.$data.userCur)
+            dbSetRole.get().then((doc) => {
+                if(doc.data().role == "newUser"){
+                    console.log("INCONDITION")
+                    console.log(doc.data())
+                    dbSetRole.update({
+                        role: "restaurantOwner",
+                        newUser: false
+                    }).then(() => {
+                        console.log("Update! role become: restaurantOwner")
+                    })
+                    
+                }
+            })
+        
         }
     },
     beforeMount(){
-        this.checkStatus()
+        //this.checkStatus()
         setTimeout(() => {
-            this.loadData()
-        }, 1500);
-       
+            //this.loadData()
+        }, 1500);       
     }
 }
 
