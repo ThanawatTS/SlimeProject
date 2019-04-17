@@ -112,7 +112,7 @@ export default {
                 this.loginByLine()
             }, 1000);
             this.getdata()
-            this.userCurrent()
+            
         }, 1000);
         
     }

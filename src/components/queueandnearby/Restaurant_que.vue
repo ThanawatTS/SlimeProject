@@ -60,11 +60,12 @@ export default {
     employeeEmail.get().then((doc) => {
       if(doc.exists){
         var lwcEmploy = doc.data().EmployeeEmail.toLowerCase();
+        var lwcOwner = doc.data().RestaurantMail.toLowerCase();
         var lwcUser = userCur.email.toLowerCase();
         console.log("1" ,lwcEmploy)
         console.log("2", lwcUser)
-        if(lwcEmploy != lwcUser) this.$router.push('/employee');
-        else console.log("correct path")
+        if(lwcEmploy == lwcUser || lwcOwner == lwcUser) console.log("correct path")
+        else this.$router.push('/employee');
       } else {
         console.log("Doc doesn't exist")
       }
@@ -139,7 +140,10 @@ export default {
 beforeRouteUpdate (to, from, next){
   this.verifyUser(to.params.Pid)
   console.log("VERIFY BEFORE")
-  //next()
+  setTimeout(() => {
+    next()  
+  }, 700);
+  
 },
 beforeMount(){
   this.verifyUser(this.$route.params.Pid)

@@ -7,6 +7,10 @@
             <v-btn @click.prevent="createRestaurant(restName)">Create</v-btn>
             <v-btn @click.prevent="pushQueue">Queue</v-btn>
             
+            <div v-for="listName in showRestaurantList" :key="listName.id">
+               <h2 @click.prevent="gotoRestaurant(listName)"> {{listName}} </h2>
+            </div>
+                
         </form>
 
         
@@ -27,17 +31,21 @@ export default {
             restName: "",
             restaurantEach: { restaurantName: "", emailOwner: "", emailEmployee: "", restaurantArrange: ""},
             restuarantInfo: [],
+            showRestaurantList: [],
         }
     },
     methods: {
+        gotoRestaurant(nameRestaurant){
+            this.$router.push({name: 'Restaurant_que', params:{Pid: nameRestaurant}})
+        },
         checkStatus(){
-            firebase.auth().onAuthStateChanged(function(user) {
+            var user = firebase.auth().currentUser;
                 if(user){
-                    console.log(user.email)
+                    this.$data.userCur = user.email;
+                    console.log(this.$data.userCur)
                 } else {
-                    console.log("Didn't login")
+                    console.log("Didn't login yet")
                 }
-            })
         },
         genPassword(){
             var emp_password = Math.random().toString(36).slice(-6)
@@ -262,12 +270,22 @@ export default {
                 }
             })
         
+        },
+        showRestaurantName(){
+            console.log(this.$data.userCur)
+            var rest_name = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
+            rest_name.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id)
+                    this.$data.showRestaurantList.push(doc.id)
+                })
+            })
         }
     },
     beforeMount(){
-        //this.checkStatus()
+        this.checkStatus()
         setTimeout(() => {
-            //this.loadData()
+            this.showRestaurantName()
         }, 1500);       
     }
 }
