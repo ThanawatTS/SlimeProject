@@ -100,11 +100,11 @@ const router = new Router({
     },
     {
       path: '/Restaurant_que',
-      name: 'Restaurant_Que',
+      name: 'Restaurant_que',
       component: Restaurant_Que,
       meta: {
         requiresAuth: true,
-        role: "restaurantOwner",
+        role: "restaurantOwner" || "employee",
       }
     }
   ]
@@ -113,18 +113,29 @@ const router = new Router({
 var emailDB = firebaseApp.collection("emailSignupFromWebsite")
 
 router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
+  const curUser = firebase.auth().currentUser;
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   console.log(requiresAuth)
-  if(requiresAuth && !currentUser) next('/signin');
+  
+
+  if(curUser != null){
+    var examineEmail = curUser.email.slice(0,3)
+    if(examineEmail == "emp") emailDB = firebaseApp.collection("EmployeeEmail")
+    else emailDB = firebaseApp.collection("emailSignupFromWebsite")
+  }
+  
+
+  if(requiresAuth && !curUser) next('/signin');
   // else if (!requiresAuth && currentUser) next('usermanager');
-  else if(currentUser){
-    var dbSetRole = emailDB.doc(currentUser.email)
+  else if(curUser){
+    var dbSetRole = emailDB.doc(curUser.email)
+    console.log("EmailINDEX", dbSetRole)
     dbSetRole.get().then((doc) => {
-      console.log(doc.data().role)
-      if(doc.data().newUser) next();
-      else if (doc.data().role == to.meta.role) next();
+      console.log("DOC role",doc.data().role)
+      if(doc.data().newUser){console.log("1"); next();} 
+      else if (doc.data().role == to.meta.role){console.log("2"); next();} 
       else if (doc.data().role != to.meta.role) {
+        {console.log("3"); next();} 
         if(!requiresAuth) next();
         else next(false);
       }

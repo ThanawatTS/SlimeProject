@@ -25,8 +25,8 @@ export default {
         return {
             userCur: "",
             restName: "",
-            restaurantEach: { restaurantName: "", emailOwner: "", emailEmployee: ""},
-            restuarantInfo: []
+            restaurantEach: { restaurantName: "", emailOwner: "", emailEmployee: "", restaurantArrange: ""},
+            restuarantInfo: [],
         }
     },
     methods: {
@@ -56,16 +56,19 @@ export default {
             var restaurantExist = restaurantCreate
             var checkRestaurantName = rest_name
             var emp_restaurant
+            var restaurantArrangeNum = 1
             var existName = false
         
-            restaurantExist.get().then(function(querySnapshot){
-                querySnapshot.forEach(function(doc){
+            restaurantExist.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.id, " => ", doc.data())
+                    restaurantArrangeNum++
                     if(checkRestaurantName == doc.id){
                         console.log("This Name is already have!")
                         existName = true;
                     } else if (!existName) {
                         console.log("This Name not have Yet!")
+                        console.log("NUM", restaurantArrangeNum)
                     }
                 });
 
@@ -75,25 +78,48 @@ export default {
                 if(existName){
                     console.log("Not add in database")
                 } else {
-                    restaurantCreate.doc(rest_name).set({
+                    restaurantExist.doc(rest_name).set({
                         restaurantName: rest_name, 
                         emailOwner: this.$data.userCur,
-                        emailEmployee: "EMP_"+this.$data.userCur
+                        emailEmployee: "EMP"+restaurantArrangeNum+"_"+this.$data.userCur,
+                        restaurantArrange: restaurantArrangeNum
                     })
-                    emp_restaurant = "EMP_"+this.$data.userCur
+                    emp_restaurant = "EMP"+restaurantArrangeNum+"_"+this.$data.userCur
                     var emp_password = this.genPassword()
-                }
-                setTimeout(() => {
-                    firebase.auth().createUserWithEmailAndPassword(emp_restaurant, emp_password).then( user => {
-                        alert('Account created successful!');
-                        console.log('register for employee: ', rest_name);
-                        console.log("Employee password", emp_password)
+
+                    setTimeout(() => {
+                    firebase.auth().createUserWithEmailAndPassword(emp_restaurant, emp_password).then( () => {
+                        var setEmailToLWC = emp_restaurant.toLowerCase();
+                        var employeeEmailDB = firebaseApp.collection("EmployeeEmail")
+
+                        employeeEmailDB.doc(setEmailToLWC).set({
+                            owner: this.$data.userCur,
+                            role: "employee",
+                        })
+                        emailDB.doc(this.$data.userCur).collection("EmployeeEmail").doc(setEmailToLWC).set({
+                            role: "employee",
+                            newUser: false,
+                            owner: this.$data.userCur,
+                            password: emp_password,
+                            restaurantArrange: restaurantArrangeNum
+                        })
+                        setTimeout(() => {
+                            firebase.auth().signOut().then(() =>{
+                                console.log("sign out!")
+                                this.$router.push('/signin');
+                                alert(" Employee\'s password: " + emp_password + " \n Please noted the password you will be force to sign in again");
+                                setTimeout(() => {
+                                    alert('Please sign in again to vertify Owner account');
+                                }, 50);
+                            })
+                        }, 1200);
+
                     },  err => {
                             alert(err.message);
                             console.log("Can't created account");
                         });
-                }, 100);
-
+                    }, 200);
+                } 
             }, 1100);
             // restaurantExist.get().then(function(doc) {
             //     console.log(doc.data())
