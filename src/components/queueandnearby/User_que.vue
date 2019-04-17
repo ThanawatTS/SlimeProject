@@ -44,7 +44,6 @@ export default {
               console.log(que[que.length-1])
               console.log(que[que.length-1]+1)
               que.push(que[que.length-1]+1)
-              console.log(que)
           
           Get_Que_Value.update({
               Queue: que

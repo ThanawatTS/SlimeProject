@@ -12,6 +12,7 @@ import CustomerManagement from '@/components/manager-role/CustomerManagement'
 import RestaurantManagement from '@/components/manager-role/RestaurantManagement'
 import User_Que from '@/components/queueandnearby/User_que'
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
+import User_history from '@/components/User_history'
 import firebase from 'firebase';
 import firebaseApp from '@/components/firebase/firebaseInit'
 
@@ -99,7 +100,11 @@ const router = new Router({
       component: User_Que
     },
     {
-      path: '/Restaurant_que',
+      path: '/User_history',
+      name: 'User_history',
+      component: User_history
+    },
+    {
       name: 'Restaurant_que',
       component: Restaurant_Que,
       meta: {

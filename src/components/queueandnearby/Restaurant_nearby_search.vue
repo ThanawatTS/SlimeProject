@@ -149,32 +149,27 @@ export default {
                 lng: location[1]
               };
               this.markers.push({ position: marker });
-              this.RestaurantName.push(key);
-
-                  
-            });
-            console.log(this.firebaseRef)
-
-            geoQuery.on("key_exited", function(key, location, distance) {
-              console.log(key + " is located at [" + location + "] which is no longer within the query (" + distance.toFixed(2) + " km from center)");
+              this.RestaurantName.push(key);   
             });
       },
+
       MakeQue : function (restname) {
-      console.log(restname.RestaurantMail)
-      console.log(restname.Name)
       var Get_Que_Value = firebaseApp.collection("RestaurantData").doc(restname)
-      
-      Get_Que_Value.get().then(function(doc) {
+      var Save_User_Que = firebaseApp.collection("User").doc("Pure")
+      Get_Que_Value.get().then( doc =>  {
           if (doc.exists) {
               var que = doc.data().Queue
               console.log("Document data:", doc.data().Queue);
-              console.log(que[que.length-1])
-              console.log(que[que.length-1]+1)
               que.push(que[que.length-1]+1)
-              console.log(que)
+              
           
           Get_Que_Value.update({
               Queue: que
+          })
+
+          Save_User_Que.update({
+              Restaurant : restname,
+              Queue: que[que.length-1]
           })
           .then(function() {
               console.log("Document successfully updated!");
