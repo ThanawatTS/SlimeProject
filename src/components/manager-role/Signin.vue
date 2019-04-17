@@ -74,7 +74,6 @@ export default {
                     }, 1100);
                 }
                 setTimeout(() => {
-                    console.log("OWNEREMAIL: ",ownerEmail)
                     emailDB.get().then((querySnapshot) =>{
                     querySnapshot.forEach((doc) =>{
                         if(doc.id == setEmailToLWC) {

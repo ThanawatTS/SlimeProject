@@ -78,6 +78,14 @@ export default {
                 if(existName){
                     console.log("Not add in database")
                 } else {
+                    var restaurantData = firebaseApp.collection("RestaurantData")
+                    restaurantData.doc(rest_name).set({
+                        Location: 0,
+                        Name: rest_name,
+                        Queue: [],
+                        RestaurantMail: this.$data.userCur
+                    })
+
                     restaurantExist.doc(rest_name).set({
                         restaurantName: rest_name, 
                         emailOwner: this.$data.userCur,

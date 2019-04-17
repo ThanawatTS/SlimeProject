@@ -105,6 +105,7 @@ const router = new Router({
       component: User_history
     },
     {
+      path: '/Restaurant_que',
       name: 'Restaurant_que',
       component: Restaurant_Que,
       meta: {
@@ -122,13 +123,11 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   console.log(requiresAuth)
   
-
   if(curUser != null){
     var examineEmail = curUser.email.slice(0,3)
     if(examineEmail == "emp") emailDB = firebaseApp.collection("EmployeeEmail")
     else emailDB = firebaseApp.collection("emailSignupFromWebsite")
   }
-  
 
   if(requiresAuth && !curUser) next('/signin');
   // else if (!requiresAuth && currentUser) next('usermanager');
