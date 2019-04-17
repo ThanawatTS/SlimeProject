@@ -12,6 +12,7 @@ import CustomerManagement from '@/components/manager-role/CustomerManagement'
 import RestaurantManagement from '@/components/manager-role/RestaurantManagement'
 import User_Que from '@/components/queueandnearby/User_que'
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
+import User_history from '@/components/User_history'
 
 Vue.use(Router)
 
@@ -76,6 +77,11 @@ const router = new Router({
       path: '/Restaurant_que',
       name: 'Restaurant_Que',
       component: Restaurant_Que
+    },
+    {
+      path: '/User_history',
+      name: 'User_history',
+      component: User_history
     }
   ]
 })

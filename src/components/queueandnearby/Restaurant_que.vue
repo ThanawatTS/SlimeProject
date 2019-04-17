@@ -30,12 +30,14 @@ export default {
   data() {
     return {
       Que : {},
-      Current_que : 0
+      Current_que : 0,
+      Show_restaurant_que : firebaseApp.collection("RestaurantData").doc("ร้าน1")
+    
     }
   },
   firestore() {
       return {
-         Show_restaurant_que : firebaseApp.collection("RestaurantByUser").doc("usermanager@hotmail.com").collection("RestaurantsListsName").doc("ร้าน1")
+         Show_restaurant_que : firebaseApp.collection("RestaurantData").doc("ร้าน1")
       }
   },
   created () {
@@ -48,25 +50,25 @@ export default {
   },
   methods: {
     Restaurant_show_que () {
-        firebaseApp.collection("RestaurantByUser").doc("usermanager@hotmail.com").collection("RestaurantsListsName").doc("ร้าน1").get().then(doc => {
+        firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(doc => {
         this.Que = doc.data().Queue;  
   })
  },
     Restaurant_show_current_que () {
-        firebaseApp.collection("RestaurantByUser").doc("usermanager@hotmail.com").collection("RestaurantsListsName").doc("ร้าน1").get().then(doc => {
+        firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(doc => {
         this.Current_que = doc.data().Queue[0];
   })
  },
     Next_que() {
-        var Get_Que_Value = firebaseApp.collection("RestaurantByUser").doc("usermanager@hotmail.com").collection("RestaurantsListsName").doc("ร้าน1")
-        firebaseApp.collection("RestaurantByUser").doc("usermanager@hotmail.com").collection("RestaurantsListsName").doc("ร้าน1").get().then(doc => {
+        
+        firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(doc => {
             if (doc.exists) {
               var que = doc.data().Queue;
               que.shift();
               this.Current_que = que[0];
               console.log(que);
           
-        Get_Que_Value.update({
+        firebaseApp.collection("RestaurantData").doc("ร้าน1").update({
               Queue: que
           })
           .then(function() {
@@ -86,14 +88,14 @@ export default {
     },
     
     Update_Current_Que(currentque){
-        var Get_Que_Value = firebaseApp.collection("RestaurantByUser").doc("usermanager@hotmail.com").collection("RestaurantsListsName").doc("ร้าน1")
         
-        Get_Que_Value.get().then(function(doc) {
+        
+            firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(function(doc) {
             if (doc.exists) {
                 var que = doc.data().Queue
             
             
-            Get_Que_Value.update({
+            firebaseApp.collection("RestaurantData").doc("ร้าน1").update({
                 Queue: que[0]
             })
             .then(function() {
