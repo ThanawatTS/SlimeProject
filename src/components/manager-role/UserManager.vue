@@ -11,7 +11,7 @@
 import firebase from 'firebase';
 
 export default {
-    name: 'usermanager',
+    name: 'userManager',
     data () {
         return {
         }
@@ -40,7 +40,7 @@ export default {
     },
     beforeMount(){
         setTimeout(() => {
-           this.userCurrent()
+           //this.userCurrent()
         }, 1000);
         
     }

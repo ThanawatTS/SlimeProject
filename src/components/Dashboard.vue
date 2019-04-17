@@ -91,6 +91,18 @@ export default {
             //     picture_U: decode.payload.picture
             // })
             });
+        },
+        userCurrent(){
+            var user = firebase.auth().currentUser;
+            if(user){
+                firebase.auth().signOut().then(() => {
+                    console.log("Signout")
+                }).catch((err) => {
+                    console.log(err)
+                })
+            } else {
+                console.log("NO LONGER USER")
+            }
         }
     },
     //Should set time delay because data need to time to load
@@ -100,6 +112,7 @@ export default {
                 this.loginByLine()
             }, 1000);
             this.getdata()
+            this.userCurrent()
         }, 1000);
         
     }

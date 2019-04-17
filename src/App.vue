@@ -12,6 +12,10 @@
           <v-icon left>supervisor_account</v-icon>
           Sign In
         </v-btn>
+        <v-btn flat to="/signin">
+          <v-icon left>supervisor_account</v-icon>
+          Sign out
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
