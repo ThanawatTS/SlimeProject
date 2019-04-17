@@ -8,7 +8,8 @@
             <v-btn @click.prevent="pushQueue">Queue</v-btn>
             
             <div v-for="listName in showRestaurantList" :key="listName.id">
-               <h2 @click.prevent="gotoRestaurant(listName)"> {{listName}} </h2>
+               <h2 > {{listName}} </h2>
+                <v-btn round color="primary" dark @click.prevent="gotoRestaurant(listName)">Queue Manage</v-btn>
             </div>
                 
         </form>
