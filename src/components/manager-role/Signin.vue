@@ -74,7 +74,6 @@ export default {
                     }, 1100);
                 }
                 setTimeout(() => {
-                    console.log("OWNEREMAIL: ",ownerEmail)
                     emailDB.get().then((querySnapshot) =>{
                     querySnapshot.forEach((doc) =>{
                         if(doc.id == setEmailToLWC) {
@@ -84,7 +83,7 @@ export default {
                                     this.$router.push('/restaurantManagement')
                                     break;
                                 case "employee":
-                                    this.$router.push({name: 'Restaurant_que'})
+                                    this.$router.push('/employee')
                                     console.log("Push to rest")
                                     break;
                                 case "customer":
@@ -108,10 +107,6 @@ export default {
                 console.log('Login Fail');
             });
         }
-    },
-    beforeMount(){
-        var text = "EMP2_qwe"
-        console.log(text.slice(0,3))
     }
 }
 </script>

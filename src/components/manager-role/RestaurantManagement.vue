@@ -7,6 +7,10 @@
             <v-btn @click.prevent="createRestaurant(restName)">Create</v-btn>
             <v-btn @click.prevent="pushQueue">Queue</v-btn>
             
+            <div v-for="listName in showRestaurantList" :key="listName.id">
+               <h2 @click.prevent="gotoRestaurant(listName)"> {{listName}} </h2>
+            </div>
+                
         </form>
 
         
@@ -27,17 +31,21 @@ export default {
             restName: "",
             restaurantEach: { restaurantName: "", emailOwner: "", emailEmployee: "", restaurantArrange: ""},
             restuarantInfo: [],
+            showRestaurantList: [],
         }
     },
     methods: {
+        gotoRestaurant(nameRestaurant){
+            this.$router.push({name: 'Restaurant_que', params:{Pid: nameRestaurant}})
+        },
         checkStatus(){
-            firebase.auth().onAuthStateChanged(function(user) {
+            var user = firebase.auth().currentUser;
                 if(user){
-                    console.log(user.email)
+                    this.$data.userCur = user.email;
+                    console.log(this.$data.userCur)
                 } else {
-                    console.log("Didn't login")
+                    console.log("Didn't login yet")
                 }
-            })
         },
         genPassword(){
             var emp_password = Math.random().toString(36).slice(-6)
@@ -78,17 +86,29 @@ export default {
                 if(existName){
                     console.log("Not add in database")
                 } else {
-                    restaurantExist.doc(rest_name).set({
-                        restaurantName: rest_name, 
-                        emailOwner: this.$data.userCur,
-                        emailEmployee: "EMP"+restaurantArrangeNum+"_"+this.$data.userCur,
-                        restaurantArrange: restaurantArrangeNum
-                    })
+                    
                     emp_restaurant = "EMP"+restaurantArrangeNum+"_"+this.$data.userCur
                     var emp_password = this.genPassword()
 
                     setTimeout(() => {
                     firebase.auth().createUserWithEmailAndPassword(emp_restaurant, emp_password).then( () => {
+
+                        var restaurantData = firebaseApp.collection("RestaurantData")
+                        restaurantData.doc(rest_name).set({
+                            Location: 0,
+                            Name: rest_name,
+                            Queue: [],
+                            RestaurantMail: this.$data.userCur,
+                            EmployeeEmail: emp_restaurant
+                        })
+
+                        restaurantExist.doc(rest_name).set({
+                            restaurantName: rest_name, 
+                            emailOwner: this.$data.userCur,
+                            emailEmployee: emp_restaurant,
+                            restaurantArrange: restaurantArrangeNum
+                        })
+
                         var setEmailToLWC = emp_restaurant.toLowerCase();
                         var employeeEmailDB = firebaseApp.collection("EmployeeEmail")
 
@@ -250,12 +270,22 @@ export default {
                 }
             })
         
+        },
+        showRestaurantName(){
+            console.log(this.$data.userCur)
+            var rest_name = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
+            rest_name.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id)
+                    this.$data.showRestaurantList.push(doc.id)
+                })
+            })
         }
     },
     beforeMount(){
-        //this.checkStatus()
+        this.checkStatus()
         setTimeout(() => {
-            //this.loadData()
+            this.showRestaurantName()
         }, 1500);       
     }
 }

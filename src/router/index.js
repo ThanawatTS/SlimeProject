@@ -13,6 +13,7 @@ import RestaurantManagement from '@/components/manager-role/RestaurantManagement
 import User_Que from '@/components/queueandnearby/User_que'
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
 import User_history from '@/components/User_history'
+import Employee from '@/components/manager-role/Employee'
 import firebase from 'firebase';
 import firebaseApp from '@/components/firebase/firebaseInit'
 
@@ -105,12 +106,18 @@ const router = new Router({
       component: User_history
     },
     {
+      path: '/Restaurant_que/:Pid',
       name: 'Restaurant_que',
       component: Restaurant_Que,
       meta: {
         requiresAuth: true,
         role: "restaurantOwner" || "employee",
       }
+    },
+    {
+      path: '/employee',
+      name: 'Employee',
+      component: Employee
     }
   ]
 })
@@ -122,13 +129,11 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   console.log(requiresAuth)
   
-
   if(curUser != null){
     var examineEmail = curUser.email.slice(0,3)
     if(examineEmail == "emp") emailDB = firebaseApp.collection("EmployeeEmail")
     else emailDB = firebaseApp.collection("emailSignupFromWebsite")
   }
-  
 
   if(requiresAuth && !curUser) next('/signin');
   // else if (!requiresAuth && currentUser) next('usermanager');
