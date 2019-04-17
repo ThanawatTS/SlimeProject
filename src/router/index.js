@@ -13,6 +13,7 @@ import RestaurantManagement from '@/components/manager-role/RestaurantManagement
 import User_Que from '@/components/queueandnearby/User_que'
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
 import User_history from '@/components/User_history'
+import Employee from '@/components/manager-role/Employee'
 import firebase from 'firebase';
 import firebaseApp from '@/components/firebase/firebaseInit'
 
@@ -105,13 +106,18 @@ const router = new Router({
       component: User_history
     },
     {
-      path: '/Restaurant_que',
+      path: '/Restaurant_que/:Pid',
       name: 'Restaurant_que',
       component: Restaurant_Que,
       meta: {
         requiresAuth: true,
         role: "restaurantOwner" || "employee",
       }
+    },
+    {
+      path: '/employee',
+      name: 'Employee',
+      component: Employee
     }
   ]
 })

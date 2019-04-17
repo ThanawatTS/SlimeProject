@@ -83,7 +83,7 @@ export default {
                                     this.$router.push('/restaurantManagement')
                                     break;
                                 case "employee":
-                                    this.$router.push({name: 'Restaurant_que'})
+                                    this.$router.push('/employee')
                                     console.log("Push to rest")
                                     break;
                                 case "customer":

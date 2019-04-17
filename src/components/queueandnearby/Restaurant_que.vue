@@ -31,13 +31,13 @@ export default {
     return {
       Que : {},
       Current_que : 0,
-      Show_restaurant_que : firebaseApp.collection("RestaurantData").doc("ร้าน1")
+      Show_restaurant_que : firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid)
     
     }
   },
   firestore() {
       return {
-         Show_restaurant_que : firebaseApp.collection("RestaurantData").doc("ร้าน1")
+         Show_restaurant_que : firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid)
       }
   },
   created () {
@@ -50,25 +50,25 @@ export default {
   },
   methods: {
     Restaurant_show_que () {
-        firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(doc => {
+        firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
         this.Que = doc.data().Queue;  
   })
  },
     Restaurant_show_current_que () {
-        firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(doc => {
+        firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
         this.Current_que = doc.data().Queue[0];
   })
  },
     Next_que() {
         
-        firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(doc => {
+        firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
             if (doc.exists) {
               var que = doc.data().Queue;
               que.shift();
               this.Current_que = que[0];
               console.log(que);
           
-        firebaseApp.collection("RestaurantData").doc("ร้าน1").update({
+        firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).update({
               Queue: que
           })
           .then(function() {
@@ -90,12 +90,12 @@ export default {
     Update_Current_Que(currentque){
         
         
-            firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(function(doc) {
+            firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(function(doc) {
             if (doc.exists) {
                 var que = doc.data().Queue
             
             
-            firebaseApp.collection("RestaurantData").doc("ร้าน1").update({
+            firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).update({
                 Queue: que[0]
             })
             .then(function() {
