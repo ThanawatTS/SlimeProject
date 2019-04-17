@@ -107,10 +107,6 @@ export default {
                 console.log('Login Fail');
             });
         }
-    },
-    beforeMount(){
-        var text = "EMP2_qwe"
-        console.log(text.slice(0,3))
     }
 }
 </script>

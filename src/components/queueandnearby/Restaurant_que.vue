@@ -54,6 +54,22 @@ export default {
         this.Que = doc.data().Queue;  
   })
  },
+  verifyUser(Pid) {
+    var employeeEmail = firebaseApp.collection("RestaurantData").doc(Pid)
+    var userCur = firebase.auth().currentUser
+    employeeEmail.get().then((doc) => {
+      if(doc.exists){
+        var lwcEmploy = doc.data().EmployeeEmail.toLowerCase();
+        var lwcUser = userCur.email.toLowerCase();
+        console.log("1" ,lwcEmploy)
+        console.log("2", lwcUser)
+        if(lwcEmploy != lwcUser) this.$router.push('/employee');
+        else console.log("correct path")
+      } else {
+        console.log("Doc doesn't exist")
+      }
+    })
+  },
     Restaurant_show_current_que () {
         firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
         this.Current_que = doc.data().Queue[0];
@@ -119,6 +135,15 @@ export default {
  updated(){
     this.Restaurant_show_que();
     this.Restaurant_show_current_que()
+},
+beforeRouteUpdate (to, from, next){
+  this.verifyUser(to.params.Pid)
+  console.log("VERIFY BEFORE")
+  //next()
+},
+beforeMount(){
+  this.verifyUser(this.$route.params.Pid)
+  console.log("VERIFY MOUNT")
 }
 };
 </script>

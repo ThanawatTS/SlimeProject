@@ -78,25 +78,29 @@ export default {
                 if(existName){
                     console.log("Not add in database")
                 } else {
-                    var restaurantData = firebaseApp.collection("RestaurantData")
-                    restaurantData.doc(rest_name).set({
-                        Location: 0,
-                        Name: rest_name,
-                        Queue: [],
-                        RestaurantMail: this.$data.userCur
-                    })
-
-                    restaurantExist.doc(rest_name).set({
-                        restaurantName: rest_name, 
-                        emailOwner: this.$data.userCur,
-                        emailEmployee: "EMP"+restaurantArrangeNum+"_"+this.$data.userCur,
-                        restaurantArrange: restaurantArrangeNum
-                    })
+                    
                     emp_restaurant = "EMP"+restaurantArrangeNum+"_"+this.$data.userCur
                     var emp_password = this.genPassword()
 
                     setTimeout(() => {
                     firebase.auth().createUserWithEmailAndPassword(emp_restaurant, emp_password).then( () => {
+
+                        var restaurantData = firebaseApp.collection("RestaurantData")
+                        restaurantData.doc(rest_name).set({
+                            Location: 0,
+                            Name: rest_name,
+                            Queue: [],
+                            RestaurantMail: this.$data.userCur,
+                            EmployeeEmail: emp_restaurant
+                        })
+
+                        restaurantExist.doc(rest_name).set({
+                            restaurantName: rest_name, 
+                            emailOwner: this.$data.userCur,
+                            emailEmployee: emp_restaurant,
+                            restaurantArrange: restaurantArrangeNum
+                        })
+
                         var setEmailToLWC = emp_restaurant.toLowerCase();
                         var employeeEmailDB = firebaseApp.collection("EmployeeEmail")
 
