@@ -53,12 +53,39 @@ export default {
             firebase.auth().signInWithEmailAndPassword(setEmailToLWC, this.password)
             .then( user => {
                 alert('Login successful!');
-                emailDB.get().then((querySnapshot) =>{
+                var examineEmail = setEmailToLWC.slice(0,3)
+                console.log("0: ",examineEmail)
+                if(examineEmail == "emp"){
+                    console.log("1:",examineEmail)
+                    emailDB = firebaseApp.collection("EmployeeEmail")
+                    var ownerEmail
+                    emailDB.get().then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            console.log("DOC",doc.id)
+                            if(doc.id == setEmailToLWC){
+                                ownerEmail = doc.data().owner
+                                 console.log("2:",ownerEmail)
+                            }
+                        })
+                    })
+                    console.log("3:",ownerEmail)
+                    setTimeout(() => {
+                        emailDB = firebaseApp.collection("emailSignupFromWebsite").doc(ownerEmail).collection("EmployeeEmail")
+                    }, 1100);
+                }
+                setTimeout(() => {
+                    console.log("OWNEREMAIL: ",ownerEmail)
+                    emailDB.get().then((querySnapshot) =>{
                     querySnapshot.forEach((doc) =>{
                         if(doc.id == setEmailToLWC) {
                             switch(doc.data().role) {
+
                                 case "restaurantOwner":
                                     this.$router.push('/restaurantManagement')
+                                    break;
+                                case "employee":
+                                    this.$router.push({name: 'Restaurant_que'})
+                                    console.log("Push to rest")
                                     break;
                                 case "customer":
                                     this.$router.push('/customerManagement')
@@ -68,16 +95,23 @@ export default {
                                     this.$router.push('/userManager')
                                     console.log("Push to usermanager")
                                     break;
+
                             }
                         }
                     })
                 })
+                }, 1100);
+                
             },
             err => {
                 alert(err.message);
                 console.log('Login Fail');
             });
         }
+    },
+    beforeMount(){
+        var text = "EMP2_qwe"
+        console.log(text.slice(0,3))
     }
 }
 </script>
