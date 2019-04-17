@@ -45,8 +45,8 @@ export default {
     this.Restaurant_show_current_que ()
   },
   beforeCreate(){
-    this.Restaurant_show_que()
-    this.Restaurant_show_current_que ()
+    //this.Restaurant_show_que()
+    //this.Restaurant_show_current_que ()
   },
   methods: {
     Restaurant_show_que () {
