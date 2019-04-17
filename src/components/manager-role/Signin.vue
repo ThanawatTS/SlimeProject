@@ -13,6 +13,7 @@
                             <v-text-field label="Password" type="password" id="passwordInput"  v-model="password"></v-text-field>
                         </div>
                         <v-btn round color="primary" dark v-on:click="signinAccount">Sign In</v-btn>
+                        <v-btn round color="primary" dark v-on:click="signoutAccount">Sign Out</v-btn>
                     </form>
                 </v-flex>
             </v-layout>
@@ -23,7 +24,9 @@
 
 <script>
 import firebase from 'firebase';
+import firebaseApp from '../firebase/firebaseInit'
 
+var emailDB = firebaseApp.collection("emailSignupFromWebsite")
 export default {
     name: 'signin',
     data() {
@@ -33,12 +36,42 @@ export default {
         }
     },
     methods: {
-        signinAccount: function() {
-            firebase.auth().signInWithEmailAndPassword(this.username, this.password)
+        signoutAccount(){
+            var user = firebase.auth().currentUser;
+            if(user){
+                firebase.auth().signOut().then(() => {
+                    console.log("Signout")
+                }).catch((err) => {
+                    console.log(err)
+                })
+            } else {
+                console.log("NO LONGER USER")
+            }
+        },
+        signinAccount() {
+            var setEmailToLWC = this.username.toLowerCase();
+            firebase.auth().signInWithEmailAndPassword(setEmailToLWC, this.password)
             .then( user => {
                 alert('Login successful!');
-                console.log('Login Successful');
-                this.$router.push('/usermanager');
+                emailDB.get().then((querySnapshot) =>{
+                    querySnapshot.forEach((doc) =>{
+                        if(doc.id == setEmailToLWC) {
+                            switch(doc.data().role) {
+                                case "restaurantOwner":
+                                    this.$router.push('/restaurantManagement')
+                                    break;
+                                case "customer":
+                                    this.$router.push('/customerManagement')
+                                    console.log("Push to customer")
+                                    break;
+                                case "newUser":
+                                    this.$router.push('/userManager')
+                                    console.log("Push to usermanager")
+                                    break;
+                            }
+                        }
+                    })
+                })
             },
             err => {
                 alert(err.message);

@@ -17,6 +17,7 @@
 import firebase from 'firebase'
 import firebaseApp from '../firebase/firebaseInit'
 import { exists } from 'fs';
+var emailDB = firebaseApp.collection("emailSignupFromWebsite")
 
 export default {
     name: 'restaurantManagement',
@@ -205,14 +206,31 @@ export default {
             }, 1500);
             
         
+        },
+        setRestaurantRole(){
+
+            var dbSetRole = emailDB.doc(this.$data.userCur)
+            dbSetRole.get().then((doc) => {
+                if(doc.data().role == "newUser"){
+                    console.log("INCONDITION")
+                    console.log(doc.data())
+                    dbSetRole.update({
+                        role: "restaurantOwner",
+                        newUser: false
+                    }).then(() => {
+                        console.log("Update! role become: restaurantOwner")
+                    })
+                    
+                }
+            })
+        
         }
     },
     beforeMount(){
         //this.checkStatus()
         setTimeout(() => {
             //this.loadData()
-        }, 1500);
-       
+        }, 1500);       
     }
 }
 

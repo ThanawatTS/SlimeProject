@@ -23,7 +23,9 @@
 
 <script>
 import firebase from 'firebase';
+import firebaseApp from '../firebase/firebaseInit'
 
+var emailDB = firebaseApp.collection("emailSignupFromWebsite")
 
 export default {
     name: 'signup',
@@ -45,6 +47,12 @@ export default {
                 alert(err.message);
                 console.log("Can't created account");
             });
+            var setEmailToLWC = this.username.toLowerCase();
+            emailDB.doc(setEmailToLWC).set({
+                role: "newUser",
+                newUser: true
+            })
+
         }
     }
 }
