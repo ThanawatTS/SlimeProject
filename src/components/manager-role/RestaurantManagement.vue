@@ -3,8 +3,8 @@
         <h1>Restaurant</h1>
         <form>
             <label> Create Restaurant Name </label><br/>
-            <input v-model="restuarantName" placeholder="Input restaurant name">
-            <v-btn @click.prevent="createRestaurant(restuarantName)">Create</v-btn>
+            <input v-model="restName" placeholder="Input restaurant name">
+            <v-btn @click.prevent="createRestaurant(restName)">Create</v-btn>
             <v-btn @click.prevent="pushQueue">Queue</v-btn>
             
         </form>
@@ -23,8 +23,8 @@ export default {
     data () {
         return {
             userCur: "",
-            restuarantName: "",
-            restaurantEach: { location: "15.02", queue: {name: "", queue: "0"}, status: false},
+            restName: "",
+            restaurantEach: { restaurantName: "", emailOwner: "", emailEmployee: ""},
             restuarantInfo: []
         }
     },
@@ -38,6 +38,10 @@ export default {
                 }
             })
         },
+        genPassword(){
+            var emp_password = Math.random().toString(36).slice(-6)
+            return emp_password
+        },
         createRestaurant(rest_name){
             var user = firebase.auth().currentUser;
                 if(user){
@@ -50,6 +54,7 @@ export default {
             var restaurantCreate = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
             var restaurantExist = restaurantCreate
             var checkRestaurantName = rest_name
+            var emp_restaurant
             var existName = false
         
             restaurantExist.get().then(function(querySnapshot){
@@ -69,9 +74,26 @@ export default {
                 if(existName){
                     console.log("Not add in database")
                 } else {
-                    restaurantCreate.doc(rest_name).set(this.$data.restaurantEach)
+                    restaurantCreate.doc(rest_name).set({
+                        restaurantName: rest_name, 
+                        emailOwner: this.$data.userCur,
+                        emailEmployee: "EMP_"+this.$data.userCur
+                    })
+                    emp_restaurant = "EMP_"+this.$data.userCur
+                    var emp_password = this.genPassword()
                 }
-            }, 2000);
+                setTimeout(() => {
+                    firebase.auth().createUserWithEmailAndPassword(emp_restaurant, emp_password).then( user => {
+                        alert('Account created successful!');
+                        console.log('register for employee: ', rest_name);
+                        console.log("Employee password", emp_password)
+                    },  err => {
+                            alert(err.message);
+                            console.log("Can't created account");
+                        });
+                }, 100);
+
+            }, 1100);
             // restaurantExist.get().then(function(doc) {
             //     console.log(doc.data())
             //     if (doc.exists){
@@ -156,22 +178,25 @@ export default {
             
             var restaurantData = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
             var temparr
-            restaurantData.get().then(function(doc) {
-                console.log("1")
-                if(doc.exists){
-                    console.log("2")
-                    // for(var x in doc.data().Restaurant.RestaurantName){
-                    //     restuarantInfo = doc.data().Restaurant.RestaurantName
-                    // }
-                    console.log("2"+ doc.data().Restaurant.RestaurantName)
-                    temparr = doc.data().Restaurant.RestaurantName
-                    console.log("loadData" + temparr)
-                } else {
-                    console.log("N Doc")
-                }
+            restaurantData.get().then((doc) => {
+
             })
+            // restaurantData.get().then(function(doc) {
+            //     console.log("1")
+            //     if(doc.exists){
+            //         console.log("2")
+            //         // for(var x in doc.data().Restaurant.RestaurantName){
+            //         //     restuarantInfo = doc.data().Restaurant.RestaurantName
+            //         // }
+            //         console.log("2"+ doc.data().Restaurant.RestaurantName)
+            //         temparr = doc.data().Restaurant.RestaurantName
+            //         console.log("loadData" + temparr)
+            //     } else {
+            //         console.log("N Doc")
+            //     }
+            // })
             setTimeout(() => {
-                console.log("DATA" + temparr)  
+                console.log("DATA", temparr)  
                 this.$data.restuarantInfo = temparr
                 if(temparr == null){
                     this.$data.restuarantInfo = []
@@ -183,9 +208,9 @@ export default {
         }
     },
     beforeMount(){
-        this.checkStatus()
+        //this.checkStatus()
         setTimeout(() => {
-            this.loadData()
+            //this.loadData()
         }, 1500);
        
     }
