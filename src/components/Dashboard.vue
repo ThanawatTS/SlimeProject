@@ -95,11 +95,12 @@ export default {
         userCurrent(){
             var user = firebase.auth().currentUser;
             if(user){
-                firebase.auth().signOut().then(() => {
-                    console.log("Signout")
-                }).catch((err) => {
-                    console.log(err)
-                })
+                // firebase.auth().signOut().then(() => {
+                //     console.log("Signout")
+                // }).catch((err) => {
+                //     console.log(err)
+                // })
+                console.log(user.email)
             } else {
                 console.log("NO LONGER USER")
             }
@@ -112,6 +113,7 @@ export default {
                 this.loginByLine()
             }, 1000);
             this.getdata()
+            
             
         }, 1000);
         

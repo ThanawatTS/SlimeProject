@@ -46,7 +46,8 @@ export default {
         addMenu(menuName) {
             if(this.checkDuplicateName(menuName)) {
                 this.$data.alacratemenuList.push({
-                    Name: menuName
+                    Name: menuName,
+                    Id: this.$data.alacratemenuList.length
                 })
                 alacrateMenu.update({
                     menu: this.$data.alacratemenuList

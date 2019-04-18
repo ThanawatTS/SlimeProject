@@ -23,10 +23,6 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
-      path: '*',
-      redirect: '/'
-    },
-    {
       path: '/',
       name: 'Dashboard',
       component: Dashboard
@@ -145,18 +141,16 @@ router.beforeEach((to, from, next) => {
   // else if (!requiresAuth && currentUser) next('usermanager');
   else if(curUser){
     var dbSetRole = emailDB.doc(curUser.email)
-    console.log("EmailINDEX", dbSetRole)
     dbSetRole.get().then((doc) => {
-      console.log("DOC role",doc.data().role)
+
       if(doc.data().newUser){console.log("1"); next();} 
       else if (doc.data().role == to.meta.role){console.log("2"); next();} 
       else if (doc.data().role != to.meta.role) {
-        {console.log("3"); next();} 
+        console.log("3"); 
         if(!requiresAuth) next();
         else next(false);
       }
     })
-    
   }
   else next();
 

@@ -62,9 +62,13 @@ export default {
         var lwcEmploy = doc.data().EmployeeEmail.toLowerCase();
         var lwcOwner = doc.data().RestaurantMail.toLowerCase();
         var lwcUser = userCur.email.toLowerCase();
-        console.log("1" ,lwcEmploy)
-        console.log("2", lwcUser)
+        var examineEmail = lwcUser.slice(0,3)
+        console.log("1", lwcEmploy)
+        console.log("2", lwcOwner)
+        console.log("3", lwcUser)
+        console.log("4", examineEmail)
         if(lwcEmploy == lwcUser || lwcOwner == lwcUser) console.log("correct path")
+        else if(examineEmail != "emp") this.$router.push('/restaurantManagement')
         else this.$router.push('/employee');
       } else {
         console.log("Doc doesn't exist")

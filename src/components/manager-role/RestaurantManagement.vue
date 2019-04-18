@@ -254,24 +254,7 @@ export default {
             
         
         },
-        setRestaurantRole(){
-
-            var dbSetRole = emailDB.doc(this.$data.userCur)
-            dbSetRole.get().then((doc) => {
-                if(doc.data().role == "newUser"){
-                    console.log("INCONDITION")
-                    console.log(doc.data())
-                    dbSetRole.update({
-                        role: "restaurantOwner",
-                        newUser: false
-                    }).then(() => {
-                        console.log("Update! role become: restaurantOwner")
-                    })
-                    
-                }
-            })
         
-        },
         showRestaurantName(){
             console.log(this.$data.userCur)
             var rest_name = firebaseApp.collection("RestaurantByUser").doc(this.$data.userCur).collection("RestaurantsListsName")
