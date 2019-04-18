@@ -38,6 +38,12 @@ export default {
             }
         },
         deleteMenu(menuName) {
+            for (var x in this.$data.alacratemenuList){
+                if(this.$data.alacratemenuList[x].Name == index){
+                    this.$data.alacratemenuList.splice(x, 1)
+                }
+            }
+
             this.$data.alacratemenuList.splice(menuName, 1)
             alacrateMenu.update({
                 menu: this.$data.alacratemenuList
@@ -46,8 +52,7 @@ export default {
         addMenu(menuName) {
             if(this.checkDuplicateName(menuName)) {
                 this.$data.alacratemenuList.push({
-                    Name: menuName,
-                    Id: this.$data.alacratemenuList.length
+                    Name: menuName
                 })
                 alacrateMenu.update({
                     menu: this.$data.alacratemenuList
