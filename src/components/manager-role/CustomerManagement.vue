@@ -1,7 +1,8 @@
 <template>
     <div id="customerManagement">
         <h1>Customer</h1>
-        
+        <v-btn color="blue" @click="suggestionMenu()"> Suggestion Menu </v-btn>
+        <v-btn color="red" @click="queuing()"> Que </v-btn>
     </div>
 </template>
 
@@ -28,28 +29,15 @@ export default {
                     console.log("Didn't login yet")
                 }
         },
-        setCustomerRole(){
-            var dbSetRole = emailDB.doc(this.$data.emailUesr)
-            dbSetRole.get().then((doc) => {
-                if(doc.data().role == "newUser"){
-                    console.log("INCONDITION")
-                    console.log(doc.data())
-                    dbSetRole.update({
-                        role: "customer",
-                        newUser: false
-                    }).then(() => {
-                        console.log("Update! role become: customer")
-                    })
-                    
-                }
-            })
+        suggestionMenu() {
+            this.$router.push('/suggestion')
+        },
+        queuing() {
+            this.$router.push('/maps')
         }
     },
     beforeMount(){
         setTimeout(() => {
-            setTimeout(() => {
-                this.setCustomerRole()
-            }, 100);
         this.checkStatus()
         }, 1000);
         

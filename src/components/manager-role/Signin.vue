@@ -107,6 +107,14 @@ export default {
                 console.log('Login Fail');
             });
         }
+    },
+    beforeMount() {
+        var user = firebase.auth().currentUser;
+            if(user){
+                console.log(user.email)
+            } else {
+                console.log("NO LONGER USER")
+            }
     }
 }
 </script>

@@ -6,7 +6,7 @@ import Signin from '@/components/manager-role/Signin'
 import fire from '@/components/fire'
 import Addrestloca from '@/components/Addrestloca'
 import Maps from '@/components/queueandnearby/Restaurant_nearby_search'
-import Suggestion from '@/components/Suggestion'
+import Suggestion from '@/components/SuggestionMenu/Suggestion'
 import UserManager from '@/components/manager-role/UserManager'
 import CustomerManagement from '@/components/manager-role/CustomerManagement'
 import RestaurantManagement from '@/components/manager-role/RestaurantManagement'
@@ -14,6 +14,7 @@ import User_Que from '@/components/queueandnearby/User_que'
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
 import User_history from '@/components/User_history'
 import Employee from '@/components/manager-role/Employee'
+import AllMenu from '@/components/SuggestionMenu/AllMenu'
 import firebase from 'firebase';
 import firebaseApp from '@/components/firebase/firebaseInit'
 
@@ -21,10 +22,6 @@ Vue.use(Router)
 
 const router = new Router({
   routes: [
-    {
-      path: '*',
-      redirect: '/'
-    },
     {
       path: '/',
       name: 'Dashboard',
@@ -118,6 +115,11 @@ const router = new Router({
       path: '/employee',
       name: 'Employee',
       component: Employee
+    },
+    {
+      path: '/allmenu',
+      name: 'AllMenu',
+      component: AllMenu
     }
   ]
 })
@@ -139,18 +141,16 @@ router.beforeEach((to, from, next) => {
   // else if (!requiresAuth && currentUser) next('usermanager');
   else if(curUser){
     var dbSetRole = emailDB.doc(curUser.email)
-    console.log("EmailINDEX", dbSetRole)
     dbSetRole.get().then((doc) => {
-      console.log("DOC role",doc.data().role)
+
       if(doc.data().newUser){console.log("1"); next();} 
       else if (doc.data().role == to.meta.role){console.log("2"); next();} 
       else if (doc.data().role != to.meta.role) {
-        {console.log("3"); next();} 
+        console.log("3"); 
         if(!requiresAuth) next();
         else next(false);
       }
     })
-    
   }
   else next();
 

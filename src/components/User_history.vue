@@ -28,9 +28,9 @@ export default {
     created(){
         this.test();
     },
-    methods: {
-    test(){
 
+    methods: {
+    test(){    
         firebaseApp.collection("User").doc("Pure").get().then( doc =>  {
         this.Que = doc.data().Queue;
         this.RestaurantName = doc.data().Restaurant;

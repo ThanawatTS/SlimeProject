@@ -35,9 +35,9 @@ export default {
     MakeQue : function (restname) {
       console.log(restname.RestaurantMail)
       console.log(restname.Name)
-      var Get_Que_Value = firebaseApp.collection("RestaurantByUser").doc(restname.RestaurantMail).collection("RestaurantsListsName").doc(restname.Name)
+     
       
-      Get_Que_Value.get().then(function(doc) {
+       firebaseApp.collection("RestaurantData").doc("ร้าน1").get().then(function(doc) {
           if (doc.exists) {
               var que = doc.data().Queue
               console.log("Document data:", doc.data().Queue);
