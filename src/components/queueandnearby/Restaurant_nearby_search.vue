@@ -4,6 +4,7 @@
         <v-btn small color="yellow lighten-2" @click="addgeofire()">
         Test add geofire
         </v-btn>
+
         <v-btn small color="yellow lighten-2" @click="findnearby()">
         Test Find nearby
         </v-btn>
@@ -43,13 +44,21 @@
         :position="m.position"
         ></gmap-marker>
 
+        
         <gmap-marker
-        :key="index"
-        v-for="(x, index) in Currentlocation"
-        :position="x.position"
-        @click="center=m.position"
+        :position="mapCenter"
         ></gmap-marker>
+          
+          <GmapCircle
+            :center="mapCenter"
+            :radius="1000"
+            :visible="true"
+            
+          ></GmapCircle>
+
         </gmap-map>
+
+
 
     </div>
   </div>
@@ -70,12 +79,16 @@ export default {
       Currentlocation: [],
       latitude : 0,
       longitude : 0,
-      firebaseRef : firebase.database().ref("location")
+      firebaseRef : firebase.database().ref("location"),
+      geoQuery : null
     };
   },
     
     created(){
       this.geolocate();
+    },
+    mounted(){
+    this.findnearby();
     },
     // watch(){
       
@@ -88,13 +101,46 @@ export default {
             this.latitude = position.coords.latitude;
             this.longitude = position.coords.longitude;
             this.mapCenter = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
+              lat: this.latitude,
+              lng: this.longitude
             };
-            this.Currentlocation.push({position : this.mapCenter})
-            console.log(this.Currentlocation)
+
+                    
+          var firebaseRef = firebase.database().ref("location")
+          var radius = parseFloat(1000);
+          var operation;
+          var geoFire = new GeoFire(firebaseRef);
+          this.Restaurant = []
+
+
+        
+          if (this.geoQuery != null) {
+          this.operation = "Updating";
+
+          this.geoQuery.updateCriteria({
+            center: [this.latitude, this.longitude],
+            radius: radius
           });
-        },
+            } else {
+          operation = "Creating";
+          this.geoQuery = geoFire.query({
+            center: [this.latitude, this.longitude],
+            radius: radius
+          });
+
+           
+          this.geoQuery.on("key_entered", (key, location, distance) => {
+              console.log("test")
+              const marker = {
+                lat: location[0],
+                lng: location[1]
+              };
+              this.markers.push({ position: marker });
+              this.RestaurantName.push(key);   
+            });
+          }       
+        });          
+      },
 
         addgeofire () {
           var geoFire = new GeoFire(this.firebaseRef);
@@ -114,44 +160,42 @@ export default {
           });
       },//end addgeofire
      
-     findnearby: function() {
-          var firebaseRef = firebase.database().ref("location")
-          var radius = parseFloat(1000);
-          var operation;
-          var geoFire = new GeoFire(firebaseRef);
-          var geoQuery;        
-          this.Restaurant = []
+    //  findnearby() {
+    //       console.log(this.latitude)
+    //       var firebaseRef = firebase.database().ref("location")
+    //       var radius = parseFloat(1000);
+    //       var operation;
+    //       var geoFire = new GeoFire(firebaseRef);
+    //       this.Restaurant = []
 
-          if (geoQuery) {
-          geoQuery.cancel();
-          clearLog();
-          }
+
         
-          if (typeof geoQuery !== "undefined") {
-          operation = "Updating";
+    //       if (this.geoQuery != null) {
+    //       this.operation = "Updating";
 
-          geoQuery.updateCriteria({
-            center: [this.latitude, this.longitude],
-            radius: radius
-          });
-            } else {
-          operation = "Creating";
-          geoQuery = geoFire.query({
-            center: [this.latitude, this.longitude],
-            radius: radius
-          });
-          }          
+    //       this.geoQuery.updateCriteria({
+    //         center: [this.latitude, this.longitude],
+    //         radius: radius
+    //       });
+    //         } else {
+    //       operation = "Creating";
+    //       this.geoQuery = geoFire.query({
+    //         center: [this.latitude, this.longitude],
+    //         radius: radius
+    //       });
 
-            geoQuery.on("key_entered", (key, location, distance ) => {
-              console.log(key + " is located at [" + location[0] + "] which is within the query (" + distance.toFixed(2) + " km from center)");
-              const marker = {
-                lat: location[0],
-                lng: location[1]
-              };
-              this.markers.push({ position: marker });
-              this.RestaurantName.push(key);   
-            });
-      },
+           
+    //       this.geoQuery.on("key_entered", (key, location, distance) => {
+    //           console.log("test")
+    //           const marker = {
+    //             lat: location[0],
+    //             lng: location[1]
+    //           };
+    //           this.markers.push({ position: marker });
+    //           this.RestaurantName.push(key);   
+    //         });
+    //       }       
+    //   },
 
       MakeQue : function (restname) {
       var Get_Que_Value = firebaseApp.collection("RestaurantData").doc(restname)
@@ -171,6 +215,7 @@ export default {
               Restaurant : restname,
               Queue: que[que.length-1]
           })
+          
           .then(function() {
               console.log("Document successfully updated!");
           })
