@@ -51,7 +51,7 @@
 
 <script>
 import firebase from 'firebase'
-import firebaseApp from './firebase/firebaseInit'
+import firebaseApp from '../firebase/firebaseInit'
 
 export default {
     name: 'suggestion',
@@ -84,40 +84,11 @@ export default {
             var userMenuAdded = firebaseApp.collection("usersChoosingMenu").doc(this.$data.userEmail)
             
             if(this.restaurant_List.length == 0){
-                // userMenuAdded.get().then(function(doc) {
-                // if (doc.exists){
-                //     for (var restaurantList in doc.data().menu){
-                //         this.$data.menuInFB = doc.data().menu;
-                //     }
-                // } else {
-                //     console.log("No such document!");
-                // }
-                // }).catch(function(error){
-                // console.log("Error getting document: ", error)
-                // });
-                
-
-                // if(this.$data.dataRestaurant_List.length == 0){
-                //     setTimeout(() => {
-                //         this.$data.dataRestaurant_List.push({
-                //         Name: this.restaurant_Name
-                //         })
-                //         this.restaurant_Name = ''   
-                //     }, 500);
-                // } else {
-                //     setTimeout(() => {
-                //         this.$data.dataRestaurant_List = this.$data.menuInFB
-                //         this.$data.dataRestaurant_List.push({
-                //         Name: this.restaurant_Name
-                //         })
-                //         this.restaurant_Name = ''   
-                //     }, 500);
-                // }
                 setTimeout(() => {
                         this.$data.dataRestaurant_List.push({
-                        Name: this.restaurant_Name
-                        })
-                        this.restaurant_Name = ''
+                            Name: this.restaurant_Name
+                        })  
+                        this.$data.restaurant_Name = ''
                     }, 1000);
 
                 this.restaurant_List.push({
@@ -148,11 +119,12 @@ export default {
                     Id: this.restaurant_ID++,
                     Name: this.restaurant_Name
                     })       
-                }  
+                }
             }
             setTimeout(() => {
-                    userMenuAdded.set({
-                    menu: this.$data.dataRestaurant_List
+                console.log(this.$data.dataRestaurant_List)
+                    userMenuAdded.update({
+                        menu: this.$data.dataRestaurant_List
                     })
             }, 1000);
         },
@@ -201,21 +173,6 @@ export default {
                     this.$data.dataRestaurant_List = []
                 }
             }, 1500);
-
-
-
-            // userData.get().then(function(doc) {
-            //     if (doc.exists){
-            //         for (var restaurantList in doc.data().menu){
-            //             menuInFB = doc.data().menu;              
-            //         }
-            //     } else {
-            //         console.log("No such document!");
-            //         //const userData = firebaseApp.collection("users").doc(this.$data.userEmail)
-            //     }
-            //     }).catch(function(error){
-            //     console.log("Error getting document: ", error)
-            //     });
                 
         },
         userStatus(){
@@ -228,7 +185,7 @@ export default {
                 } else {
                     console.log(user)
                     // No user is signed in.
-                    console.log("user not login")
+                    //console.log("user not login")
                 }
                 });
                 console.log("BR")
@@ -252,8 +209,6 @@ export default {
         setTimeout(() => {
             this.loadData();
         }, 1000);
-        
-        //this.setUpUser();
     }
 }
 </script>
