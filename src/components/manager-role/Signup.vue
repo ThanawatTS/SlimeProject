@@ -26,6 +26,7 @@ import firebase from 'firebase';
 import firebaseApp from '../firebase/firebaseInit'
 
 var emailDB = firebaseApp.collection("emailSignupFromWebsite")
+var userChoosingEmail = firebaseApp.collection("usersChoosingMenu")
 
 export default {
     name: 'signup',
@@ -51,6 +52,12 @@ export default {
             emailDB.doc(setEmailToLWC).set({
                 role: "newUser",
                 newUser: true
+            })
+            
+            userChoosingEmail.doc(setEmailToLWC).set({
+                menu: [],
+                lastThreePick: [],
+                favouriteMenu: []
             })
 
         }
