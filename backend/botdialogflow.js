@@ -2,6 +2,7 @@
 //import firebaseApp from '../src/components/firebaseInit'
 var admin = require('firebase-admin');
 var serviceAccount = require("./slimeslam-24d26-firebase-adminsdk-7c.json");
+const request = require('request-promise');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -15,6 +16,14 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 //const {WebhookClient} = require('actions-on-google').DialogflowApp;
 const express = require('express');
 const bodyParser = require('body-parser')
+
+
+const LINE_MESSAGING_API = 'https://api.line.me/v2/bot/message';
+const LINE_HEADER = {
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer 1hEDucdo64ySMmSQKj3wBqIzsnyiBewDH29Dt5EiE5O1UlSjwv90J1P28ASJjoW5cW0VmLZ0z1n5WH5E5rTpzh9eJXK9vqnZkgq/VqBB7KUbSlMddapMXU29VDQMt8MTo9V6qI0VnHUzFCYkOFvZTlGUYhWQfeY8sLGRXgo3xvw=`
+};
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -34,6 +43,7 @@ app.post('/chatbot', express.json(), (req, res) => {
     // console.log("Body : " + JSON.stringify(request.body));
     //console.log("Header2 : " + JSON.stringify(req.headers) + '\n');
     console.log("Body2 : " + JSON.stringify(req.body));
+    console.log("Replytoken: "+ JSON.stringify(req.body.originalDetectIntentRequest.payload.data.replyToken))
     // if(req.body.events[0].message.text.toUpperCase() == 'LIFF'){
     //     console.log("Line test")
     // }
@@ -76,6 +86,25 @@ app.post('/chatbot', express.json(), (req, res) => {
         agent.add("จองเรียบร้อยโดยคุณ \""+name+"\"" + "Menu:" + menuFB);
         
     }
+
+
+    const reply_liff = (bodyResponse) => {
+        return request({
+          method: `POST`,
+          uri:`${LINE_MESSAGING_API}/reply`,
+          headers: LINE_HEADER,
+          body: JSON.stringify({
+            replyToken: bodyResponse.originalDetectIntentRequest.payload.data.replyToken,
+            messages: [
+              {
+                type: `text`,
+                text: "line://app/1648357069-N4goRqx1"
+              }
+            ]
+          })
+        })
+      };
+
 
     function welcome () {}
     function queue(){}
