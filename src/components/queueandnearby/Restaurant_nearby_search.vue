@@ -53,7 +53,7 @@
             :center="mapCenter"
             :radius="1000"
             :visible="true"
-            
+
           ></GmapCircle>
 
         </gmap-map>
@@ -87,59 +87,73 @@ export default {
     created(){
       this.geolocate();
     },
-    mounted(){
-    this.findnearby();
-    },
+
     // watch(){
       
     // },
   methods: {
         //Find current location
         geolocate: function() {
-          this.Currentlocation = [];
-          navigator.geolocation.getCurrentPosition(position => {
-            this.latitude = position.coords.latitude;
-            this.longitude = position.coords.longitude;
-            this.mapCenter = {
-              lat: this.latitude,
-              lng: this.longitude
-            };
+          // this.Currentlocation = [];
+          // navigator.geolocation.getCurrentPosition(position => {
+        
+            // };
+          // this.$getLocation({
+          // enableHighAccuracy: false, //defaults to false
+          // timeout: Infinity, //defaults to Infinity
+          // maximumAge: 0 //defaults to 0
+          
+          // })
+          // .then(position => {
+          //           this.mapCenter = position
+          //           console.log(position)
+          // });
 
-                    
-          var firebaseRef = firebase.database().ref("location")
-          var radius = parseFloat(1000);
-          var operation;
-          var geoFire = new GeoFire(firebaseRef);
-          this.Restaurant = []
+          this.$watchLocation({
+          enableHighAccuracy: false, //defaults to false
+          timeout: Infinity, //defaults to Infinity
+          maximumAge: 0 //defaults to 0
+          })
+          .then(position => {
+                   this.mapCenter = position
+          });          
+
+          
+          // var firebaseRef = firebase.database().ref("location")
+          // var radius = parseFloat(1000);
+          // var operation;
+          // var geoFire = new GeoFire(firebaseRef);
+          // this.Restaurant = []
 
 
         
-          if (this.geoQuery != null) {
-          this.operation = "Updating";
+          // if (this.geoQuery != null) {
+          // this.operation = "Updating";
 
-          this.geoQuery.updateCriteria({
-            center: [this.latitude, this.longitude],
-            radius: radius
-          });
-            } else {
-          operation = "Creating";
-          this.geoQuery = geoFire.query({
-            center: [this.latitude, this.longitude],
-            radius: radius
-          });
+          // this.geoQuery.updateCriteria({
+          //   center: [this.latitude, this.longitude],
+          //   radius: radius
+          // });
+          //   } else {
+          // operation = "Creating";
+          // this.geoQuery = geoFire.query({
+          //   center: [this.latitude, this.longitude],
+          //   radius: radius
+          // });
 
            
-          this.geoQuery.on("key_entered", (key, location, distance) => {
-              console.log("test")
-              const marker = {
-                lat: location[0],
-                lng: location[1]
-              };
-              this.markers.push({ position: marker });
-              this.RestaurantName.push(key);   
-            });
-          }       
-        });          
+          // this.geoQuery.on("key_entered", (key, location, distance) => {
+          //     console.log("test")
+          //     const marker = {
+          //       lat: location[0],
+          //       lng: location[1]
+          //     };
+          //     this.markers.push({ position: marker });
+          //     this.RestaurantName.push(key);   
+          //   });
+          // }       
+        // });          
+      
       },
 
         addgeofire () {
