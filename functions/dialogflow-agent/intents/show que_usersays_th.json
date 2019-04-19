@@ -1,0 +1,37 @@
+[
+  {
+    "id": "818ea331-0b1f-46f2-914f-8c22bcd7e2c1",
+    "data": [
+      {
+        "text": "คิว",
+        "alias": "unit-volume-name",
+        "meta": "@sys.unit-volume-name",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0
+  },
+  {
+    "id": "fd279789-2710-4c85-8ec6-3253adf63296",
+    "data": [
+      {
+        "text": "แสดงคิว",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0
+  },
+  {
+    "id": "dc93ac33-bc15-4aa0-a975-987f529b7df7",
+    "data": [
+      {
+        "text": "ขอคิว",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0
+  }
+]
