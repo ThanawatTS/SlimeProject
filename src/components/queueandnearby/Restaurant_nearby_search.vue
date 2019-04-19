@@ -53,7 +53,6 @@
             :center="mapCenter"
             :radius="1000"
             :visible="true"
-
           ></GmapCircle>
 
         </gmap-map>
@@ -84,10 +83,15 @@ export default {
     };
   },
     
+    // created(){
+    //   this.geolocate();
+    // },
     created(){
       this.geolocate();
     },
-
+    beforeUpdate(){
+     this.geolocate();
+    },
     // watch(){
       
     // },
@@ -108,7 +112,7 @@ export default {
           //           this.mapCenter = position
           //           console.log(position)
           // });
-
+          console.log("test")
           this.$watchLocation({
           enableHighAccuracy: false, //defaults to false
           timeout: Infinity, //defaults to Infinity
@@ -153,7 +157,6 @@ export default {
           //   });
           // }       
         // });          
-      
       },
 
         addgeofire () {

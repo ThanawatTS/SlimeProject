@@ -45,7 +45,8 @@ export default {
         
         },
         setCustomerRole(){
-            var dbSetRole = emailDB.doc( this.$data.userCurrentEmail)
+            console.log("CUS",this.$data.userCurrentEmail)
+            var dbSetRole = emailDB.doc(this.$data.userCurrentEmail)
             dbSetRole.get().then((doc) => {
                 if(doc.data().role == "newUser"){
                     console.log("INCONDITION")
@@ -67,17 +68,15 @@ export default {
             //     console.log(user.email)
             //     console.log(user.photoURL)
                 this.$data.userCurrentEmail = user.email
+                console.log(this.$data.userCurrentEmail)
              } else {
                    console.log("NO LONGER USER")
             }
         }
         
     },
-    beforeMount(){
-        setTimeout(() => {
-           this.userCurrent()
-        }, 1000);
-        
+    beforeMount(){        
+        this.userCurrent()
     }
 }
 </script>
