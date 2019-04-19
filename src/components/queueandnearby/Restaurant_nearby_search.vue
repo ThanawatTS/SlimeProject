@@ -53,6 +53,7 @@
             :center="mapCenter"
             :radius="1000"
             :visible="true"
+
           ></GmapCircle>
 
         </gmap-map>
@@ -86,9 +87,7 @@ export default {
     created(){
       this.geolocate();
     },
-    // updated(){
-    //  this.geolocate();
-    // },
+
     // watch(){
       
     // },
@@ -154,6 +153,7 @@ export default {
           //   });
           // }       
         // });          
+      
       },
 
         addgeofire () {
