@@ -11,10 +11,34 @@
                <h2 > {{listName}} </h2>
                 <v-btn round color="primary" dark @click.prevent="gotoRestaurant(listName)">Queue Manage</v-btn>
             </div>
-                
         </form>
 
-        
+
+
+     <div>
+      <h2>Search and add a pin</h2>
+      <label>
+        <gmap-autocomplete
+          @place_changed="setPlace">
+        </gmap-autocomplete>
+        <button @click="addMarker">Add</button>
+      </label>
+      <br/>
+
+    </div>
+    <br>
+    <gmap-map
+      :center="center"
+      :zoom="12"
+      style="width:100%;  height: 400px;"
+    >
+      <gmap-marker
+        :key="index"
+        v-for="(m, index) in markers"
+        :position="m.position"
+        @click="center=m.position"
+      ></gmap-marker>
+    </gmap-map>
     </div>
 </template>
 
@@ -33,9 +57,50 @@ export default {
             restaurantEach: { restaurantName: "", emailOwner: "", emailEmployee: "", restaurantArrange: ""},
             restuarantInfo: [],
             showRestaurantList: [],
+            center: { lat: 45.508, lng: -73.587 },
+            markers: [],
+            places: [],
+            currentPlace: null
         }
     },
+    mounted() {
+        this.geolocate();
+        },
     methods: {
+        geolocate: function() {
+            this.$getLocation(options)
+            .then(coordinates => {
+                this.center = coordinates;
+            });
+        },
+        setPlace(place) {
+             this.currentPlace = place;
+        },
+        addMarker() {
+        if (this.currentPlace) {
+            const marker = {
+            lat: this.currentPlace.geometry.location.lat(), //use this for latitude
+            lng: this.currentPlace.geometry.location.lng() //use this for longtitude
+            };
+            console.log(marker); // show restaurant position
+            this.markers.push({ position: marker });
+            this.places.push(this.currentPlace);
+            this.center = marker;
+            this.currentPlace = null;
+        }
+        },
+        geolocate: function() {
+        navigator.geolocation.getCurrentPosition(position => {
+            this.center = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+            };
+        });
+        },
+
+
+
+
         gotoRestaurant(nameRestaurant){
             this.$router.push({name: 'Restaurant_que', params:{Pid: nameRestaurant}})
         },

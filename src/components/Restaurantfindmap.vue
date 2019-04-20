@@ -47,6 +47,13 @@ export default {
 
   methods: {
     // receives a place object via the autocomplete component
+    
+     geolocate: function() {
+        this.$getLocation(options)
+        .then(coordinates => {
+            console.log(coordinates);
+        });
+     },
     setPlace(place) {
       this.currentPlace = place;
     },
