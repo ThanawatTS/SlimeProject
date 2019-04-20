@@ -53,7 +53,7 @@ export default {
                     console.log(doc.data())
                     dbSetRole.update({
                         role: "customer",
-                        newUser: false
+                        newUser: true
                     }).then(() => {
                         console.log("Update! role become: customer")
                     })

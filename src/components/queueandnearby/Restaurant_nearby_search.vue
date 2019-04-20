@@ -216,7 +216,13 @@ export default {
 
       MakeQue : function (restname) {
       var Get_Que_Value = firebaseApp.collection("RestaurantData").doc(restname)
-      var Save_User_Que = firebaseApp.collection("User").doc("Pure")
+      var user = firebase.auth().currentUser;
+        if(user){
+          var Save_User_Que = firebaseApp.collection("User").doc(user.email)
+        } else {
+          console.log("Didn't login yet")
+        }
+
       Get_Que_Value.get().then( doc =>  {
           if (doc.exists) {
               var que = doc.data().Queue

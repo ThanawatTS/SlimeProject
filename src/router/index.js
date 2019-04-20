@@ -124,7 +124,7 @@ const router = new Router({
   ]
 })
 
-var emailDB = firebaseApp.collection("emailSignupFromWebsite")
+var emailDB
 
 router.beforeEach((to, from, next) => {
   const curUser = firebase.auth().currentUser;
@@ -133,7 +133,9 @@ router.beforeEach((to, from, next) => {
   
   if(curUser != null){
     var examineEmail = curUser.email.slice(0,3)
+    var lineEmail = curUser.email.slice(0,6)
     if(examineEmail == "emp") emailDB = firebaseApp.collection("EmployeeEmail")
+    else if (lineEmail == "lineid") emailDB = firebaseApp.collection("emailSignupFromLine")
     else emailDB = firebaseApp.collection("emailSignupFromWebsite")
   }
 

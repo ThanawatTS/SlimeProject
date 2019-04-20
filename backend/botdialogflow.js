@@ -30,12 +30,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json({type: 'application/json'}));
 
-
-
 app.post('/chatbot', express.json(), (req, res) => {
     //console.log(admin.database())
     var botDialog = db.collection("bot").doc('botdetail')
     var botGetdata = db.collection("bot").doc('getdata')
+    
+
+    
 
     const agent = new WebhookClient({ request: req, response: res });
 
@@ -44,11 +45,10 @@ app.post('/chatbot', express.json(), (req, res) => {
     //console.log("Header2 : " + JSON.stringify(req.headers) + '\n');
     console.log("Body2 : " + JSON.stringify(req.body));
     console.log("Replytoken: "+ JSON.stringify(req.body.originalDetectIntentRequest.payload.data.replyToken))
+    console.log("UserID", JSON.stringify(req.body.originalDetectIntentRequest.payload.data.source.userId))
     // if(req.body.events[0].message.text.toUpperCase() == 'LIFF'){
     //     console.log("Line test")
     // }
-
-    
     function authUserid() {
         let userid = req.body.queryResult.parameters.userID;
         let botAuth = db.collection("usersChoosingMenu").doc(userid)
@@ -98,16 +98,56 @@ app.post('/chatbot', express.json(), (req, res) => {
             messages: [
               {
                 type: `text`,
-                text: "line://app/1648357069-N4goRqx1"
+                text: "Asd"
               }
             ]
-          })
         })
-      };
+      })
+    };
 
+    const reserveQueue = (bodyResponse) => {
+      return request({
+        method: `POST`,
+        uri:`${LINE_MESSAGING_API}/reply`,
+        headers: LINE_HEADER,
+        body: JSON.stringify({
+          replyToken: bodyResponse.originalDetectIntentRequest.payload.data.replyToken,
+          messages: [
+            {
+              "type": "template",
+              "altText": "This is a buttons template",
+              "template": {
+                  "type": "buttons",
+                  "thumbnailImageUrl": "https://example.com/bot/images/image.jpg",
+                  "imageAspectRatio": "rectangle",
+                  "imageSize": "cover",
+                  "imageBackgroundColor": "#FFFFFF",
+                  "title": "Slime Website",
+                  "text": "Please select",
+                  "defaultAction": {
+                      "type": "uri",
+                      "label": "View detail",
+                      "uri": "https://0affde8f.ngrok.io"
+                  },
+                  "actions": [
+                      {
+                        "type": "uri",
+                        "label": "Reserve",
+                        "uri": "https://0affde8f.ngrok.io"
+                      }
+                  ]
+              }
+            }
+          ]
+      })
+    })
+  };
 
+  
     function welcome () {}
-    function queue(){}
+    function queue(){
+      reserveQueue(req.body)
+    }
     function askUserName(){}
     function fallback(){}
 
@@ -120,26 +160,9 @@ app.post('/chatbot', express.json(), (req, res) => {
     intentMap.set('Default Fallback Intent', fallback);
 
     agent.handleRequest(intentMap);
-    // console.log("GO");
-    // res.setHeader('Content-Type', 'application/json');
-    // console.log(req.body);
-    // console.log("BREAK")
-    // var name = req.body.queryResult.parameters['lastname'];
-    // var messRes = req.body.queryResult.fulfillmentText;
-    // let responseObj =   {
-    //                     "fulfillmentText": messRes,
-    //                     "fulfillmentMessages":[{"text": {"text": name}}],
-    //                     "source":""
-    //                     }
-    // console.log(responseObj)
-    // console.log("Break")
-    // console.log("TEXT : " + req.body.queryResult.queryText);
-    // console.log("TEXT2: "+ responseObj.fulfillmentText);
-    // return res.json(responseObj);
+  
   })
 
 app.get('/', (req, res) => res.send('online'))
-
-
 
 module.exports = app
