@@ -60,7 +60,9 @@ export default {
             center: { lat: 45.508, lng: -73.587 },
             markers: [],
             places: [],
-            currentPlace: null
+            currentPlace: null,
+            lat: 0,
+            lon: 0
         }
     },
     mounted() {
@@ -82,6 +84,8 @@ export default {
             lat: this.currentPlace.geometry.location.lat(), //use this for latitude
             lng: this.currentPlace.geometry.location.lng() //use this for longtitude
             };
+            this.lat = this.currentPlace.geometry.location.lat()
+            this.lon = this.currentPlace.geometry.location.lng()
             console.log(marker); // show restaurant position
             this.markers.push({ position: marker });
             this.places.push(this.currentPlace);
@@ -161,7 +165,7 @@ export default {
 
                         var restaurantData = firebaseApp.collection("RestaurantData")
                         restaurantData.doc(rest_name).set({
-                            Location: 0,
+                            Location: new firebase.firestore.GeoPoint(parseFloat(this.lat),parseFloat(this.lon)),
                             Name: rest_name,
                             Queue: [],
                             RestaurantMail: this.$data.userCur,

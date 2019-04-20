@@ -137,7 +137,6 @@ router.beforeEach((to, from, next) => {
   const curUser = firebase.auth().currentUser;
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   console.log(requiresAuth)
-  
   if(curUser != null){
     var examineEmail = curUser.email.slice(0,3)
     var lineEmail = curUser.email.slice(0,6)
@@ -150,6 +149,9 @@ router.beforeEach((to, from, next) => {
   // else if (!requiresAuth && currentUser) next('usermanager');
   else if(curUser){
     var dbSetRole = emailDB.doc(curUser.email)
+    console.log(curUser.email)
+    console.log(dbSetRole)
+    console.log("curUser index")
     dbSetRole.get().then((doc) => {
 
       if(doc.data().newUser){console.log("1"); next();} 
@@ -159,6 +161,12 @@ router.beforeEach((to, from, next) => {
         if(!requiresAuth) next();
         else next(false);
       }
+    }).catch((error) => {
+      firebase.auth().signOut().then(() => {
+        console.log("Signout")
+      }).catch((err) => {
+        console.log(err)
+      })
     })
   }
   else next();
