@@ -112,51 +112,52 @@ export default {
           //           this.mapCenter = position
           //           console.log(position)
           // });
-          console.log("test")
+
           this.$watchLocation({
           enableHighAccuracy: false, //defaults to false
           timeout: Infinity, //defaults to Infinity
           maximumAge: 0 //defaults to 0
           })
-          .then(position => {
-                   this.mapCenter = position
-          });          
-
+          .then(location => {
+          this.mapCenter = location
+          var firebaseRef = firebase.database().ref("location")
+          var radius = parseFloat(5);
+          var operation; 
+          var geoFire = new GeoFire(firebaseRef);
+          this.Restaurant = []
           
-          // var firebaseRef = firebase.database().ref("location")
-          // var radius = parseFloat(1000);
-          // var operation;
-          // var geoFire = new GeoFire(firebaseRef);
-          // this.Restaurant = []
+          if (this.geoQuery != null) {
+          this.operation = "Updating";
 
+          this.geoQuery.updateCriteria({
+            center: [location.lat, location.lng],
+            radius: radius
+          });
+            } else {
+          console.log(location[0] + "///" + location[1])
+          operation = "Creating";
+          this.geoQuery = geoFire.query({
+            center: [location.lat, location.lng],
+            radius: radius
+          });
+         
+          this.geoQuery.on("key_entered", (key, location, distance) => {
+              console.log("test")
+              const marker = {
+                lat: location[0],
+                lng: location[1]
+              };
+              this.markers.push({ position: marker });
+              this.RestaurantName.push(key);   
+            });
+          }  
+         
+         
+         
+         
+         
+         });          
 
-        
-          // if (this.geoQuery != null) {
-          // this.operation = "Updating";
-
-          // this.geoQuery.updateCriteria({
-          //   center: [this.latitude, this.longitude],
-          //   radius: radius
-          // });
-          //   } else {
-          // operation = "Creating";
-          // this.geoQuery = geoFire.query({
-          //   center: [this.latitude, this.longitude],
-          //   radius: radius
-          // });
-
-           
-          // this.geoQuery.on("key_entered", (key, location, distance) => {
-          //     console.log("test")
-          //     const marker = {
-          //       lat: location[0],
-          //       lng: location[1]
-          //     };
-          //     this.markers.push({ position: marker });
-          //     this.RestaurantName.push(key);   
-          //   });
-          // }       
-        // });          
       },
 
         addgeofire () {
@@ -272,8 +273,7 @@ export default {
   font-size: 20px;
   background: greenyellow;
 }
-#Maps{
-}
+
 .app{
   display: grid;
   grid-template-columns: 

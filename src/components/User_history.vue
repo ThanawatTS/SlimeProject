@@ -1,7 +1,9 @@
 <template>
 
-  <div class = "app"> 
-    <div id= "List"  class="grid__text">
+<body>
+
+  <div class = "app" id = "color" > 
+    <div id= "List">
     <ul>
 
         Current Restaurant : {{RestaurantName}} <br>
@@ -10,6 +12,7 @@
     </ul>
     </div>
   </div>
+</body>
 </template>
 
 <script>
@@ -47,27 +50,27 @@ export default {
 
 
 <style>
+
 #List{
-  display: block;
+
   font-size: 20px;
   background: greenyellow;
 }
-#Maps{
+
+body {
+  background-color: green;
+}
+
+#color{
+  background: black;
 }
 .app{
-  display: grid;
-  grid-template-columns: 
-  minmax(20px, 1fr) repeat(12, minmax(0, 100px)) minmax(20px, 1fr);
-  grid-column-gap: 20px;
+ display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
 }
-.grid__media {
-  grid-column: 2 / 10; /* Start on Column 2 and end at the start of Column 9 */
-}
-.grid__text {
-  grid-column: 10 / 14; /* Start on Column 10 and end at the start of Column 14 */
-}
-.grid__media,
-.grid__text {
-  grid-row: 1; /* We want to keep our items on the same row */
-}
+
 </style>
