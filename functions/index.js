@@ -2,25 +2,27 @@ const functions = require('firebase-functions');
 const request = require('request-promise');
 const admin = require('firebase-admin');
 
-const app = require('./botdialogflow')
-//const app = require('../backend/botdialogflow.js')
-
-const { WebhookClient } = require('dialogflow-fulfillment');
-const {Card, Suggestion} = require('dialogflow-fulfillment');
-const { Carousel } = require('actions-on-google');
-
-process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
-
-
-
 const LINE_MESSAGING_API = 'https://api.line.me/v2/bot/message';
 const LINE_HEADER = {
   'Content-Type': 'application/json',
   'Authorization': `Bearer 1hEDucdo64ySMmSQKj3wBqIzsnyiBewDH29Dt5EiE5O1UlSjwv90J1P28ASJjoW5cW0VmLZ0z1n5WH5E5rTpzh9eJXK9vqnZkgq/VqBB7KUbSlMddapMXU29VDQMt8MTo9V6qI0VnHUzFCYkOFvZTlGUYhWQfeY8sLGRXgo3xvw=`
 };
 
-exports.app = functions.https.onRequest(app)
+var serviceAccount = require("./slimeslam-24d26-firebase-adminsdk-7c.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://slimeslam-24d26.firebaseio.com"
+});
+
+const app = require('../backend/botdialogflow')
+// var db = admin.firestore();
+// var botGetdata = db.collection("bot").doc('getdata')
+exports.appLine = functions.https.onRequest(app);
+
 // exports.LineBot = functions.https.onRequest((req, res) => {
+  
+
 //   var data = JSON.stringify(reply_profile())
 //   let stickerpack = "3";
   
@@ -28,15 +30,44 @@ exports.app = functions.https.onRequest(app)
 //     return;
 //   }
 //   if(req.body.events[0].message.text.toUpperCase() == 'LIFF'){
+//     console.log("IN LIFF");
 //     reply_liff(req.body);
 //   } else if(req.body.events[0].message.text.toUpperCase() == 'SLIME'){
+//     console.log("IN Slime");
 //     reply(req.body, stickerpack, data);
+//   } else if(req.body.events[0].message.text.toUpperCase() == 'RESERVE'){
+//     console.log("in reserve condition");
+//     getAccessData();
+//   } else {
+//     console.log("NOT IN ANY CONDITION");
 //   }
 //   //  else if (req.body.events[0].message.text.toUpperCase() == 'คิว') {
 //   //   app(req.body, res)
 //   // }
-//    res.sendStatus(200)
+  
+
+//   res.sendStatus(200)
 // });
+
+// function getAccessData(){
+//   var db = admin.firestore();
+//   var botGetdata = db.collection("bot").doc('getdata')
+//   console.log("GET in get access function")
+
+//   botGetdata.get().then((doc) => {
+//     console.log("IN Database")
+//     if(doc.exists){
+//       var setData = botGetdata.set({
+//         menu: "หมูกรอบ"
+//       })
+//       console.log("IN condition if")
+        
+//     } else {
+//       console.log("No doc!")
+//     }
+//       console.log("Error not in condition")
+//   })
+// }
 
 // var request = require("request");
 

@@ -8,13 +8,13 @@ import router from './router'
 import VueFirestore from 'vue-firestore'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vuex from 'vuex'
-
+import VueGeolocation from 'vue-browser-geolocation';
 
 Vue.config.productionTip = false
 Vue.use(VueFirestore);
 Vue.use(Vuetify)
 Vue.use(Vuex)
-
+Vue.use(VueGeolocation);
 export const EventBus = new Vue();
 
 Vue.use(VueGoogleMaps, {
