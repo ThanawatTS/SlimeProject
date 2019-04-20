@@ -15,6 +15,7 @@ import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
 import User_history from '@/components/User_history'
 import Employee from '@/components/manager-role/Employee'
 import AllMenu from '@/components/SuggestionMenu/AllMenu'
+import Restaurantfindmap from '@/components/Restaurantfindmap'
 import firebase from 'firebase';
 import firebaseApp from '@/components/firebase/firebaseInit'
 
@@ -120,7 +121,13 @@ const router = new Router({
       path: '/allmenu',
       name: 'AllMenu',
       component: AllMenu
-    }
+    }, 
+    {
+      path: '/Restaurantfindmap',
+      name: 'Restaurantfindmap',
+      component: Restaurantfindmap
+    }, 
+
   ]
 })
 
