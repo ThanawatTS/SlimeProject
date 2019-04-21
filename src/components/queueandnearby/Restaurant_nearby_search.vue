@@ -79,7 +79,8 @@ export default {
       latitude : 0,
       longitude : 0,
       firebaseRef : firebase.database().ref("location"),
-      geoQuery : null
+      geoQuery : null,
+      queueArr: []
     };
   },
     
@@ -227,17 +228,24 @@ export default {
       Get_Que_Value.get().then( doc =>  {
           if (doc.exists) {
               var que = doc.data().Queue
+              this.$data.queueArr = doc.data().Queue
+              console.log("que",que)
+              console.log("que length", doc.data().Queue.length)
               console.log("Document data:", doc.data().Queue);
-              que.push(que[que.length-1]+1)
-              
+              console.log(que[que.length-1].queue+1)
+              this.$data.queueArr.push({
+                queue: que[que.length-1].queue+1,
+                customerEmail: user.email
+              })
+              console.log("queuearr", this.$data.queueArr)
           
           Get_Que_Value.update({
-              Queue: que
+              Queue: this.$data.queueArr
           })
 
           Save_User_Que.update({
               Restaurant : restname,
-              Queue: que[que.length-1]
+              Queue: que[que.length-1].queue+1
           })
           
           .then(function() {
