@@ -279,6 +279,40 @@ app.post('/chatbot', express.json(), (req, res) => {
       })
     })
   };
+  
+
+
+  const emptyQueue = (bodyResponse) => {
+    return request({
+      method: `POST`,
+      uri:`${LINE_MESSAGING_API}/push`,
+      headers: LINE_HEADER,
+      body: JSON.stringify({
+        "to": bodyResponse.originalDetectIntentRequest.payload.data.source.userId ,
+        "messages": [
+          {
+            "type": "flex",
+            "altText": "This is a Flex Message",
+            "contents": {
+              "type": "bubble",
+              "body": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ไม่มีคิวอยู่ในรายการจอง",
+                    "align": "center"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+    })
+  })
+};
+
 
   const checkQueLine = (bodyResponse, userCur, restaurantCur, restaurantName) => {
     return request({
@@ -426,15 +460,20 @@ app.post('/chatbot', express.json(), (req, res) => {
         //     }
         //   })
         // })
-          restaurantDB = db.collection("RestaurantData").doc(restaurant)
-          restaurantDB.get().then((doc) => {
-          if(doc.exists){
+          if(restaurant == "" || userCurrentQueue == 0){
+            emptyQueue(req.body)
+          } else {
+            restaurantDB = db.collection("RestaurantData").doc(restaurant)
+            restaurantDB.get().then((doc) => {
+            if(doc.exists){
               restaurantCurrentQueue = doc.data().Queue[0].queue
+            }
+            })
+            setTimeout(() => {
+              checkQueLine(req.body, userCurrentQueue, restaurantCurrentQueue, restaurant)
+            }, 500);
           }
-          })
-          setTimeout(() => {
-            checkQueLine(req.body, userCurrentQueue, restaurantCurrentQueue, restaurant)
-          }, 500);
+          
           
       }, 500);
 

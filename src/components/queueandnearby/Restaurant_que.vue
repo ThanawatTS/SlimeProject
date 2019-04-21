@@ -116,7 +116,7 @@ export default {
       firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then((doc) => {
         if(doc.exists){
           for(var x in doc.data().Queue){
-            if( x < 3){
+            if( x < 5){
               this.$data.notiQueue[x] = doc.data().Queue[x]
               console.log("Data in: ",this.$data.notiQueue[x])
             }
@@ -130,7 +130,7 @@ export default {
       var checkEmailLine = firebaseApp.collection("emailSignupFromLine")
       checkEmailLine.get().then((queryShapShot) => {
         queryShapShot.forEach((doc) => {
-          for(var x = 0 ; x < 3 ; x++){
+          for(var x = 2 ; x < 5 ; x++){
             if(doc.id == this.$data.notiQueue[x].customerEmail){
               console.log("find")
               this.$data.lineUserId.push(doc.data().userIdLine)
@@ -153,10 +153,11 @@ export default {
 
           var sendNoti = restaurantQueue
           var test
+          var y
           sendNoti.get().then((doc) => {
             for(var x in doc.data().userId) {
               console.log("IN noti", doc.data().userId[x])
-              this.sendNotitoUser(doc.data().userId[x],this.Current_que,this.$data.notiQueue[x].queue)
+              this.sendNotitoUser(doc.data().userId[x],this.Current_que,this.$data.notiQueue[parseInt(x) + 2].queue)
               //this.sendNotitoUser(doc.data().userId[x])
             }
           })
