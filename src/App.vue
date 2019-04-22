@@ -1,33 +1,21 @@
 <template>
-  <v-app id="app">
-    <v-toolbar dark>
+<div id="app">
+  <v-app id="inspire" dark>
+    
+    <v-toolbar app fixed clipped-left>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Slime Eater</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn flat to="/signup">
-          <v-icon left>supervisor_account</v-icon>
-          Sign Up
-        </v-btn>
-        <v-btn flat to="/signin">
-          <v-icon left>supervisor_account</v-icon>
-          Sign In
-        </v-btn>
-        <v-btn flat to="/signin">
-          <v-icon left>supervisor_account</v-icon>
-          Sign out
-        </v-btn>
-      </v-toolbar-items>
     </v-toolbar>
-
+    
     <v-content>
       <v-container fluid>
         <router-view></router-view>
       </v-container>
     </v-content>
 
-    <v-footer dark></v-footer>
-    
   </v-app>
+</div>
+
 </template>
 
 
@@ -36,8 +24,17 @@ export default {
   name: 'app',
   data (){
     return{
-
+      drawer: true
     }
-  }
+  },
+  methods : {
+    Signin(){
+        this.$router.push('/signin') 
+    },
+
+    Signout(){
+        this.$router.push('/signin') 
+    }
+    }
 }
 </script>

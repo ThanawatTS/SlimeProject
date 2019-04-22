@@ -10,7 +10,7 @@
 import firebase from 'firebase'
 import firebaseApp from '../firebase/firebaseInit'
 
-var emailDB = firebaseApp.collection("emailSignupFromWebsite")
+var emailDB
 
 export default {
     name: 'customerManagement',
@@ -28,6 +28,31 @@ export default {
                 } else {
                     console.log("Didn't login yet")
                 }
+
+            if(this.$data.emailUesr.slice(0,6) == 'lineid'){
+                emailDB = firebaseApp.collection("emailSignupFromLine")
+            } else {
+                emailDB = firebaseApp.collection("emailSignupFromWebsite")
+            }
+
+            let checkNewUser = emailDB.doc(this.$data.emailUesr)
+            checkNewUser.get().then((doc) => {
+                if(doc.data().newUser == true) {
+                    emailDB = firebaseApp.collection("User").doc(this.$data.emailUesr)
+                    emailDB.set({
+                        Queue: 0,
+                        Restaurant: ""
+                    })
+                    setTimeout(() => {
+                        checkNewUser.update({
+                            newUser: false
+                        })
+                    }, 1000);
+                } else {
+                    console.log("User is not newbie")
+                }
+            })
+
         },
         suggestionMenu() {
             this.$router.push('/suggestion')
@@ -38,7 +63,7 @@ export default {
     },
     beforeMount(){
         setTimeout(() => {
-        this.checkStatus()
+            this.checkStatus()
         }, 1000);
         
     }

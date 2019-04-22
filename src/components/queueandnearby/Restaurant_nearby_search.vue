@@ -53,7 +53,6 @@
             :center="mapCenter"
             :radius="1000"
             :visible="true"
-            
           ></GmapCircle>
 
         </gmap-map>
@@ -80,15 +79,19 @@ export default {
       latitude : 0,
       longitude : 0,
       firebaseRef : firebase.database().ref("location"),
-      geoQuery : null
+      geoQuery : null,
+      queueArr: []
     };
   },
     
+    // created(){
+    //   this.geolocate();
+    // },
     created(){
       this.geolocate();
     },
-    mounted(){
-    this.findnearby();
+    beforeUpdate(){
+     this.geolocate();
     },
     // watch(){
       
@@ -96,39 +99,49 @@ export default {
   methods: {
         //Find current location
         geolocate: function() {
-          this.Currentlocation = [];
-          navigator.geolocation.getCurrentPosition(position => {
-            this.latitude = position.coords.latitude;
-            this.longitude = position.coords.longitude;
-            this.mapCenter = {
-              lat: this.latitude,
-              lng: this.longitude
-            };
+          // this.Currentlocation = [];
+          // navigator.geolocation.getCurrentPosition(position => {
+        
+            // };
+          // this.$getLocation({
+          // enableHighAccuracy: false, //defaults to false
+          // timeout: Infinity, //defaults to Infinity
+          // maximumAge: 0 //defaults to 0
+          
+          // })
+          // .then(position => {
+          //           this.mapCenter = position
+          //           console.log(position)
+          // });
 
-                    
+          this.$watchLocation({
+          enableHighAccuracy: false, //defaults to false
+          timeout: Infinity, //defaults to Infinity
+          maximumAge: 0 //defaults to 0
+          })
+          .then(location => {
+          this.mapCenter = location
           var firebaseRef = firebase.database().ref("location")
-          var radius = parseFloat(1000);
-          var operation;
+          var radius = parseFloat(5);
+          var operation; 
           var geoFire = new GeoFire(firebaseRef);
           this.Restaurant = []
-
-
-        
+          
           if (this.geoQuery != null) {
           this.operation = "Updating";
 
           this.geoQuery.updateCriteria({
-            center: [this.latitude, this.longitude],
+            center: [location.lat, location.lng],
             radius: radius
           });
             } else {
+          console.log(location[0] + "///" + location[1])
           operation = "Creating";
           this.geoQuery = geoFire.query({
-            center: [this.latitude, this.longitude],
+            center: [location.lat, location.lng],
             radius: radius
           });
-
-           
+         
           this.geoQuery.on("key_entered", (key, location, distance) => {
               console.log("test")
               const marker = {
@@ -138,8 +151,14 @@ export default {
               this.markers.push({ position: marker });
               this.RestaurantName.push(key);   
             });
-          }       
-        });          
+          }  
+         
+         
+         
+         
+         
+         });          
+
       },
 
         addgeofire () {
@@ -199,21 +218,34 @@ export default {
 
       MakeQue : function (restname) {
       var Get_Que_Value = firebaseApp.collection("RestaurantData").doc(restname)
-      var Save_User_Que = firebaseApp.collection("User").doc("Pure")
+      var user = firebase.auth().currentUser;
+        if(user){
+          var Save_User_Que = firebaseApp.collection("User").doc(user.email)
+        } else {
+          console.log("Didn't login yet")
+        }
+
       Get_Que_Value.get().then( doc =>  {
           if (doc.exists) {
               var que = doc.data().Queue
+              this.$data.queueArr = doc.data().Queue
+              console.log("que",que)
+              console.log("que length", doc.data().Queue.length)
               console.log("Document data:", doc.data().Queue);
-              que.push(que[que.length-1]+1)
-              
+              console.log(que[que.length-1].queue+1)
+              this.$data.queueArr.push({
+                queue: que[que.length-1].queue+1,
+                customerEmail: user.email
+              })
+              console.log("queuearr", this.$data.queueArr)
           
           Get_Que_Value.update({
-              Queue: que
+              Queue: this.$data.queueArr
           })
 
           Save_User_Que.update({
               Restaurant : restname,
-              Queue: que[que.length-1]
+              Queue: que[que.length-1].queue+1
           })
           
           .then(function() {
@@ -249,8 +281,7 @@ export default {
   font-size: 20px;
   background: greenyellow;
 }
-#Maps{
-}
+
 .app{
   display: grid;
   grid-template-columns: 

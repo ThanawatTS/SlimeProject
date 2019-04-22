@@ -25,14 +25,18 @@
 <script>
 import firebaseApp from '../firebase/firebaseInit';
 import firebase from 'firebase/app'
+
+
 export default {
   name: "Que",
   data() {
     return {
       Que : {},
       Current_que : 0,
-      Show_restaurant_que : firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid)
-    
+      Show_restaurant_que : firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid),
+      notiQueue: [],
+      lineUserId: []
+
     }
   },
   firestore() {
@@ -77,19 +81,21 @@ export default {
   },
     Restaurant_show_current_que () {
         firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
-        this.Current_que = doc.data().Queue[0];
+        this.Current_que = doc.data().Queue[0].queue;
   })
  },
     Next_que() {
         
-        firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
+        
+         firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
+          console.log("GET in")
             if (doc.exists) {
               var que = doc.data().Queue;
               que.shift();
-              this.Current_que = que[0];
+              this.Current_que = que[0].queue;
               console.log(que);
           
-        firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).update({
+           firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).update({
               Queue: que
           })
           .then(function() {
@@ -106,6 +112,185 @@ export default {
       }).catch(function(error) {
           console.log("Error getting document:", error);
       });
+
+      firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then((doc) => {
+        if(doc.exists){
+          for(var x in doc.data().Queue){
+            if( x < 5){
+              this.$data.notiQueue[x] = doc.data().Queue[x]
+              console.log("Data in: ",this.$data.notiQueue[x])
+            }
+          }
+        }
+      })
+
+
+      
+
+      var checkEmailLine = firebaseApp.collection("emailSignupFromLine")
+      checkEmailLine.get().then((queryShapShot) => {
+        queryShapShot.forEach((doc) => {
+          for(var x = 2 ; x < 5 ; x++){
+            if(doc.id == this.$data.notiQueue[x].customerEmail){
+              console.log("find")
+              this.$data.lineUserId.push(doc.data().userIdLine)
+              console.log("DATA", this.$data.lineUserId)
+            } else {
+              console.log("not find")
+            }
+          }
+        })
+      })
+
+      setTimeout(() => {
+        console.log("IN userid")
+        var restaurantQueue = firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).collection("RestaurantQueue").doc("userId")
+          restaurantQueue.set({
+          userId: this.$data.lineUserId
+        })
+        setTimeout(() => {
+          this.$data.lineUserId = []
+
+          var sendNoti = restaurantQueue
+          var test
+          var y
+          sendNoti.get().then((doc) => {
+            for(var x in doc.data().userId) {
+              console.log("IN noti", doc.data().userId[x])
+              this.sendNotitoUser(doc.data().userId[x],this.Current_que,this.$data.notiQueue[parseInt(x) + 2].queue)
+              //this.sendNotitoUser(doc.data().userId[x])
+            }
+          })
+          
+          
+
+        }, 100);
+      }, 1000);
+      
+      
+
+      
+       
+      
+      
+      // var testUserIdline = firebaseApp.collection("testuserId").doc("lineuserId")
+      // testUserIdline.set({
+      //   userId: this.$data.lineUserId
+      // })
+
+      
+
+
+    },
+    sendNotitoUser(userId, currentQueue, userQueue){
+      console.log("IN userid", userId)
+      console.log("IN currentQueue", currentQueue)
+      console.log("IN userQueue", userQueue)
+      //console.log("trying to send noti", userId)
+      //const request = require('request-promise');
+      // var invocation = new XMLHttpRequest();
+      // var urlline = 'https://api.line.me/v2/bot/message/push'
+      // var bodyline = "body: {to: 'Uc7d94e2bf96f8cb56389107f8fbff8d1', messages: [{ type 'text', text: 'Hello, world'}]}"
+      // if(invocation){
+      //   invocation.open('POST', urlline, true);
+      //   invocation.setRequestHeader('Authorization', 'Bearer 1hEDucdo64ySMmSQKj3wBqIzsnyiBewDH29Dt5EiE5O1UlSjwv90J1P28ASJjoW5cW0VmLZ0z1n5WH5E5rTpzh9eJXK9vqnZkgq/VqBB7KUbSlMddapMXU29VDQMt8MTo9V6qI0VnHUzFCYkOFvZTlGUYhWQfeY8sLGRXgo3xvw=')
+      //   invocation.setRequestHeader('Content-Type', 'application/json' )
+      //   invocation.setRequestHeader('Access-Control-Allow-Origin', '*')
+      //   invocation.onreadystatechange = handler
+      //   invocation.send(bodyline)
+      // }
+
+
+//       var request = require("request");
+
+// var options = { method: 'POST',
+//   url: 'https://api.line.me/v2/bot/message/push',
+//   headers: 
+//    { 'Postman-Token': '2949cf44-facc-4c5f-bfcc-aced5940189a',
+//      'cache-control': 'no-cache',
+//      'Access-Control-Allow-Origin': '*',
+//      "X-Requested-With": "XMLHttpRequest",
+//      'Authorization': 'Bearer 1hEDucdo64ySMmSQKj3wBqIzsnyiBewDH29Dt5EiE5O1UlSjwv90J1P28ASJjoW5cW0VmLZ0z1n5WH5E5rTpzh9eJXK9vqnZkgq/VqBB7KUbSlMddapMXU29VDQMt8MTo9V6qI0VnHUzFCYkOFvZTlGUYhWQfeY8sLGRXgo3xvw=',
+//      'Content-Type': 'application/json' },
+//   body: 
+//    { to: 'Uc7d94e2bf96f8cb56389107f8fbff8d1',
+//      messages: 
+//       [ { type: 'text', text: 'Hello, world1' },
+//         { type: 'text', text: 'Hello, world2' } ] },
+//   json: true };
+
+// request(options, function (error, response, body) {
+//   if (error) throw new Error(error);
+
+//   console.log(body);
+// });
+
+// var data = JSON.stringify({
+//   "to": "Uc7d94e2bf96f8cb56389107f8fbff8d1",
+//   "messages": [
+//     {
+//       "type": "text",
+//       "text": "Hello, world1"
+//     },
+//     {
+//       "type": "text",
+//       "text": "Hello, world2"
+//     }
+//   ]
+// });
+
+// var xhr = new XMLHttpRequest();
+// xhr.withCredentials = true;
+
+// xhr.addEventListener("readystatechange", function () {
+//   if (this.readyState === 4) {
+//     console.log(this.responseText);
+//   }
+// });
+
+// xhr.open("POST", "https://7d824f1d.ngrok.io/chatbot/1");
+// xhr.setRequestHeader("Content-Type", "application/json");
+// xhr.setRequestHeader("Authorization", "Bearer 1hEDucdo64ySMmSQKj3wBqIzsnyiBewDH29Dt5EiE5O1UlSjwv90J1P28ASJjoW5cW0VmLZ0z1n5WH5E5rTpzh9eJXK9vqnZkgq/VqBB7KUbSlMddapMXU29VDQMt8MTo9V6qI0VnHUzFCYkOFvZTlGUYhWQfeY8sLGRXgo3xvw=");
+// xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+// xhr.setRequestHeader("cache-control", "no-cache");
+// xhr.setRequestHeader("Postman-Token", "725538d2-f13e-435a-afd3-950cfefc6a3b");
+
+// xhr.send(data);
+// const line = require('@line/bot-sdk');
+
+// const client = new line.Client({
+//   channelAccessToken: 'Bearer 1hEDucdo64ySMmSQKj3wBqIzsnyiBewDH29Dt5EiE5O1UlSjwv90J1P28ASJjoW5cW0VmLZ0z1n5WH5E5rTpzh9eJXK9vqnZkgq/VqBB7KUbSlMddapMXU29VDQMt8MTo9V6qI0VnHUzFCYkOFvZTlGUYhWQfeY8sLGRXgo3xvw='
+// });
+
+// const message = {
+//   type: 'text',
+//   text: 'Hello World!'
+// };
+
+// client.pushMessage('Uc7d94e2bf96f8cb56389107f8fbff8d1', message)
+//   .then(() => {
+//     console.log("in push")
+//   })
+//   .catch((err) => {
+//     // error handling
+//     console.log("Not push")
+//     console.log(err)
+//   });
+
+
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("POST", "https://4a824f03.ngrok.io/noti/"+userId+"/"+currentQueue+"/"+userQueue, true);
+xhr.send();
+
     },
     
     Update_Current_Que(currentque){
@@ -113,11 +298,11 @@ export default {
         
             firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(function(doc) {
             if (doc.exists) {
-                var que = doc.data().Queue
+                var que = doc.data().Queue[0].queue
             
             
             firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).update({
-                Queue: que[0]
+                Queue: que
             })
             .then(function() {
                 console.log("Document successfully updated!");

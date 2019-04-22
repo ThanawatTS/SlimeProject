@@ -15,6 +15,7 @@ import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
 import User_history from '@/components/User_history'
 import Employee from '@/components/manager-role/Employee'
 import AllMenu from '@/components/SuggestionMenu/AllMenu'
+import Restaurantfindmap from '@/components/Restaurantfindmap'
 import firebase from 'firebase';
 import firebaseApp from '@/components/firebase/firebaseInit'
 
@@ -108,32 +109,44 @@ const router = new Router({
       component: Restaurant_Que,
       meta: {
         requiresAuth: true,
-        role: "restaurantOwner" || "employee",
+        role: "restaurantOwner",
+        roleEmp: "employee"
       }
     },
     {
       path: '/employee',
       name: 'Employee',
-      component: Employee
+      component: Employee,
+      meta: {
+        requiresAuth: true,
+        roleEmp: "employee"
+      }
     },
     {
       path: '/allmenu',
       name: 'AllMenu',
       component: AllMenu
-    }
+    }, 
+    {
+      path: '/Restaurantfindmap',
+      name: 'Restaurantfindmap',
+      component: Restaurantfindmap
+    }, 
+
   ]
 })
 
-var emailDB = firebaseApp.collection("emailSignupFromWebsite")
+var emailDB
 
 router.beforeEach((to, from, next) => {
   const curUser = firebase.auth().currentUser;
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   console.log(requiresAuth)
-  
   if(curUser != null){
     var examineEmail = curUser.email.slice(0,3)
+    var lineEmail = curUser.email.slice(0,6)
     if(examineEmail == "emp") emailDB = firebaseApp.collection("EmployeeEmail")
+    else if (lineEmail == "lineid") emailDB = firebaseApp.collection("emailSignupFromLine")
     else emailDB = firebaseApp.collection("emailSignupFromWebsite")
   }
 
@@ -141,15 +154,31 @@ router.beforeEach((to, from, next) => {
   // else if (!requiresAuth && currentUser) next('usermanager');
   else if(curUser){
     var dbSetRole = emailDB.doc(curUser.email)
+    console.log(curUser.email)
+    console.log(dbSetRole)
+    console.log("curUser index") 
     dbSetRole.get().then((doc) => {
-
+      console.log("role: ",doc.data().role)
+      console.log("TO meta: ", to.meta.role)
       if(doc.data().newUser){console.log("1"); next();} 
       else if (doc.data().role == to.meta.role){console.log("2"); next();} 
+      else if (doc.data().role == to.meta.roleEmp){console.log("4"); next();}
       else if (doc.data().role != to.meta.role) {
         console.log("3"); 
-        if(!requiresAuth) next();
-        else next(false);
+        if(!requiresAuth){
+          console.log("not reqire", !requiresAuth)
+          next();
+        } else {
+          console.log("require", requiresAuth)
+          next(false);
+        }
       }
+    }).catch((error) => {
+      firebase.auth().signOut().then(() => {
+        console.log("Signout")
+      }).catch((err) => {
+        console.log(err)
+      })
     })
   }
   else next();
