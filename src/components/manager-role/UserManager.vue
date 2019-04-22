@@ -1,8 +1,18 @@
 <template>
-    <div id="usermanager">
-        <h1>Usermanager</h1>
+    <div id="usermanager" class="center">
+
+        <h1>Welcome ! </h1>
+        <h2> Please Choose Your Role </h2>
+
+        
         <v-btn color="info" @click="claimTobeOwner"> Restuarant Owner</v-btn>
+
+
+    
         <v-btn color="error" @click="claimTobeCustomer"> Customer </v-btn>
+    
+    
+    
     </div>
 </template>
  
@@ -80,3 +90,9 @@ export default {
     }
 }
 </script>
+<style>
+.center {
+  text-align: center;
+
+}
+</style>
