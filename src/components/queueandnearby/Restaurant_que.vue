@@ -1,7 +1,7 @@
 <template>
   <div class = "app"> 
     <div id= "Show_que"  class="grid__text">
-        Que in Line
+        <center>Que in Line</center>
         <ul>
         <tr v-for="(restaurant_que,index) in Que " :key = "index">       
         <td>  {{restaurant_que}} - {{index}} </td>
@@ -10,14 +10,21 @@
     </div>
 
     <div id = "Show_current_que" class="grid__text1">
-        Current Que
-        {{Current_que}}
+      <b-card-group deck>
+        <b-card bg-variant="primary" text-variant="white" header="Current Que" class="text-center">
+        <b-card-text> {{Current_que}} </b-card-text>
+         </b-card>
+    </b-card-group>
+       
+  
     </div>
 
     <div id = "button" class="grid__text2">
-        <v-btn small color="yellow lighten-2" @click="Next_que()">
+
+        <v-btn small color="black" @click="Next_que()">
         Next Que
         </v-btn>
+
     </div>
   </div>
 </template>
@@ -35,11 +42,7 @@ export default {
     
     }
   },
-  firestore() {
-      return {
-         Show_restaurant_que : firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid)
-      }
-  },
+
   created () {
     this.Restaurant_show_que()
     this.Restaurant_show_current_que ()
@@ -159,8 +162,10 @@ beforeMount(){
 #Show_que{
   display: block;
   font-size: 20px;
-  background: greenyellow;
+  background: Grey;
+
 }
+
 #Show_current_que{
   display: block;
   font-size: 20px;
@@ -173,7 +178,7 @@ beforeMount(){
   grid-column-gap: 20px;
 }
 .grid__media {
-  grid-column: 2 / 10; /* Start on Column 2 and end at the start of Column 9 */
+  grid-column: 1 / 6; /* Start on Column 2 and end at the start of Column 9 */
 }
 .grid__text {
   grid-column: 10 / 14; /* Start on Column 10 and end at the start of Column 14 */
@@ -187,7 +192,7 @@ beforeMount(){
 
 
 .grid__text1 {
-  grid-column: 6 / 10; /* Start on Column 10 and end at the start of Column 14 */
+  grid-column: 1 / 7; /* Start on Column 10 and end at the start of Column 14 */
 }
 
 .grid__media1 {
@@ -199,7 +204,7 @@ beforeMount(){
 }
 
 .grid__text2 {
-  grid-column: 6 / 10; /* Start on Column 10 and end at the start of Column 14 */
+  grid-column: 3 / 4; /* Start on Column 10 and end at the start of Column 14 */
 }
 
 

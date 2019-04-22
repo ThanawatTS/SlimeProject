@@ -1,35 +1,39 @@
 <template>
   <div class = "app"> 
-        <div id = "List" class="grid__text">
-        <v-btn small color="yellow lighten-2" @click="addgeofire()">
-        Test add geofire
-        </v-btn>
-
-        <v-btn small color="yellow lighten-2" @click="findnearby()">
-        Test Find nearby
-        </v-btn>
+    <div id = "List" class="grid__text">
     
-    <div v-for="Restname in RestaurantName">
+    <VueAutoVirtualScrollList
+      :totalHeight="422"
+      :defaultHeight="30"
+      style="width: 100%;"
+      
+    >
+   <div v-for="Restname in RestaurantName">
+    
     <v-layout>
-    <v-flex xs12 sm6 offset-sm3>
-      <v-card>
+    <v-flex >
+      <v-card height="200%">
         <v-card-title primary-title>
-          <div>
-            <h3 class="headline mb-0">{{Restname}}</h3>
-            <div> asdlksadlkasldklk </div>
-          </div>
-          <v-card-actions>
-          <v-btn flat color="orange" @click="MakeQue(Restname)" >Que</v-btn>
-
-        </v-card-actions>
+            <div>
+              <h1 class="headline mb-0">{{Restname}}</h1>
+              <h5> asdlksadlkasldklk </h5>
+            </div>
+            
+            <v-card-actions>
+            <v-btn flat color="orange" @click="MakeQue(Restname)" >Que</v-btn>
+            </v-card-actions>
         </v-card-title>
 
 
-      </v-card>
-    </v-flex>
-  </v-layout>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </div>
+  </VueAutoVirtualScrollList>
 </div>
-</div>
+
+
+
   <div id = "Maps" class="grid__media"> 
     <br>
         <gmap-map ref = "gmap"
@@ -51,7 +55,7 @@
           
           <GmapCircle
             :center="mapCenter"
-            :radius="1000"
+            :radius="5000"
             :visible="true"
           ></GmapCircle>
 
@@ -64,6 +68,7 @@
 </template>
 
 <script>
+import VueAutoVirtualScrollList from 'vue-auto-virtual-scroll-list'
 import firebaseApp from '../firebase/firebaseInit';
 import firebase from 'firebase/app'
 import { GeoFire } from "geofire";
@@ -82,6 +87,7 @@ export default {
       geoQuery : null
     };
   },
+  components: { VueAutoVirtualScrollList },
     
     // created(){
     //   this.geolocate();
@@ -98,21 +104,6 @@ export default {
   methods: {
         //Find current location
         geolocate: function() {
-          // this.Currentlocation = [];
-          // navigator.geolocation.getCurrentPosition(position => {
-        
-            // };
-          // this.$getLocation({
-          // enableHighAccuracy: false, //defaults to false
-          // timeout: Infinity, //defaults to Infinity
-          // maximumAge: 0 //defaults to 0
-          
-          // })
-          // .then(position => {
-          //           this.mapCenter = position
-          //           console.log(position)
-          // });
-
           this.$watchLocation({
           enableHighAccuracy: false, //defaults to false
           timeout: Infinity, //defaults to Infinity
@@ -121,7 +112,7 @@ export default {
           .then(location => {
           this.mapCenter = location
           var firebaseRef = firebase.database().ref("location")
-          var radius = parseFloat(5);
+          var radius = parseFloat(10);
           var operation; 
           var geoFire = new GeoFire(firebaseRef);
           this.Restaurant = []
@@ -142,22 +133,15 @@ export default {
           });
          
           this.geoQuery.on("key_entered", (key, location, distance) => {
-              console.log("test")
               const marker = {
                 lat: location[0],
                 lng: location[1]
               };
               this.markers.push({ position: marker });
-              this.RestaurantName.push(key);   
+              this.RestaurantName.push(key); 
             });
           }  
-         
-         
-         
-         
-         
-         });          
-
+        });          
       },
 
         addgeofire () {
@@ -171,50 +155,11 @@ export default {
                     geoFire.set(myID, [lat, lon]).then(function() {
                     console.log(myID + ": setting position to [" + lat + "," + lon + "]");
                      });
-
-
                   console.log(doc.data().Name);
               });
           });
       },//end addgeofire
      
-    //  findnearby() {
-    //       console.log(this.latitude)
-    //       var firebaseRef = firebase.database().ref("location")
-    //       var radius = parseFloat(1000);
-    //       var operation;
-    //       var geoFire = new GeoFire(firebaseRef);
-    //       this.Restaurant = []
-
-
-        
-    //       if (this.geoQuery != null) {
-    //       this.operation = "Updating";
-
-    //       this.geoQuery.updateCriteria({
-    //         center: [this.latitude, this.longitude],
-    //         radius: radius
-    //       });
-    //         } else {
-    //       operation = "Creating";
-    //       this.geoQuery = geoFire.query({
-    //         center: [this.latitude, this.longitude],
-    //         radius: radius
-    //       });
-
-           
-    //       this.geoQuery.on("key_entered", (key, location, distance) => {
-    //           console.log("test")
-    //           const marker = {
-    //             lat: location[0],
-    //             lng: location[1]
-    //           };
-    //           this.markers.push({ position: marker });
-    //           this.RestaurantName.push(key);   
-    //         });
-    //       }       
-    //   },
-
       MakeQue : function (restname) {
       var Get_Que_Value = firebaseApp.collection("RestaurantData").doc(restname)
       var user = firebase.auth().currentUser;
@@ -270,8 +215,6 @@ export default {
 <style>
 #List{
   display: block;
-  font-size: 20px;
-  background: greenyellow;
 }
 
 .app{
@@ -279,12 +222,14 @@ export default {
   grid-template-columns: 
   minmax(20px, 1fr) repeat(12, minmax(0, 100px)) minmax(20px, 1fr);
   grid-column-gap: 20px;
+  grid-row-gap: 20px;
 }
 .grid__media {
   grid-column: 2 / 10; /* Start on Column 2 and end at the start of Column 9 */
 }
 .grid__text {
   grid-column: 10 / 14; /* Start on Column 10 and end at the start of Column 14 */
+  
 }
 .grid__media,
 .grid__text {

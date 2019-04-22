@@ -4,6 +4,7 @@
         <v-btn v-on:click="getdata">checked</v-btn>
         <v-btn v-on:click="loginByLine">login / Created</v-btn>
         <v-btn @click="line"> line </v-btn>
+        <v-btn @click="signup"> signup </v-btn>
     </div>
 </template>
 
@@ -25,6 +26,9 @@ export default {
         }
     },
     methods: {
+        signup(){
+            this.$router.push('/signup') 
+        },
         // Choose think about login logic!!!!
         // Now create firebase authentication by using email for both username and password
         line(){

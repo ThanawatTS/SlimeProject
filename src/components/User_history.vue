@@ -24,26 +24,25 @@ export default {
     return {
       Que : 0,
       RestaurantName : "",
-      User_Que : firebaseApp.collection("User").doc("Pure")
 
     };
   },
     created(){
-        this.test();
+        this.Getdata();
     },
 
     methods: {
-    test(){    
+    Getdata(){    
         firebaseApp.collection("User").doc("Pure").get().then( doc =>  {
         this.Que = doc.data().Queue;
         this.RestaurantName = doc.data().Restaurant;
         })
         
-        console.log("test")
+
     }
   },
     updated() {
-            this.test();
+            this.Getdata();
         },
 };
 </script>
