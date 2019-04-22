@@ -339,7 +339,9 @@ export default {
         this.checkStatus()
         setTimeout(() => {
             this.showRestaurantName()
-        }, 1500);       
+        }, 2500);       
+
+      
     }
 }
 
