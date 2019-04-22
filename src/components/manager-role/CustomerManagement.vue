@@ -101,7 +101,7 @@ export default {
     },
     beforeMount(){
         setTimeout(() => {
-        this.checkStatus()
+            this.checkStatus()
         }, 1000);
         
     }

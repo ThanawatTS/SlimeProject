@@ -16,6 +16,7 @@ var dataCollectDecode
 import firebaseApp from './firebase/firebaseInit'
 import { decode } from 'jsonwebtoken';
 var emailDB = firebaseApp.collection("emailSignupFromLine")
+var userIdLineCol = firebaseApp.collection("UserIdLine")
 var userChoosingEmail = firebaseApp.collection("usersChoosingMenu")
 
 export default {
@@ -32,7 +33,7 @@ export default {
         // Choose think about login logic!!!!
         // Now create firebase authentication by using email for both username and password
         line(){
-            location.replace("https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554433367&redirect_uri=https://0affde8f.ngrok.io&state=12345abcde&scope=openid%20profile%20email")
+            location.replace("https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554433367&redirect_uri=https://20d9fdeb.ngrok.io&state=12345abcde&scope=openid%20profile%20email")
         },
         loginByLine(){
             let lineEmail = "lineid"+dataCollectDecode.email_U;
@@ -64,7 +65,11 @@ export default {
                     newUser: true,
                     userIdLine: dataCollectDecode.userID
                 })
-            
+
+                userIdLineCol.doc(dataCollectDecode.userID).set({
+                    email: lineEmail
+                })
+
                 userChoosingEmail.doc(setEmailToLWC).set({
                     menu: [],
                     lastThreePick: [],
@@ -99,7 +104,7 @@ export default {
             var currentUrl = window.location.href;
             var userUrlCode = currentUrl.slice(currentUrl.search("=")+1,currentUrl.search("&"))
             var request = require("request");
-
+                
             var options = { method: 'POST',
             url: 'https://api.line.me/oauth2/v2.1/token',
             headers: 
@@ -108,7 +113,7 @@ export default {
             { 
             grant_type: 'authorization_code',
             code: userUrlCode,
-            redirect_uri: 'https://0affde8f.ngrok.io',
+            redirect_uri: 'https://20d9fdeb.ngrok.io',
             client_id: '1554433367',
             client_secret: '88f24f0c0dfa5258983d13850529bcf9',
             }};
@@ -119,12 +124,14 @@ export default {
             dataCollectDecode = {name_U: decoded.payload.name, email_U: decoded.payload.email, pic_U: decoded.payload.picture, userID: decoded.payload.sub}
             console.log("ID_TOKEN", id_token)
             console.log("BODy", body)
-            console.log("USERID", userID)
             // userProfile.push({
             //     name_U: decode.payload.name,
             //     email_U: decode.payload.email,
             //     picture_U: decode.payload.picture
             // })
+
+            
+            
             });
         },
         userCurrent(){
@@ -151,7 +158,11 @@ export default {
             
             
         }, 1000);
-        
+        firebase.auth().signOut().then(() => {
+        console.log("Signout")
+      }).catch((err) => {
+        console.log(err)
+      })
     }
     
 }

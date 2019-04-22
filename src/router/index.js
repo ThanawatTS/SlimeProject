@@ -132,7 +132,8 @@ const router = new Router({
       component: Restaurant_Que,
       meta: {
         requiresAuth: true,
-        role: "restaurantOwner" || "employee",
+        role: "restaurantOwner",
+        roleEmp: "employee"
       }
     },
 
@@ -145,7 +146,11 @@ const router = new Router({
     {
       path: '/employee',
       name: 'Employee',
-      component: Employee
+      component: Employee,
+      meta: {
+        requiresAuth: true,
+        roleEmp: "employee"
+      }
     },
     {
       path: '/allmenu',
@@ -181,15 +186,22 @@ router.beforeEach((to, from, next) => {
     var dbSetRole = emailDB.doc(curUser.email)
     console.log(curUser.email)
     console.log(dbSetRole)
-    console.log("curUser index")
+    console.log("curUser index") 
     dbSetRole.get().then((doc) => {
-
+      console.log("role: ",doc.data().role)
+      console.log("TO meta: ", to.meta.role)
       if(doc.data().newUser){console.log("1"); next();} 
       else if (doc.data().role == to.meta.role){console.log("2"); next();} 
+      else if (doc.data().role == to.meta.roleEmp){console.log("4"); next();}
       else if (doc.data().role != to.meta.role) {
         console.log("3"); 
-        if(!requiresAuth) next();
-        else next(false);
+        if(!requiresAuth){
+          console.log("not reqire", !requiresAuth)
+          next();
+        } else {
+          console.log("require", requiresAuth)
+          next(false);
+        }
       }
     }).catch((error) => {
       firebase.auth().signOut().then(() => {
