@@ -9,12 +9,16 @@ import VueFirestore from 'vue-firestore'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vuex from 'vuex'
 import VueGeolocation from 'vue-browser-geolocation';
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
 Vue.use(VueFirestore);
 Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueGeolocation);
+Vue.use(BootstrapVue)
 export const EventBus = new Vue();
 
 Vue.use(VueGoogleMaps, {
