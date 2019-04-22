@@ -10,10 +10,8 @@ import UserManager from '@/components/manager-role/UserManager'
 import CustomerManagement from '@/components/manager-role/CustomerManagement'
 import RestaurantManagement from '@/components/manager-role/RestaurantManagement'
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
-import User_history from '@/components/User_history'
 import Employee from '@/components/manager-role/Employee'
 import AllMenu from '@/components/SuggestionMenu/AllMenu'
-import Restaurantfindmap from '@/components/Restaurantfindmap'
 
 //import layout
 import Usersidebar from '@/components/layout/user_sidebar'
@@ -95,8 +93,8 @@ const router = new Router({
       ]
     },
     {
-      path: '/t',
-      component: Usersidebar,
+      path: '/r',
+      component: restaurantsidebar,
       children: [{
         
           path: '/restaurantManagement',
