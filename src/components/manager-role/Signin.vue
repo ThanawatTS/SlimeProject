@@ -12,8 +12,8 @@
                         <div class = "sign-in">
                             <v-text-field label="Password" type="password" id="passwordInput"  v-model="password"></v-text-field>
                         </div>
+                        <p>Don't Have account ? <router-link @click.native="Signup" to="/signup">Signup</router-link></p>
                         <v-btn round color="primary" dark v-on:click="signinAccount">Sign In</v-btn>
-                        <v-btn round color="primary" dark v-on:click="signoutAccount">Sign Out</v-btn>
                     </form>
                 </v-flex>
             </v-layout>

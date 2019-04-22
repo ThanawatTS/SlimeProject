@@ -88,6 +88,7 @@ export default {
             lastPicks: []
         }
     },
+    created(){this.setUpMenu()},
     methods: {
         lastPick(choice) {
             var userMenuAdded = firebaseApp.collection("usersChoosingMenu").doc(this.$data.userEmail)

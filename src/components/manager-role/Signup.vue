@@ -12,6 +12,7 @@
                         <div class = "sign-up">
                             <v-text-field label="Password" type="password" id="passwordInput"  v-model="password"></v-text-field>
                         </div>
+                        <p>Already Have account ? <router-link @click.native="Signin" to="/signin">Signin</router-link></p>
                         <v-btn round color="primary" dark v-on:click="signupAccount">Sign Up</v-btn>
                     </form>
                 </v-flex>
@@ -33,7 +34,7 @@ export default {
     data() {
         return {
             username: '',
-            password: ''
+            password: '',
         }
     },
     methods: {
