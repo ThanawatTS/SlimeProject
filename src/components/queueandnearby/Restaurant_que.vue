@@ -15,8 +15,6 @@
         <b-card-text> {{Current_que}} </b-card-text>
          </b-card>
     </b-card-group>
-       
-  
     </div>
 
     <div id = "button" class="grid__text2">
@@ -85,16 +83,41 @@ export default {
     Restaurant_show_current_que () {
         firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
         this.Current_que = doc.data().Queue[0].queue;
+        
+          // var setemail
+          // setemail = doc.data().Queue[0].customerEmail
+          // console.log("update before:", setemail)
+          // firebaseApp.collection("User").doc(setemail).update({
+          //   Queue: 0,
+          //   Restaurant: ""
+          // })
+        
   })
  },
     Next_que() {
+        firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
+        this.Current_que = doc.data().Queue[0].queue;
+        this.$data.notiQueue = []
+          var setemail
+          setemail = doc.data().Queue[0].customerEmail
+          
+          setTimeout(() => {
+            firebaseApp.collection("User").doc(setemail).update({
+            Queue: 0,
+            Restaurant: ""
+          })
         
+          }, 1000);
+          
+          })
         
          firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(doc => {
           console.log("GET in")
             if (doc.exists) {
               var que = doc.data().Queue;
-              que.shift();
+              if(que.length > 1){
+                que.shift();
+              }
               this.Current_que = que[0].queue;
               console.log(que);
           
@@ -133,57 +156,76 @@ export default {
       var checkEmailLine = firebaseApp.collection("emailSignupFromLine")
       checkEmailLine.get().then((queryShapShot) => {
         queryShapShot.forEach((doc) => {
-          for(var x = 2 ; x < 5 ; x++){
-            if(doc.id == this.$data.notiQueue[x].customerEmail){
-              console.log("find")
-              this.$data.lineUserId.push(doc.data().userIdLine)
-              console.log("DATA", this.$data.lineUserId)
-            } else {
+          if (this.$data.notiQueue.length > 2){
+            for(var x = 2 ; x < this.$data.notiQueue.length ; x++){
+              if(doc.id == this.$data.notiQueue[x].customerEmail){
+                console.log("find Data")
+                console.log("Doc user", doc.data().userIdLine)
+                console.log("Queue", this.$data.notiQueue[x].queue)
+                this.$data.lineUserId.push({
+                  userId: doc.data().userIdLine,
+                  userQueue: this.$data.notiQueue[x].queue
+                })
+                console.log("DATA", this.$data.lineUserId)
+              } else {
               console.log("not find")
+              }
             }
+          } else {
+            this.$data.lineUserId = []
           }
+          
+
         })
       })
 
       setTimeout(() => {
-        console.log("IN userid")
+        console.log("IN userid" , this.$data.lineUserId)
         var restaurantQueue = firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).collection("RestaurantQueue").doc("userId")
           restaurantQueue.set({
           userId: this.$data.lineUserId
         })
         setTimeout(() => {
           this.$data.lineUserId = []
-
+          console.log("Notiqueue: ", this.$data.notiQueue)
+          this.queueDone()
           var sendNoti = restaurantQueue
-          var test
-          var y
           sendNoti.get().then((doc) => {
-            for(var x in doc.data().userId) {
-              console.log("IN noti", doc.data().userId[x])
-              this.sendNotitoUser(doc.data().userId[x],this.Current_que,this.$data.notiQueue[parseInt(x) + 2].queue)
+            if(doc.data().userId.length > 0){
+                for(var x in doc.data().userId) {
+                  console.log("IN noti", doc.data().userId[x])
+                  if(this.$data.notiQueue.length > 2){
+                  this.sendNotitoUser(doc.data().userId[x].userId, this.Current_que, doc.data().userId[x].userQueue)
+                  }
+                }
+            
+                
               //this.sendNotitoUser(doc.data().userId[x])
             }
           })
           
           
 
-        }, 100);
+        }, 500);
       }, 1000);
       
-      
-
-      
-       
-      
-      
-      // var testUserIdline = firebaseApp.collection("testuserId").doc("lineuserId")
-      // testUserIdline.set({
-      //   userId: this.$data.lineUserId
-      // })
-
-      
-
-
+    },
+    queueDone() {
+      firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then((doc) => {
+        this.$data.Current_que = doc.data().Queue[0].queue;
+          var setemail = doc.data().Queue[0].customerEmail
+          setTimeout(() => {
+            firebaseApp.collection("User").doc(setemail).get().then((doc) => {
+              if(doc.data().Queue == this.$data.Current_que){
+                  firebaseApp.collection("User").doc(setemail).update({
+                  Queue: 0,
+                  Restaurant: ""
+                  })
+              }
+            })
+          }, 500);
+          
+          })
     },
     sendNotitoUser(userId, currentQueue, userQueue){
       console.log("IN userid", userId)
@@ -287,11 +329,11 @@ xhr.withCredentials = true;
 
 xhr.addEventListener("readystatechange", function () {
   if (this.readyState === 4) {
-    console.log(this.responseText);
+   //console.log(this.responseText);
   }
 });
 
-xhr.open("POST", "https://4a824f03.ngrok.io/noti/"+userId+"/"+currentQueue+"/"+userQueue, true);
+xhr.open("POST", "https://30353dd5.ngrok.io/noti/"+userId+"/"+currentQueue+"/"+userQueue, true);
 xhr.send();
 
     },
@@ -302,8 +344,7 @@ xhr.send();
             firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).get().then(function(doc) {
             if (doc.exists) {
                 var que = doc.data().Queue[0].queue
-            
-            
+
             firebaseApp.collection("RestaurantData").doc(this.$route.params.Pid).update({
                 Queue: que
             })

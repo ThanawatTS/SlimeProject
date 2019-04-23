@@ -170,8 +170,13 @@ export default {
           console.log("Didn't login yet")
         }
 
-      Get_Que_Value.get().then( doc =>  {
-          if (doc.exists) {
+      Save_User_Que.get().then((doc) => {
+        console.log("doc queue" , doc.data().Queue)
+        if(doc.data().Queue == 0){
+
+          Get_Que_Value.get().then( (doc) =>  {
+            console.log("IN restname: ", restname)
+            if (doc.exists) {
               var que = doc.data().Queue
               this.$data.queueArr = doc.data().Queue
               console.log("que",que)
@@ -184,31 +189,38 @@ export default {
               })
               console.log("queuearr", this.$data.queueArr)
           
-          Get_Que_Value.update({
-              Queue: this.$data.queueArr
-          })
+              Get_Que_Value.update({
+                Queue: this.$data.queueArr
+              })
 
-          Save_User_Que.update({
-              Restaurant : restname,
-              Queue: que[que.length-1].queue+1
-          })
+              Save_User_Que.update({
+                Restaurant : restname,
+                Queue: que[que.length-1].queue+1
+              })
           
-          .then(function() {
-              console.log("Document successfully updated!");
-          })
-          .catch(function(error) {
+              .then(function() {
+                console.log("Document successfully updated!");
+              })
+              .catch(function(error) {
               // The document probably doesn't exist.
               console.error("Error updating document: ", error);
-          });     
+              });     
 
-              
-          } else {
+            } else {
               // doc.data() will be undefined in this case
               console.log("No such document!");
-          }
-      }).catch(function(error) {
-          console.log("Error getting document:", error);
-      });
+            }
+
+            }).catch(function(error) {
+              console.log("Error getting document:", error);
+            });
+        
+        } else {
+          console.log("User only have Queue")
+        }
+
+        })
+
 
     },
 
