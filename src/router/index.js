@@ -155,7 +155,7 @@ router.beforeEach((to, from, next) => {
     var dbSetRole = emailDB.doc(curUser.email)
     console.log(curUser.email)
     console.log(dbSetRole)
-    console.log("curUser index")
+    console.log("curUser index") 
     dbSetRole.get().then((doc) => {
       console.log("role: ",doc.data().role)
       console.log("TO meta: ", to.meta.role)

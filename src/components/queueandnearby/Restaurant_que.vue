@@ -115,9 +115,11 @@ export default {
           console.log("GET in")
             if (doc.exists) {
               var que = doc.data().Queue;
+
               if(que.length > 1){
                 que.shift();
               }
+
               this.Current_que = que[0].queue;
               console.log(que);
           
@@ -175,7 +177,6 @@ export default {
             this.$data.lineUserId = []
           }
           
-
         })
       })
 
@@ -198,13 +199,13 @@ export default {
                   this.sendNotitoUser(doc.data().userId[x].userId, this.Current_que, doc.data().userId[x].userQueue)
                   }
                 }
-            
-                
+       
               //this.sendNotitoUser(doc.data().userId[x])
             }
           })
           
           
+
 
         }, 500);
       }, 1000);

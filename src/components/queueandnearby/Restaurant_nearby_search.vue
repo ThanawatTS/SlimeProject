@@ -188,7 +188,7 @@ export default {
                 customerEmail: user.email
               })
               console.log("queuearr", this.$data.queueArr)
-          
+         
               Get_Que_Value.update({
                 Queue: this.$data.queueArr
               })
