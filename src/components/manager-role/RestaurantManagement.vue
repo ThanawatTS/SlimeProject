@@ -19,6 +19,7 @@
       <h2>Search and add a pin</h2>
       <label>
         <gmap-autocomplete
+        ref="autocomplete"
           @place_changed="setPlace">
         </gmap-autocomplete>
         <button @click="addMarker">Add</button>
@@ -29,14 +30,23 @@
     <br>
     <gmap-map
       :center="center"
-      :zoom="12"
-      style="width:100%;  height: 400px;"
+      :zoom="10"
+      style="width:100%;  height: 500px;"
     >
+    <gmap-marker
+        :position="center"
+        @dragend="updateMaker" 
+        :draggable="true"
+    ></gmap-marker>
+    
+    
       <gmap-marker
+        @dragend="updateMaker" 
         :key="index"
         v-for="(m, index) in markers"
         :position="m.position"
         @click="center=m.position"
+        :draggable="true"
       ></gmap-marker>
     </gmap-map>
     </div>
@@ -46,6 +56,7 @@
 import firebase from 'firebase'
 import firebaseApp from '../firebase/firebaseInit'
 import { exists } from 'fs';
+import { GeoFire } from "geofire";
 var emailDB = firebaseApp.collection("emailSignupFromWebsite")
 
 export default {
@@ -62,23 +73,37 @@ export default {
             places: [],
             currentPlace: null,
             lat: 0,
-            lon: 0
+            lon: 0,
+            firebaseRef : firebase.database().ref("location")
         }
     },
     mounted() {
         this.geolocate();
         },
     methods: {
+    updateMaker: function(event) {
+    let geocoder = new google.maps.Geocoder()
+
+    geocoder.geocode({ 'latLng': event.latLng }, (result, status) => {
+        console.log(event.latLng.lat())
+        console.log(event.latLng.lng())
+        this.lat = event.latLng.lat()
+        this.lon = event.latLng.lng()
+            
+    })
+},
         geolocate: function() {
             this.$getLocation(options)
             .then(coordinates => {
                 this.center = coordinates;
+
             });
         },
         setPlace(place) {
              this.currentPlace = place;
         },
         addMarker() {
+        this.markers = []
         if (this.currentPlace) {
             const marker = {
             lat: this.currentPlace.geometry.location.lat(), //use this for latitude
@@ -149,7 +174,6 @@ export default {
                         console.log("NUM", restaurantArrangeNum)
                     }
                 });
-
             })
             
             setTimeout(() => {
@@ -211,6 +235,12 @@ export default {
                     }, 200);
                 } 
             }, 1100);
+
+
+            setTimeout(() => {
+            this.addgeofire();
+            }, 4000);      
+            
             // restaurantExist.get().then(function(doc) {
             //     console.log(doc.data())
             //     if (doc.exists){
@@ -274,6 +304,22 @@ export default {
                 
             // }, 1500);    
         },
+        addgeofire () {
+          var geoFire = new GeoFire(this.firebaseRef);
+          // Create a new GeoFire instance at the random Firebase location
+          firebaseApp.collection("RestaurantData").get().then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                    var lat = doc.data().Location.latitude;
+                    var lon = doc.data().Location.longitude;
+                    var myID = doc.data().Name;
+                    geoFire.set(myID, [lat, lon]).then(function() {
+                    console.log(myID + ": setting position to [" + lat + "," + lon + "]");
+                     });
+                  console.log(doc.data().Name);
+              });
+          });
+      },
+
         iterationCopy(src){
             var target = {}
             for(var prop in src){

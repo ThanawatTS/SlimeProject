@@ -1,33 +1,40 @@
 <template>
-    <div id="customerManagement">
-    <div id= "List">
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>    
-    <b-card-group deck>
-        <b-card bg-variant="primary" text-variant="white" header="Current Restaurant" class="text-center">
-        <b-card-text>  {{RestaurantName}} </b-card-text>
-         </b-card>
+ <v-app style="
+    background: #3A1C71;
+    background: -webkit-linear-gradient(to right, #FFAF7B, #D76D77, #3A1C71);
+    background: linear-gradient(to right, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
+  ">
+        <div id="customerManagement">
+        <div id= "List">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+  <transition name="fade">
+        <b-card-group deck>
+            <b-card bg-variant="info" text-variant="white" header="Current Restaurant" class="text-center">
+            <b-card-text>  <br><br><br><h1>{{RestaurantName}}</h1><br><br><br> </b-card-text>
+            </b-card>
 
-      <b-card bg-variant="secondary" text-variant="white" header="Secondary" class="text-center">
-        <b-card-text>{{Restaurantcurrentque}}</b-card-text>
-      </b-card>
+        <b-card bg-variant="secondary" text-variant="white" header="Current Que" class="text-center">
+            <b-card-text><br><br><br><h1>{{Restaurantcurrentque}}</h1><br><br><br></b-card-text>
+        </b-card>
 
-      <b-card bg-variant="success" text-variant="white" header="Your Que" class="text-center">
-        <b-card-text>{{Que}}</b-card-text>
-      </b-card>
-    </b-card-group>
+        <b-card bg-variant="success" text-variant="white" header="Your Que" class="text-center">
+            <b-card-text><br><br><br><h1>{{Que}}</h1><br><br><br></b-card-text>
+        </b-card>
+        </b-card-group>
+  </transition>
 
 
-
+        </div>
     </div>
-</div>
+</v-app>
 </template>
 
 <script>
@@ -114,5 +121,11 @@ button span {
 }
 button hr {
     margin: 5px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

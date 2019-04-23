@@ -1,12 +1,9 @@
 <template>
 <div id="user_sidebar">
-  <v-app id="inspire" dark>
-    <v-content>
-      <v-container fluid>
+
+
         <router-view></router-view>
-      </v-container>
-    </v-content>
-  </v-app>
+
 
 </div>
 

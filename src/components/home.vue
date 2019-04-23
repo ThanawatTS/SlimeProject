@@ -1,253 +1,92 @@
 <template>
-  <div class = "content"> 
-    <div id = "top">
-    <h1>Find restaurants around you</h1>
-    <p>Restaurant on the list are within 10 km.</p>
-    <p>Use button below to refresh your location</p>
-    <a href="#" class="btn-3d cyan" @click="geolocate()">Refresh</a>
-    </div>
+<body>
+<div class = app>
+<div id="app">
+  <v-app id="inspire">
+    <v-toolbar>
+      <v-toolbar-title>Slime Eater</v-toolbar-title>
+     
+    </v-toolbar>
 
-    <div id = "right"> 
-      <VueAutoVirtualScrollList
-        :totalHeight="422"
-        :defaultHeight="30"
-        style="width: 100%;"
-      >
-    <div v-for="Restname in RestaurantName" >
-      
-      <v-layout>
-      <v-flex >
-        <v-card height="200%" color="blue-grey">
-          <v-card-title primary-title>
-              <div>
-                <h1 class="headline mb-0">{{Restname}}</h1>
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout justify-center align-center>
+
+
+           <v-flex  class="display-2 text-xs-center my-5">
+           <div id = "welcome">
+            <p style="font-size:50px">Welcome to Slime Eater !</p>
+            <p style="font-size:20px">We are here to help you find restaurants around you and help you make your Que for your favorite one</p>
             </div>
-              <v-spacer></v-spacer>
-              <v-card-actions>
-                 <a href="#" class="btn-two blue rounded" @click="MakeQue(Restname)">Join</a>
-
-              </v-card-actions>
-          </v-card-title>
-
-
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </div>
-    </VueAutoVirtualScrollList>
-  </div>
-
-
-
-  <div id = "left"> 
-    <br>
-        <gmap-map ref = "gmap"
-        :center="mapCenter"
-        :zoom="10"
-        style="width:100%;  height: 400px;"
-        >
-       
-        <gmap-marker
-        :key="index"
-        v-for="(m, index) in markers"
-        :position="m.position"
-        ></gmap-marker>
-
-        
-        <gmap-marker
-        :position="mapCenter"
-        icon = "https://img.icons8.com/color/48/000000/region-code.png"
-        ></gmap-marker>
+           
+           <div style="width:image width px; font-size:100%; text-align:center;">
+             <img src="https://firebasestorage.googleapis.com/v0/b/slimeslam-24d26.appspot.com/o/Map.png?alt=media&token=935023c9-f94b-4e1a-8ba5-53934010df38" alt="alternate text" width="width" height="height" style="padding-bottom:0.5em;" />
+                Find restaurant around you
+          </div>  
           
-          <GmapCircle
-            :center="mapCenter"
-            :radius="10000"
-            :visible="true"
-          ></GmapCircle>
-        </gmap-map>
-    </div>
-  </div>
+          <div style="width:image width px; font-size:100%; text-align:center;">
+             <img src="https://firebasestorage.googleapis.com/v0/b/slimeslam-24d26.appspot.com/o/que.png?alt=media&token=2e7991ec-e737-48cf-b7e9-7a7ab248d3de" alt="alternate text" width="width" height="height" style="padding-bottom:0.5em;" />
+                   Make your Que
+          </div>  
+
+          <div style="width:image width px; font-size:100%; text-align:center;">
+             <img src="https://firebasestorage.googleapis.com/v0/b/slimeslam-24d26.appspot.com/o/Line.png?alt=media&token=360e8b95-a40e-47f8-8ba8-3dfbdf4e35c5" alt="alternate text" width="width" height="height" style="padding-bottom:0.5em;" />
+                  Get notification 
+          </div>  
+
+
+          <a href="#" class="btn-two green rounded" @click="Signup()">Get Start !!</a>
+
+          </v-flex>
+
+
+          
+        </v-layout>
+      </v-container>
+    </v-content>
+
+
+
+    
+  </v-app>
+</div>
+</div>
+</body>
 </template>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 <script>
-import VueAutoVirtualScrollList from 'vue-auto-virtual-scroll-list';
-import firebaseApp from '../firebase/firebaseInit';
-import firebase from 'firebase/app';
-import {gmapApi} from 'vue2-google-maps'
-import { GeoFire } from "geofire";
+
 export default {
-    name: "Maps",
-    data() {
+  name: 'app',
+   data () {
     return {
-      mapCenter: { lat: 0, lng: 0 },
-      icon: {},
-      markers: [],
-      RestaurantName : [],
-      RestuarantLocation: [],
-      Currentlocation: [],
-      latitude : 0,
-      longitude : 0,
-      firebaseRef : firebase.database().ref("location"),
-      geoQuery : null
-    };
+      menu: [
+        { icon: 'home', title: 'Sign in' },
+        { icon: 'info', title: 'Sign up' },
+
+      ]
+    }
   },
-  components: { VueAutoVirtualScrollList },
-    
-    // created(){
-    //   this.geolocate();
-    // },
-    created(){
-      this.geolocate();
-    },
-    // watch(){
-      
-    // },
+  
   methods: {
-        //Find current location
-        geolocate: function() {
-          console.log("from geolocation")
-          this.$watchLocation({
-          enableHighAccuracy: false, //defaults to false
-          timeout: Infinity, //defaults to Infinity
-          maximumAge: 0 //defaults to 0
-          })
-          .then(location => {
-          this.mapCenter = location
-          this.icon ='https://image.flaticon.com/teams/slug/google.jpg'
-        
-          var firebaseRef = firebase.database().ref("location")
-          var radius = parseFloat(10);
-          var operation; 
-          var geoFire = new GeoFire(firebaseRef);
-          this.Restaurant = []
-          
-          if (this.geoQuery != null) {
-          this.operation = "Updating";
-
-          this.geoQuery.updateCriteria({
-            center: [location.lat, location.lng],
-            radius: radius
-          });
-            } else {
-          console.log(location[0] + "///" + location[1])
-          operation = "Creating";
-          this.geoQuery = geoFire.query({
-            center: [location.lat, location.lng],
-            radius: radius
-          });
-         
-          this.geoQuery.on("key_entered", (key, location, distance) => {
-              const marker = {
-                lat: location[0],
-                lng: location[1]
-              };
-              this.markers.push({ position: marker });
-              this.RestaurantName.push(key); 
-            });
-          }  
-        });          
-      },
-
-        addgeofire () {
-          var geoFire = new GeoFire(this.firebaseRef);
-          // Create a new GeoFire instance at the random Firebase location
-          firebaseApp.collection("RestaurantData").get().then(function(querySnapshot) {
-              querySnapshot.forEach(function(doc) {
-                    var lat = doc.data().Location.latitude;
-                    var lon = doc.data().Location.longitude;
-                    var myID = doc.data().Name;
-                    geoFire.update(myID, [lat, lon]).then(function() {
-                    console.log(myID + ": setting position to [" + lat + "," + lon + "]");
-                     });
-                  console.log(doc.data().Name);
-              });
-          });
-      },//end addgeofire
-     
-      MakeQue : function (restname) {
-      var Get_Que_Value = firebaseApp.collection("RestaurantData").doc(restname)
-      var user = firebase.auth().currentUser;
-        if(user){
-          var Save_User_Que = firebaseApp.collection("User").doc(user.email)
-        } else {
-          console.log("Didn't login yet")
-        }
-
-      Get_Que_Value.get().then( doc =>  {
-          if (doc.exists) {
-              var que = doc.data().Queue
-              console.log("Document data:", doc.data().Queue);
-              que.push(que[que.length-1]+1)
-              
-          
-          Get_Que_Value.update({
-              Queue: que
-          })
-
-          Save_User_Que.update({
-              Restaurant : restname,
-              Queue: que[que.length-1]
-          })
-          
-          .then(function() {
-              console.log("Document successfully updated!");
-          })
-          .catch(function(error) {
-              // The document probably doesn't exist.
-              console.error("Error updating document: ", error);
-          });     
-
-              
-          } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-          }
-      }).catch(function(error) {
-          console.log("Error getting document:", error);
-      });
-
+    menuItems () {
+      return this.menu
     },
-
-
-
-
-  }//end method
-};
+     Signup(){
+        this.$router.push('/signup') 
+    },
+  }
+  
+}
 </script>
-
-
 <style>
-p{
-    font-family : "Courier New";
+/* .dispaly-1{
+    font-size : 12px
+} */
 
-}
-#content > div {
-    height:240px;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-}
-#left {
-    float:left;
-    width: 50%;
-    margin: auto;
-
-    text-align: center;
-}
-#right {
-    float:right;
-    width: 45%;
-    text-align: center;
-    
-
-}
-#bottom {
-    border-top:1px solid black;
-    clear: both;
-
-}
-
-/* If you want the content centered horizontally and vertically */
-
+.button1 {font-size: 50px;}
 
 body {
     margin: 0;
@@ -255,11 +94,6 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
-h2 {
-    color: #89867e;
-    text-align: center;
-    font-weight: 300;
-}
 .color {
     width: 350px;
     margin: 0 auto;
@@ -276,7 +110,7 @@ h2 {
 .color .green  {background: #82c8a0;}
 .color .cyan   {background: #7fccde;}
 .color .blue   {background: #6698cb;}
-.color .purple {background: #6e899b;}
+.color .purple {background: #cb99c5;}
 
 .content, 
 .content-gradient, 
@@ -285,8 +119,7 @@ h2 {
 }
 .content {
   width: 80%;
-  max-width: 900px;
-
+  max-width: 700px;
 }
 .content-3d {
   width: 50%;
@@ -310,7 +143,22 @@ pre .anc {color: #f92672;} /* anchor tag */
 pre .att {color: #a6a926;} /* attribute */
 pre .val {color: #e6db74;} /* value */
 
-
+/* .btn-container, .container {
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 40px;
+} */
+.btn-container{
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.container h2 {
+    padding-top: 30px;
+    font-weight: 300;
+}
 .btn, .btn-two {
     margin: 9px;
 }
@@ -325,7 +173,7 @@ button[class*="btn"] {border: 0;}
 .btn.large, 
 .btn-two.large, 
 .btn-effect.large {
-  padding: 20px 40px; 
+  padding: 20px 30px; 
   font-size: 22px;
 }
 .btn.small, 
@@ -361,7 +209,7 @@ button[class*="btn"] {border: 0;}
 .btn.blue, .btn-two.blue     {background-color: #7fb1bf;}
 .btn.green, .btn-two.green   {background-color: #9abf7f;}
 .btn.red, .btn-two.red       {background-color: #fa5a5a;}
-.btn.purple, .btn-two.purple {background-color: #6e899b;}
+.btn.purple, .btn-two.purple {background-color: #cb99c5;}
 .btn.cyan, .btn-two.cyan     {background-color: #7fccde;}
 .btn.yellow, .btn-two.yellow {background-color: #f0d264;}
 
@@ -392,7 +240,7 @@ button[class*="btn"] {border: 0;}
 .btn.red {box-shadow:0px 4px 0px #E04342;}
 .btn.red:active {box-shadow: 0 0 #ff4c4b; background-color: #ff4c4b;}
 
-.btn.purple {box-shadow:0px 4px 0px #6e899b;}
+.btn.purple {box-shadow:0px 4px 0px #AD83A8;}
 .btn.purple:active {box-shadow: 0 0 #BA8CB5; background-color: #BA8CB5;}
 
 .btn.cyan {box-shadow:0px 4px 0px #73B9C9;}
@@ -404,7 +252,7 @@ button[class*="btn"] {border: 0;}
 /* Button two - I have no creativity for names */
 .btn-two {
     color: white;   
-    padding: 3px 15px;
+    padding: 5px 15px;
     display: inline-block;
     border: 1px solid rgba(0,0,0,0.21);
     border-bottom-color: rgba(0,0,0,0.34);
@@ -425,7 +273,7 @@ button[class*="btn"] {border: 0;}
     position: relative;
     display: inline-block;
     font-size: 22px;
-    padding: 2px 20px;
+    padding: 20px 60px;
     color: white;
     margin: 20px 10px 10px;
     border-radius: 6px;
@@ -516,7 +364,7 @@ button[class*="btn"] {border: 0;}
 }
 
 .btn-3d.yellow {
-    background-color: rgb(13, 87, 100);
+    background-color: #F0D264;
     box-shadow: 0 0 0 1px #F0D264 inset,
                 0 0 0 2px rgba(255,255,255,0.15) inset,
                 0 8px 0 0 rgba(196, 172, 83, .7),

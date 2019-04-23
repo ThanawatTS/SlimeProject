@@ -12,7 +12,7 @@ import RestaurantManagement from '@/components/manager-role/RestaurantManagement
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
 import Employee from '@/components/manager-role/Employee'
 import AllMenu from '@/components/SuggestionMenu/AllMenu'
-
+import Home from '@/components/home'
 //import layout
 import Usersidebar from '@/components/layout/user_sidebar'
 import beforelogin from '@/components/layout/beforelogin'
@@ -48,11 +48,6 @@ const router = new Router({
         }
       },
       {
-        path: '/User_history',
-        name: 'User_history',
-        component: User_history
-      },
-      {
         path: '/customerManagement',
         name: 'CustomerManagement',
         component: CustomerManagement,
@@ -81,7 +76,13 @@ const router = new Router({
           path: '/signin',
           name: 'signin',
           component: Signin
-        },{
+        },
+        {
+          path: '/home',
+          name: 'home',
+          component: Home
+        },
+        {
           path: '/userManager',
           name: 'UserManager',
           component: UserManager,
@@ -111,32 +112,13 @@ const router = new Router({
           component: Restaurant_Que,
           meta: {
             requiresAuth: true,
-            role: "restaurantOwner" || "employee",
+            role: "restaurantOwner",
+            roleEmp: "employee"
           }
         },
     
       ]
     },
-{
-      path: '/restaurantManagement',
-      name: 'RestaurantManagement',
-      component: RestaurantManagement,
-      meta: {
-        requiresAuth: true,
-        role: "restaurantOwner",
-      }
-    },
-    {
-      path: '/Restaurant_que/:Pid',
-      name: 'Restaurant_que',
-      component: Restaurant_Que,
-      meta: {
-        requiresAuth: true,
-        role: "restaurantOwner" || "employee",
-      }
-    },
-
-
     {
       path: '/addrest',
       name: 'Addrestloca',
@@ -152,11 +134,7 @@ const router = new Router({
       name: 'AllMenu',
       component: AllMenu
     }, 
-    {
-      path: '/Restaurantfindmap',
-      name: 'Restaurantfindmap',
-      component: Restaurantfindmap
-    }, 
+
 
   ]
 })
@@ -186,6 +164,7 @@ router.beforeEach((to, from, next) => {
 
       if(doc.data().newUser){console.log("1"); next();} 
       else if (doc.data().role == to.meta.role){console.log("2"); next();} 
+      else if (doc.data().role == to.meta.roleEmp){console.log("4"); next();}
       else if (doc.data().role != to.meta.role) {
         console.log("3"); 
         if(!requiresAuth) next();

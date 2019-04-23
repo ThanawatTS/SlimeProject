@@ -1,6 +1,10 @@
 <template>
 <div id="user_sidebar">
-  <v-app id="inspire" dark>
+  <v-app style="
+    background: #3A1C71;
+    background: -webkit-linear-gradient(to right, #FFAF7B, #D76D77, #3A1C71);
+    background: linear-gradient(to right, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
+  ">
     <v-navigation-drawer
       clipped
       fixed
@@ -8,30 +12,15 @@
       app
     >
       <v-list dense>
-        <v-list-tile @click="Signin()">
+        <v-list-tile @click="Restaurant()">
           <v-list-tile-action>
             <v-icon>account_box</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>History</v-list-tile-title>
+            <v-list-tile-title>Account</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-          <v-list-tile @click="suggestionMenu()">
-          <v-list-tile-action>
-            <v-icon>chrome_reader_mode</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>suggestionMenu</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-          <v-list-tile @click="queuing()">
-          <v-list-tile-action>
-            <v-icon>supervised_user_circle</v-icon>
-          </v-list-tile-action> 
-          <v-list-tile-content>
-            <v-list-tile-title>Que</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+       
                 <v-list-tile @click="Signout()">
           <v-list-tile-action>
             <v-icon>settings_power</v-icon>
@@ -68,19 +57,13 @@ export default {
     }
   },
   methods : {
-    Signin(){
-        this.$router.push('/signin') 
+    Restaurant(){
+        this.$router.push('/restaurantManagement') 
     },
 
     Signout(){
         this.$router.push('/signin') 
     },
-    suggestionMenu() {
-            this.$router.push('/suggestion')
-        },
-    queuing() {
-            this.$router.push('/maps')
-        }
     }
 }
 </script>
