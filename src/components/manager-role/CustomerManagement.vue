@@ -51,12 +51,6 @@ export default {
             RestaurantName : "",
         }
     },
-    created(){
-        this.Getdata();
-    },  
-    updated() {
-        this.Getdata();
-    },
 
     methods: {
         getcurrentque(){
@@ -67,22 +61,22 @@ export default {
         checkStatus(){
             var user = firebase.auth().currentUser;
                 if(user){
-                    this.$data.emailUesr = user.email;
-                    console.log(this.$data.emailUesr)
+                    this.$data.emailUser = user.email;
+                    console.log(this.$data.emailUser)
                 } else {
                     console.log("Didn't login yet")
                 }
 
-            if(this.$data.emailUesr.slice(0,6) == 'lineid'){
+            if(this.$data.emailUser.slice(0,6) == 'lineid'){
                 emailDB = firebaseApp.collection("emailSignupFromLine")
             } else {
                 emailDB = firebaseApp.collection("emailSignupFromWebsite")
             }
 
-            let checkNewUser = emailDB.doc(this.$data.emailUesr)
+            let checkNewUser = emailDB.doc(this.$data.emailUser)
             checkNewUser.get().then((doc) => {
                 if(doc.data().newUser == true) {
-                    emailDB = firebaseApp.collection("User").doc(this.$data.emailUesr)
+                    emailDB = firebaseApp.collection("User").doc(this.$data.emailUser)
                     emailDB.set({
                         Queue: 0,
                         Restaurant: ""
@@ -99,16 +93,34 @@ export default {
 
         },
         Getdata(){    
-        firebaseApp.collection("User").doc("Pure").get().then( doc =>  {
-        this.Que = doc.data().Queue;
-        this.RestaurantName = doc.data().Restaurant;
-        })
+             var user = firebase.auth().currentUser;
+                if(user){
+                    this.$data.emailUser = user.email;
+                    console.log(this.$data.emailUser)
+                } else {
+                    console.log("Didn't login yet")
+                }
+
+            if(this.$data.emailUser.slice(0,6) == 'lineid'){
+                emailDB = firebaseApp.collection("emailSignupFromLine")
+            } else {
+                emailDB = firebaseApp.collection("emailSignupFromWebsite")
+            }
+            setTimeout(() => {
+                console.log(this.$data.emailUser)
+                 firebaseApp.collection("User").doc(this.$data.emailUser).get().then( doc =>  {
+                    this.Que = doc.data().Queue;
+                    this.RestaurantName = doc.data().Restaurant;
+                })
+            }, 1000);
+        
         
     }
     },
     beforeMount(){
         setTimeout(() => {
-        this.checkStatus()
+            this.checkStatus()
+            this.Getdata()
         }, 1000);
         
     }

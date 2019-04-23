@@ -43,14 +43,8 @@ export default {
             .then( user => {
                 alert('Account created successful!');
                 console.log('register');
-                this.$router.push('/signin');
-            },
-            err => {
-                alert(err.message);
-                console.log("Can't created account");
-            });
-            var setEmailToLWC = this.username.toLowerCase();
-            emailDB.doc(setEmailToLWC).set({
+                var setEmailToLWC = this.username.toLowerCase();
+                emailDB.doc(setEmailToLWC).set({
                 role: "newUser",
                 newUser: true
             })
@@ -61,6 +55,13 @@ export default {
                 favouriteMenu: []
             })
 
+                this.$router.push('/signin');
+            },
+            err => {
+                alert(err.message);
+                console.log("Can't created account");
+            });
+            
         }
     }
 }
