@@ -1,6 +1,10 @@
 <template>
 <div id="user_sidebar">
-  <v-app id="inspire" dark>
+<v-app style="
+    background: #3A1C71;
+    background: -webkit-linear-gradient(to right, #FFAF7B, #D76D77, #3A1C71);
+    background: linear-gradient(to right, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
+  ">
     <v-navigation-drawer
       clipped
       fixed
@@ -8,7 +12,7 @@
       app
     >
       <v-list dense>
-        <v-list-tile @click="Signin()">
+        <v-list-tile @click="customerManager()">
           <v-list-tile-action>
             <v-icon>account_box</v-icon>
           </v-list-tile-action>
@@ -48,9 +52,9 @@
     </v-toolbar>
     
     <v-content>
-      <v-container fluid>
+  
         <router-view></router-view>
-      </v-container>
+     
     </v-content>
   </v-app>
 
@@ -80,7 +84,18 @@ export default {
         },
     queuing() {
             this.$router.push('/maps')
-        }
+        },
+    customerManager() {
+            this.$router.push('/customerManagement')
+        },
+        
+    
+      
     }
 }
 </script>
+<style>
+#user_sidebar{
+color:red
+}
+</style>

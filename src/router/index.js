@@ -12,7 +12,7 @@ import RestaurantManagement from '@/components/manager-role/RestaurantManagement
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
 import Employee from '@/components/manager-role/Employee'
 import AllMenu from '@/components/SuggestionMenu/AllMenu'
-
+import Home from '@/components/home'
 //import layout
 import Usersidebar from '@/components/layout/user_sidebar'
 import beforelogin from '@/components/layout/beforelogin'
@@ -76,7 +76,13 @@ const router = new Router({
           path: '/signin',
           name: 'signin',
           component: Signin
-        },{
+        },
+        {
+          path: '/home',
+          name: 'home',
+          component: Home
+        },
+        {
           path: '/userManager',
           name: 'UserManager',
           component: UserManager,
@@ -131,6 +137,7 @@ const router = new Router({
       name: 'AllMenu',
       component: AllMenu
     }
+
 
   ]
 })
