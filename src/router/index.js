@@ -10,10 +10,8 @@ import UserManager from '@/components/manager-role/UserManager'
 import CustomerManagement from '@/components/manager-role/CustomerManagement'
 import RestaurantManagement from '@/components/manager-role/RestaurantManagement'
 import Restaurant_Que from '@/components/queueandnearby/Restaurant_que'
-import User_history from '@/components/User_history'
 import Employee from '@/components/manager-role/Employee'
 import AllMenu from '@/components/SuggestionMenu/AllMenu'
-import Restaurantfindmap from '@/components/Restaurantfindmap'
 
 //import layout
 import Usersidebar from '@/components/layout/user_sidebar'
@@ -50,11 +48,6 @@ const router = new Router({
         }
       },
       {
-        path: '/User_history',
-        name: 'User_history',
-        component: User_history
-      },
-      {
         path: '/customerManagement',
         name: 'CustomerManagement',
         component: CustomerManagement,
@@ -66,7 +59,7 @@ const router = new Router({
       ]
     },
     {
-      path: '/b',
+      path: '/',
       component: beforelogin,
       children: [
         {
@@ -95,8 +88,8 @@ const router = new Router({
       ]
     },
     {
-      path: '/t',
-      component: Usersidebar,
+      path: '/r',
+      component: restaurantsidebar,
       children: [{
         
           path: '/restaurantManagement',
@@ -113,33 +106,12 @@ const router = new Router({
           component: Restaurant_Que,
           meta: {
             requiresAuth: true,
-            role: "restaurantOwner" || "employee",
+            role: "restaurantOwner",
+            roleEmp: "employee"
           }
         },
-    
       ]
     },
-{
-      path: '/restaurantManagement',
-      name: 'RestaurantManagement',
-      component: RestaurantManagement,
-      meta: {
-        requiresAuth: true,
-        role: "restaurantOwner",
-      }
-    },
-    {
-      path: '/Restaurant_que/:Pid',
-      name: 'Restaurant_que',
-      component: Restaurant_Que,
-      meta: {
-        requiresAuth: true,
-        role: "restaurantOwner",
-        roleEmp: "employee"
-      }
-    },
-
-
     {
       path: '/addrest',
       name: 'Addrestloca',
@@ -158,12 +130,7 @@ const router = new Router({
       path: '/allmenu',
       name: 'AllMenu',
       component: AllMenu
-    }, 
-    {
-      path: '/Restaurantfindmap',
-      name: 'Restaurantfindmap',
-      component: Restaurantfindmap
-    }, 
+    }
 
   ]
 })
@@ -192,11 +159,12 @@ router.beforeEach((to, from, next) => {
     dbSetRole.get().then((doc) => {
       console.log("role: ",doc.data().role)
       console.log("TO meta: ", to.meta.role)
-      if(doc.data().newUser){console.log("1"); next();} 
-      else if (doc.data().role == to.meta.role){console.log("2"); next();} 
+      console.log("To metaEMp", to.meta.roleEmp)
+      if(doc.data().newUser){console.log("1"); next();}
+      else if (doc.data().role == to.meta.role){console.log("2"); next();}
       else if (doc.data().role == to.meta.roleEmp){console.log("4"); next();}
       else if (doc.data().role != to.meta.role) {
-        console.log("3"); 
+        console.log("3");
         if(!requiresAuth){
           console.log("not reqire", !requiresAuth)
           next();

@@ -33,7 +33,7 @@ export default {
         // Choose think about login logic!!!!
         // Now create firebase authentication by using email for both username and password
         line(){
-            location.replace("https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554433367&redirect_uri=https://20d9fdeb.ngrok.io&state=12345abcde&scope=openid%20profile%20email")
+            location.replace("https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1554433367&redirect_uri=https://748f7e65.ngrok.io&state=12345abcde&scope=openid%20profile%20email"
         },
         loginByLine(){
             let lineEmail = "lineid"+dataCollectDecode.email_U;
@@ -113,7 +113,7 @@ export default {
             { 
             grant_type: 'authorization_code',
             code: userUrlCode,
-            redirect_uri: 'https://20d9fdeb.ngrok.io',
+            redirect_uri: 'https://748f7e65.ngrok.io',
             client_id: '1554433367',
             client_secret: '88f24f0c0dfa5258983d13850529bcf9',
             }};

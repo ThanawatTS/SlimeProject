@@ -26,6 +26,7 @@ export default {
     },
     methods: {
         gotoQueue (restaurant) {
+            console.log("RESTAURANT: ",restaurant)
             this.$router.push({name: 'Restaurant_que', params:{Pid: restaurant}})
         },
         loadData(){
