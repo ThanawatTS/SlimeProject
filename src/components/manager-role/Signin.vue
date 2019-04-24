@@ -14,8 +14,8 @@
                         </div>
                         <p>Already Have account ? <router-link to="/signup">Sign up</router-link></p>
                         <v-btn id="signin_btn" v-on:click="signinAccount">Sign in</v-btn>
-                        <v-btn color="success" @click="line"> line </v-btn>
-                        <v-btn color="success">Success</v-btn>
+                        <v-btn id="signinline_btn" @click="line"> line </v-btn>
+                        
                     </form>
                 </v-flex>
             </v-layout>
@@ -28,7 +28,6 @@ import firebase from 'firebase';
 import firebaseApp from '../firebase/firebaseInit'
 var jwt = require('jsonwebtoken');
 var dataCollectDecode
-
 var emailDBW = firebaseApp.collection("emailSignupFromWebsite")
 var emailDB = firebaseApp.collection("emailSignupFromLine")
 var userIdLineCol = firebaseApp.collection("UserIdLine")
@@ -249,12 +248,14 @@ export default {
     }
     
 
-     #signuip_btn {
-        max-width: 130%;
-        width: 130px
+     #signin_btn {
+        border-radius: 12px;
+    }
+    #signinline_btn {
+        border-radius: 12px;
     }
 
-    #containerSignip {
+    #containerSignin {
         max-width: 300%;
         width: 300px
     }

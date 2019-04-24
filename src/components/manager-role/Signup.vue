@@ -79,7 +79,8 @@ export default {
 
      #signup_btn {
         max-width: 130%;
-        width: 130px
+        width: 130px;
+        border-radius: 12px;
     }
 
     #containerSignup {
