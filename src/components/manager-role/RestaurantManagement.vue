@@ -4,12 +4,11 @@
         <form>
             <label> Create Restaurant Name </label><br/>
             <input v-model="restName" placeholder="Input restaurant name">
-            <v-btn @click.prevent="createRestaurant(restName)">Create</v-btn>
-            <v-btn @click.prevent="pushQueue">Queue</v-btn>
+            <v-btn color="warning" @click.prevent="createRestaurant(restName)">Create</v-btn>
             
             <div v-for="listName in showRestaurantList" :key="listName.id">
                <h2 > {{listName}} </h2>
-                <v-btn round color="primary" dark @click.prevent="gotoRestaurant(listName)">Queue Manage</v-btn>
+                <v-btn round small color="primary" @click.prevent="gotoRestaurant(listName)">Queue Manage</v-btn>
             </div>
         </form>
 
@@ -191,7 +190,7 @@ export default {
                         restaurantData.doc(rest_name).set({
                             Location: new firebase.firestore.GeoPoint(parseFloat(this.lat),parseFloat(this.lon)),
                             Name: rest_name,
-                            Queue: [],
+                            Queue: [{queue: 0}],
                             RestaurantMail: this.$data.userCur,
                             EmployeeEmail: emp_restaurant
                         })
@@ -220,7 +219,7 @@ export default {
                         setTimeout(() => {
                             firebase.auth().signOut().then(() =>{
                                 console.log("sign out!")
-                                this.$router.push('/signin');
+                                this.$router.push('/');
                                 alert(" Employee\'s password: " + emp_password + " \n Please noted the password you will be force to sign in again");
                                 setTimeout(() => {
                                     alert('Please sign in again to vertify Owner account');

@@ -221,6 +221,7 @@ export default {
         
         } else {
           console.log("User only have Queue")
+          alert('You already Queue. You can\'t queue more than one place ');
         }
 
         })

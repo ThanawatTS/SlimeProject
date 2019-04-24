@@ -1,28 +1,35 @@
 <template>
     <div>
-                    
+
+        <v-flex xs12>
+                    <div id="menuSuggest">
                     <h1>Menu Sugggestion</h1>
+                    
+                    </div>
                     <div id="munuPrepare" v-for="(menuPre, i) in menuSuggestion" v-bind:key="i">
                         <v-btn small color="blue" @click="addedRestaurantList(menuPre.Name)" :disabled="delaybtn"> {{menuPre.Name}} </v-btn>
                     </div>
-
+            </v-flex>
         <v-container fluid>
             <v-flex xs12>
                 <div>
+                    <h1 align="center">Favourite Menu (Most 5)</h1>
                     
-                    <h1>Favourite Menu (Most 5)</h1>
                     <div id="fovouriteMenu" v-for="(menuFav, i) in favouriteMenuCur" v-bind:key="i">
                         <v-btn small color="blue" @click="addedRestaurantList(menuFav.favouriteName)" :disabled="delaybtn"> {{menuFav.favouriteName}} </v-btn>
                         <v-btn small color="red" @click="removeFavouriteMenu(menuFav.favouriteName)">Remove</v-btn>
                     </div>
+                   
                     
                     <v-layout align-center justify-center column fill-height>
                           
                         <form>
-                            <label> Add Restaurant List </label><br/>
-                            <input v-model="restaurant_Name" id="restaurantName" placeholder="Restaurant Name"><br/>
+                            <div id="inputmenu">
+                            
+                            <input v-model="restaurant_Name" id="restaurantName"  placeholder="Menu here"><br/>
                             <span v-if="seen"> {{ message_duplicatename }} <br/></span>
-                            <v-btn small color="primary" v-on:click.prevent="addedRestaurantList(restaurant_Name)" :disabled="restaurant_Name == emptyName">Restaurant Name</v-btn>
+                            </div>
+                            <v-btn small color="primary" v-on:click.prevent="addedRestaurantList(restaurant_Name)" :disabled="restaurant_Name == emptyName">Menu Name</v-btn>
                             <v-btn small color="primary" v-on:click.prevent="addMenuFavourite(restaurant_Name)" :disabled="restaurant_Name == emptyName || favouriteMenuCur.length == 5">add Favourite Menu</v-btn>
                         </form>
                         
@@ -51,9 +58,13 @@
                 <span> Random : {{ suggestion_restaurant }}</span>
                 </v-layout>
 
-                <div v-for="(lastpick, i) in lastPicks" v-bind:key="i"> <h3> {{  lastpick.Picked }} </h3> </div>
+
+               
+               
+                <div id="btn_deal">
                 <v-btn small color="blue" @click="lastPick(suggestion_restaurant)" :disabled="suggestion_restaurant == emptyName"> Deal </v-btn>
                 <v-btn small color="red" @click="reSuggestion()" :disabled="suggestion_restaurant == emptyName" > Cancel </v-btn>
+                </div>
 
             </v-flex>
 
@@ -66,7 +77,7 @@
 <script>
 import firebase from 'firebase'
 import firebaseApp from '../firebase/firebaseInit'
-
+// <div id="threepicked" v-for="(lastpick, i) in lastPicks" v-bind:key="i"> <h3> {{  lastpick.Picked }} </h3></div>
 export default {
     name: 'suggestion',
     data () {
@@ -340,5 +351,67 @@ export default {
 <style scoped>
 
 
+#menuSuggest{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+#inputmenu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#munuPrepare {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+#menuFavourite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+#fovouriteMenu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+::-webkit-input-placeholder {
+   color: #808080;
+   text-align: center;
+
+}
+:-moz-placeholder {
+   color: #808080;
+   text-align: center;
+
+}
+
+input {
+	box-sizing: border-box;
+	border-bottom: 0.25em solid #6495ED;
+	text-align: center;
+}
+#btn_deal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+#threepicked{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    margin-left: 320px;
+    border: 0.25em solid #6495ED;
+}
 
 </style>

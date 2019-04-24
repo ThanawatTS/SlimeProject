@@ -68,12 +68,12 @@ const router = new Router({
           component: Signup
         },
         {
-          path: '/',
+          path: '/Dashboard',
           name: 'Dashboard',
           component: Dashboard
         },
         {
-          path: '/signin',
+          path: '/',
           name: 'signin',
           component: Signin
         },
@@ -156,9 +156,9 @@ router.beforeEach((to, from, next) => {
     else emailDB = firebaseApp.collection("emailSignupFromWebsite")
   }
 
-  // if(requiresAuth && !curUser) next('/signin');
+  if(requiresAuth && !curUser) next('/');
   // else if (!requiresAuth && currentUser) next('usermanager');
-  if(curUser){
+  else if(curUser){
     var dbSetRole = emailDB.doc(curUser.email)
     console.log(curUser.email)
     console.log(dbSetRole)

@@ -31,9 +31,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json({type: 'application/json'}));
 
 app.post('/noti/:userId/:currentQueue/:userQueue', express.json(),(req, res) => {
-
-
-
+  
   var request = require("request");
   console.log(req.params.userId)
   var options = { method: 'POST',
@@ -47,8 +45,8 @@ app.post('/noti/:userId/:currentQueue/:userQueue', express.json(),(req, res) => 
     body: 
      { to: req.params.userId,
        messages: 
-        [ { type: 'text', text: "ปัจจุบันคิวที่: " + req.params.currentQueue},
-          { type: 'text', text: "คิวของคุณคือ: " + req.params.userQueue}
+        [ { type: 'text', text: "คิวปัจจุบันของร้าน: " + req.params.currentQueue},
+          { type: 'text', text: "คิวของคุณ: " + req.params.userQueue}
         ] },
     json: true };
   
@@ -255,7 +253,7 @@ app.post('/chatbot', express.json(), (req, res) => {
               "altText": "This is a buttons template",
               "template": {
                   "type": "buttons",
-                  "thumbnailImageUrl": "https://banner2.kisspng.com/20180401/hlw/kisspng-slime-rancher-atomega-zooming-secretary-puddle-5ac0a2ee84f323.6288183815225740625446.jpg",
+                  "thumbnailImageUrl": "https://i.pinimg.com/originals/a1/95/25/a19525c6881b92a1e3fb0a2274c0eec6.jpg",
                   "imageAspectRatio": "rectangle",
                   "imageSize": "cover",
                   "imageBackgroundColor": "#FFFFFF",
@@ -264,13 +262,13 @@ app.post('/chatbot', express.json(), (req, res) => {
                   "defaultAction": {
                       "type": "uri",
                       "label": "View detail",
-                      "uri": "https://d33e15c1.ngrok.io"
+                      "uri": "https://0265096a.ngrok.io"
                   },
                   "actions": [
                       {
                         "type": "uri",
                         "label": "Reserve",
-                        "uri": "https://d33e15c1.ngrok.io"
+                        "uri": "https://0265096a.ngrok.io"
                       }
                   ]
               }
@@ -511,14 +509,20 @@ app.post('/chatbot', express.json(), (req, res) => {
       })
     }
 
+    function guidUser(){}
+    function suggestmenuCancle(){}
+    function rude(){}
+    
     let intentMap = new Map();
-    intentMap.set('Default Welcome Intent', welcome);
-    intentMap.set('Default Fallback Intent', fallback);
-    intentMap.set('suggestmenu', suggestmenu);
-    intentMap.set('suggestmenu - yes', suggestmenuConfirm);
-    intentMap.set('show que', showQueue);
+    intentMap.set('Default Welcome Intent', welcome)
+    intentMap.set('Default Fallback Intent', fallback)
+    intentMap.set('suggestmenu', suggestmenu)
+    intentMap.set('suggestmenu - yes', suggestmenuConfirm)
+    intentMap.set('suggestmenu - no', suggestmenuCancle)
+    intentMap.set('show que', showQueue)
     intentMap.set('reserve', reserve)
-
+    intentMap.set('I want to know',guidUser)
+    intentMap.set('rude', rude)
     agent.handleRequest(intentMap);
   
   })

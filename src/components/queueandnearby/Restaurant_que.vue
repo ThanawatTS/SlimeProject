@@ -1,30 +1,35 @@
 <template>
   <div class = "app"> 
-    <div id= "Show_que"  class="grid__text">
+    
+    <div id= "Show_que" >
         <center>Que in Line</center>
         <ul>
-        <tr v-for="(restaurant_que,index) in Que " :key = "index">       
-        <td>  {{restaurant_que}} - {{index}} </td>
+        <tr v-for="(restaurant_que,index) in Que " :key = "index"> 
+          <p v-if="index == 0">  Queue: {{restaurant_que.queue}}</p>     
+          <p v-if="index != 0">  No.{{index}} - Queue: {{restaurant_que.queue}}  </p>
+        <td>  </td>
         </tr>
         </ul>
     </div>
-
-    <div id = "Show_current_que" class="grid__text1">
+    
+    <div id = "Show_current_que" >
       <b-card-group deck>
-        <b-card bg-variant="primary" text-variant="white" header="Current Que" class="text-center">
+        <b-card id ="cardeck" text-variant="white" header="Current Que" class="text-center">
         <b-card-text> {{Current_que}} </b-card-text>
          </b-card>
     </b-card-group>
+
+    
     </div>
 
-    <div id = "button" class="grid__text2">
-
-        <v-btn small color="black" @click="Next_que()">
+    <div id = "button_nextque" >
+        <v-btn large="" @click="Next_que()">
         Next Que
         </v-btn>
-
     </div>
+
   </div>
+  
 </template>
 
 <script>
@@ -386,18 +391,43 @@ beforeMount(){
 };
 </script>
 <style>
+
 #Show_que{
   display: block;
+  background: #3CB371;
   font-size: 20px;
-  background: Grey;
-
+  width: 400px;
+  height: 80%;
+  margin-left: 900px;
+  border-radius: 18px;
+  margin-top: 150%;
+  margin-right: 200px
 }
 
 #Show_current_que{
   display: block;
+  background: #00BFFF;
   font-size: 20px;
-  background: greenyellow;
+  width: 400%;
+  height: 20%;
+  margin-left: 150px;
+  border-radius: 18px;
+  margin-top: 150%
+  
 }
+#cardeck{
+  background: #00BFFF;
+  border-radius: 18px;
+  
+}
+#button_nextque {
+        display: flex;
+        align-items: right;
+        justify-content: right;
+        margin-left: 1300%;
+        margin-top: 500%;
+}
+
 .app{
   display: grid;
   grid-template-columns: 
@@ -427,7 +457,7 @@ beforeMount(){
 }
 .grid__media1,
 .grid__text1 {
-  grid-row: 1; /* We want to keep our items on the same row */
+  grid-row: 2; /* We want to keep our items on the same row */
 }
 
 .grid__text2 {

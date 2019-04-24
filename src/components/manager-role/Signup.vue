@@ -1,7 +1,7 @@
 <template>
     <div id="signup">
         <main>
-        <v-container fill-height>
+        <v-container fill-height id="containerSignup">
             <v-layout row wrap align-center>
                 <v-flex class="text-xs-center">
                     <h1>Sign Up</h1>
@@ -12,8 +12,8 @@
                         <div class = "sign-up">
                             <v-text-field label="Password" type="password" id="passwordInput"  v-model="password"></v-text-field>
                         </div>
-                        <p>Already Have account ? <router-link @click.native="Signin" to="/signin">Signin</router-link></p>
-                        <v-btn round color="primary" dark v-on:click="signupAccount">Sign Up</v-btn>
+                        <p>Already Have account ? <router-link to="/">Signin</router-link></p>
+                        <v-btn id="signup_btn" v-on:click="signupAccount">Sign Up</v-btn>
                     </form>
                 </v-flex>
             </v-layout>
@@ -55,7 +55,7 @@ export default {
                 favouriteMenu: []
             })
 
-                this.$router.push('/signin');
+                this.$router.push('/');
             },
             err => {
                 alert(err.message);
@@ -73,6 +73,20 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: auto;
+        margin-top: 10%;
     }
+
+     #signup_btn {
+        max-width: 130%;
+        width: 130px
+    }
+
+    #containerSignup {
+        max-width: 300%;
+        width: 300px
+    }
+
+  
 
 </style>
