@@ -8,8 +8,10 @@
     </div>
 
     <div id = "right"> 
-  <nav>
+    <nav>
+      <ul> 
     <div v-for="Restname in RestaurantName" > 
+ 
       <v-layout>
       <v-flex >
         <v-card height="200%" color="blue-grey">
@@ -26,7 +28,9 @@
           </v-flex>
         </v-layout>
       </div>
+            </ul>
     </nav>
+   
   </div>
 
 
@@ -230,6 +234,8 @@ export default {
 
 
 <style>
+nav ul{height: 425px; width:100%;}
+nav ul{overflow:hidden; overflow-y:scroll;}
 p{
     font-family : "Courier New";
 
