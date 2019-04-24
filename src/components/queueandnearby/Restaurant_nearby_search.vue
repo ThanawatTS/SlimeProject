@@ -8,13 +8,10 @@
     </div>
 
     <div id = "right"> 
-      <VueAutoVirtualScrollList
-        :totalHeight="422"
-        :defaultHeight="30"
-        style="width: 100%;"
-      >
-    <div v-for="Restname in RestaurantName" >
-      
+    <nav>
+      <ul> 
+    <div v-for="Restname in RestaurantName" > 
+ 
       <v-layout>
       <v-flex >
         <v-card height="200%" color="blue-grey">
@@ -25,16 +22,15 @@
               <v-spacer></v-spacer>
               <v-card-actions>
                  <a href="#" class="btn-two blue rounded" @click="MakeQue(Restname)">Join</a>
-
               </v-card-actions>
           </v-card-title>
-
-
             </v-card>
           </v-flex>
         </v-layout>
       </div>
-    </VueAutoVirtualScrollList>
+            </ul>
+    </nav>
+   
   </div>
 
 
@@ -238,6 +234,8 @@ export default {
 
 
 <style>
+nav ul{height: 425px; width:100%;}
+nav ul{overflow:hidden; overflow-y:scroll;}
 p{
     font-family : "Courier New";
 
