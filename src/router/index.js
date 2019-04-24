@@ -156,9 +156,9 @@ router.beforeEach((to, from, next) => {
     else emailDB = firebaseApp.collection("emailSignupFromWebsite")
   }
 
-  if(requiresAuth && !curUser) next('/');
+  //if(requiresAuth && !curUser) next('/');
   // else if (!requiresAuth && currentUser) next('usermanager');
-  else if(curUser){
+  if(curUser){
     var dbSetRole = emailDB.doc(curUser.email)
     console.log(curUser.email)
     console.log(dbSetRole)

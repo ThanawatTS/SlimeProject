@@ -3,6 +3,7 @@
     
     <div id= "Show_que" >
         <center>Que in Line</center>
+        <nav>
         <ul>
         <tr v-for="(restaurant_que,index) in Que " :key = "index"> 
           <p v-if="index == 0">  Queue: {{restaurant_que.queue}}</p>     
@@ -10,6 +11,7 @@
         <td>  </td>
         </tr>
         </ul>
+        </nav>
     </div>
     
     <div id = "Show_current_que" >
@@ -23,7 +25,7 @@
     </div>
 
     <div id = "button_nextque" >
-        <v-btn large="" @click="Next_que()">
+        <v-btn id="nextqueue" large @click="Next_que()">
         Next Que
         </v-btn>
     </div>
@@ -392,12 +394,17 @@ beforeMount(){
 </script>
 <style>
 
+#nextqueue{
+  border-radius: 18px;
+  
+}
+
 #Show_que{
   display: block;
   background: #3CB371;
   font-size: 20px;
   width: 400px;
-  height: 80%;
+  height: 68%;
   margin-left: 900px;
   border-radius: 18px;
   margin-top: 150%;
@@ -464,5 +471,10 @@ beforeMount(){
   grid-column: 3 / 4; /* Start on Column 10 and end at the start of Column 14 */
 }
 
+nav ul{height:320px; 
+width:100%;
+margin-bottom: 100px;
+}
+nav ul{overflow:hidden; overflow-y:scroll;}
 
 </style>
