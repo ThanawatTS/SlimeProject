@@ -54,7 +54,7 @@ export default {
 
     methods: {
         getcurrentque(){
-            firebaseApp.collection("RestaurantData").doc(this.RestaurantName).get().then(doc => {
+            firebaseApp.collection("RestaurantData").doc(this.$data.RestaurantName).get().then(doc => {
             this.Restaurantcurrentque = doc.data().Queue[0];  
             })
         },
@@ -110,7 +110,7 @@ export default {
                 console.log(this.$data.emailUser)
                  firebaseApp.collection("User").doc(this.$data.emailUser).get().then( doc =>  {
                     this.Que = doc.data().Queue;
-                    this.RestaurantName = doc.data().Restaurant;
+                    this.$data.RestaurantName = doc.data().Restaurant;
                 })
             }, 1000);
         

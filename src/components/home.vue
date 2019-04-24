@@ -31,6 +31,7 @@
 
           <div style="width:image width px; font-size:100%; text-align:center;">
              <img src="https://firebasestorage.googleapis.com/v0/b/slimeslam-24d26.appspot.com/o/Line.png?alt=media&token=360e8b95-a40e-47f8-8ba8-3dfbdf4e35c5" alt="alternate text" width="width" height="height" style="padding-bottom:0.5em;" />
+                <img src="https://firebasestorage.googleapis.com/v0/b/slimeslam-24d26.appspot.com/o/QRlinecode.jpg?alt=media&token=53cce2e2-1a8d-4f77-9e0d-c9b5f3df3ec8">
                   Get notification 
           </div>  
 

@@ -196,7 +196,7 @@ export default {
         setTimeout(() => {
           this.$data.lineUserId = []
           console.log("Notiqueue: ", this.$data.notiQueue)
-          this.queueDone()
+          
           var sendNoti = restaurantQueue
           sendNoti.get().then((doc) => {
             if(doc.data().userId.length > 0){
@@ -239,6 +239,15 @@ export default {
       console.log("IN userid", userId)
       console.log("IN currentQueue", currentQueue)
       console.log("IN userQueue", userQueue)
+      var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+xhr.open("POST", "https://a950d83c.ngrok.io/noti/"+userId+"/"+currentQueue+"/"+userQueue, true);
+xhr.send();
       //console.log("trying to send noti", userId)
       //const request = require('request-promise');
       // var invocation = new XMLHttpRequest();
@@ -334,16 +343,13 @@ export default {
 
 var xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
-
 xhr.addEventListener("readystatechange", function () {
   if (this.readyState === 4) {
-   //console.log(this.responseText);
+    console.log(this.responseText);
   }
 });
-
-xhr.open("POST", "https://30353dd5.ngrok.io/noti/"+userId+"/"+currentQueue+"/"+userQueue, true);
+xhr.open("POST", "https://4a824f03.ngrok.io/noti/"+userId+"/"+currentQueue+"/"+userQueue, true);
 xhr.send();
-
     },
     
     Update_Current_Que(currentque){
