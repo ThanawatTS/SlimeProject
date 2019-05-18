@@ -1,0 +1,35 @@
+{
+  "id": "5d6642e3-5fd5-4ac3-9a47-3fd3606f626a",
+  "name": "show que",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "b4441b0e-eaa4-4ec7-a8aa-593c4874bc87",
+          "dataType": "@sys.unit-volume-name",
+          "name": "unit-volume-name",
+          "value": "$unit-volume-name",
+          "isList": false
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "lang": "th",
+          "speech": "แปปนึง"
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}
